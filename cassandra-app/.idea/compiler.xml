@@ -8,12 +8,14 @@
         <outputRelativeToContentRoot value="true" />
         <module name="rest-service-complete" />
         <module name="fileService" />
+        <module name="cassandra-app" />
         <module name="service" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="cassandra-app" options="-parameters" />
       <module name="fileService" options="-parameters" />
       <module name="rest-service-complete" options="-parameters" />
       <module name="service" options="-parameters" />

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import hr.irb.CIR.Auth.LookupAuth;
 import hr.irb.CIR.DAP.index.*;
 import hr.irb.Vars;
+import org.json.JSONObject;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -38,6 +39,22 @@ public class ServiceController {
 		indexer.connect();
 	}
 
+
+	@PostMapping("/FilePutJson")
+	public RestOut FilePutJson(
+			@RequestParam(value = "jsonData", defaultValue = "") String jsonData
+	) throws Exception {
+		this.setUp();
+		ObjectNode jsonObject = new ObjectMapper().createObjectNode();
+		try  {
+			String hash = this.indexer.insertFile(jsonData).toString();
+			jsonObject.put("hash", hash);
+		} catch (Exception e) {
+			jsonObject.put("error", e.getMessage());
+		}
+		return new RestOut(jsonObject);
+	}
+
 	/**
 	 * put file to CASSANDRA
 	 * @param key
@@ -64,6 +81,40 @@ public class ServiceController {
 		return new RestOut(jsonObject);
 	}
 
+	@GetMapping("/FileGetJson")
+	public ResponseEntity<byte[]> FileGetJson(
+			@RequestParam(value = "jsonData", defaultValue = "") String jsonData
+	) throws Exception {
+		JSONObject obj = new JSONObject(jsonData);
+		String key = obj.getString("key");
+		String hash = obj.getString("hash");
+		String documentId = obj.getString("documentId");
+
+		this.setUp();
+		byte[] fileContent;
+
+		if (!key.isEmpty())
+			this.indexer.setPublisherKey(UUID.fromString(key));
+
+		fileContent =  (!hash.isEmpty())
+				? this.indexer.getFile(UUID.fromString(hash))
+				: this.indexer.getFileByPublishersId(documentId);
+
+		HashMap<String,String> fileInfo;
+
+		fileInfo =(hash.isEmpty())
+				? this.indexer.getFileInfo(null, documentId)
+				: this.indexer.getFileInfo(UUID.fromString(hash), documentId);
+
+		String filename = fileInfo.get("id")+"."+fileInfo.get("extension");
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+		headers.setContentDisposition(ContentDisposition.attachment().filename(filename).build());
+
+		return ResponseEntity.ok()
+				.headers(headers)
+				.body(fileContent);
+	}
 	/**
 	 * get   file from cassandra
 	 * @param hash

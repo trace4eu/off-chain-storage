@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class RestServiceApplication {
 
 	public static void main(String[] args) {
-		System.out.println("STARTING THE SERVICE");
+//		System.out.println("STARTING THE SERVICE");
 		SpringApplication.run(RestServiceApplication.class, args);
 	}
 

@@ -50,9 +50,12 @@ public class CassandraIndex extends AIndex{
     public UUID insertFile(String jsonData) throws Exception {
         JSONObject obj = new JSONObject(jsonData);
 
-
+        this.setPublisherKey(UUID.fromString(obj.getString("key")));
         String key = getPublisherKey().toString();
-        byte[] file= (byte[])obj.get("file");
+        String fileContentString = obj.getString("file");
+        byte[] file=AIndex.hexStringToByteArray(fileContentString);
+        //(byte[])obj.get("file");
+        if (file.length==0) throw new Exception("File not found");
         String documentId = obj.getString("documentId");
         String extension = obj.getString("extension");
 

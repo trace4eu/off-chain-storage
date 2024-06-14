@@ -28,6 +28,7 @@ public interface IIndex {
     public void setOptions(DbOptions options) ;
 
     public UUID insertFile(MultipartFile file, String documentId, String extension) throws Exception;
+    public UUID insertFile(String jsonData) throws Exception;
     public byte[] getFile(UUID fileId);
     public byte[] getFileByPublishersId(String documentId);
     public HashMap<String,String> getFileInfo(UUID id, String documentId);

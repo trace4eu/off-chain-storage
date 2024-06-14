@@ -155,6 +155,11 @@ public class PgIndex extends AIndex{
     }
 
     @Override
+    public UUID insertFile(String jsonData) throws Exception {
+        return null;
+    }
+
+    @Override
     @Deprecated
     public byte[] getFile(UUID fileId) {
         return new byte[0];
