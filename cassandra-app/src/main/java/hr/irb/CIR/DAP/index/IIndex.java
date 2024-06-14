@@ -2,11 +2,7 @@ package hr.irb.CIR.DAP.index;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 public interface IIndex {
@@ -15,8 +11,8 @@ public interface IIndex {
     public void setLimit(Integer limit);
 
     public void setOffset(Integer offset) ;
-    public void setPublisherKey(UUID publisherKey);
-    public UUID getPublisherKey() ;
+    public void setOwner(String owner);
+    public String getOwner() ;
 
     public boolean connect();
     public String getNodeUrl() ;
@@ -30,6 +26,6 @@ public interface IIndex {
     public UUID insertFile(MultipartFile file, String documentId, String extension) throws Exception;
     public UUID insertFile(String jsonData) throws Exception;
     public byte[] getFile(UUID fileId);
-    public byte[] getFileByPublishersId(String documentId);
+    public byte[] getFileByOwner(String documentId);
     public HashMap<String,String> getFileInfo(UUID id, String documentId);
 }

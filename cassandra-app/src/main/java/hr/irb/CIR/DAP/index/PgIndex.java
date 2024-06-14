@@ -167,7 +167,7 @@ public class PgIndex extends AIndex{
 
     @Override
     @Deprecated
-    public byte[] getFileByPublishersId( String documentId) {
+    public byte[] getFileByOwner(String documentId) {
         return new byte[0];
     }
 

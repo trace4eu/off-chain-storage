@@ -57,14 +57,14 @@ public class ServiceController {
 
 	/**
 	 * put file to CASSANDRA
-	 * @param key
+	 * @param owner
 	 * @param file
 	 * @return
 	 * @throws Exception
 	 */
 	@PostMapping("/FilePut")
 	public RestOut FilePut(
-		@RequestParam(value = "key", defaultValue = "") String key
+		@RequestParam(value = "owner", defaultValue = "") String owner
 		,@RequestParam("file") MultipartFile file
 		,@RequestParam(value = "extension", defaultValue = "") String extension
 		,@RequestParam(value = "documentId", defaultValue = "") String documentId
@@ -72,7 +72,7 @@ public class ServiceController {
 		this.setUp();
 		ObjectNode jsonObject = new ObjectMapper().createObjectNode();
 		if (!file.isEmpty()) {
-			this.indexer.setPublisherKey(UUID.fromString(key));
+			this.indexer.setOwner(owner);
 			String hash = this.indexer.insertFile(file,documentId, extension).toString();
 			jsonObject.put("hash", hash);
 		} else {
@@ -86,19 +86,19 @@ public class ServiceController {
 			@RequestParam(value = "jsonData", defaultValue = "") String jsonData
 	) throws Exception {
 		JSONObject obj = new JSONObject(jsonData);
-		String key = obj.getString("key");
+		String owner = obj.getString("owner");
 		String hash = obj.getString("hash");
 		String documentId = obj.getString("documentId");
 
 		this.setUp();
 		byte[] fileContent;
 
-		if (!key.isEmpty())
-			this.indexer.setPublisherKey(UUID.fromString(key));
+		if (!owner.isEmpty())
+			this.indexer.setOwner(owner);
 
 		fileContent =  (!hash.isEmpty())
 				? this.indexer.getFile(UUID.fromString(hash))
-				: this.indexer.getFileByPublishersId(documentId);
+				: this.indexer.getFileByOwner(documentId);
 
 		HashMap<String,String> fileInfo;
 
@@ -124,18 +124,18 @@ public class ServiceController {
 	@GetMapping("/FileGet")
 	public ResponseEntity<byte[]> FileGet(
 			@RequestParam(value = "hash", defaultValue = "") String hash
-			,@RequestParam(value = "key", defaultValue = "") String key
+			,@RequestParam(value = "owner", defaultValue = "") String owner
 			,@RequestParam(value = "documentId", defaultValue = "") String documentId
 	) throws Exception {
 		this.setUp();
 		byte[] fileContent;
 
-		if (!key.isEmpty())
-			this.indexer.setPublisherKey(UUID.fromString(key));
+		if (!owner.isEmpty())
+			this.indexer.setOwner(owner);
 
 		fileContent =  (!hash.isEmpty())
 			? this.indexer.getFile(UUID.fromString(hash))
-			: this.indexer.getFileByPublishersId(documentId);
+			: this.indexer.getFileByOwner(documentId);
 
 		HashMap<String,String> fileInfo;
 
@@ -156,7 +156,7 @@ public class ServiceController {
 	/**
 	 * gets info of file @ CASSANDRA
 	 * @param hash
-	 * @param key
+	 * @param owner
 	 * @param documentId
 	 * @return
 	 * @throws Exception
@@ -164,7 +164,7 @@ public class ServiceController {
 	@GetMapping("/FileGetInfo")
 	public RestOut FileGetInfo(
 			@RequestParam(value = "hash", defaultValue = "") String hash
-			,@RequestParam(value = "key", defaultValue = "") String key
+			,@RequestParam(value = "owner", defaultValue = "") String owner
 			,@RequestParam(value = "documentId", defaultValue = "") String documentId
 	) throws Exception {
 		this.setUp();
@@ -176,12 +176,12 @@ public class ServiceController {
 		if (!hash.isEmpty()){
 			fileInfo = this.indexer.getFileInfo(UUID.fromString(hash),null);
 		}else{
-			this.indexer.setPublisherKey(UUID.fromString(key));
+			this.indexer.setOwner(owner);
 			fileInfo = this.indexer.getFileInfo(null,documentId);
 		}
 		jsonObject.put("id",fileInfo.get("id"));
 		jsonObject.put("extension",fileInfo.get("extension"));
-		jsonObject.put("publisherId",fileInfo.get("publisherId"));
+		jsonObject.put("owner",fileInfo.get("owner"));
 		jsonObject.put("documentId",fileInfo.get("documentId"));
 		return new RestOut(jsonObject);
 	}

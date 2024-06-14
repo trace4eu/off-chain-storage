@@ -7,7 +7,7 @@ public abstract class AIndex implements  IIndex{
     private Integer offset;
     private String nodeUrl;
     private DbOptions options;
-    private UUID publisherKey;
+    private String owner;
     protected boolean connected =false;
 
     public void setLimit(Integer limit) {
@@ -57,13 +57,13 @@ public abstract class AIndex implements  IIndex{
     }
 
     @Override
-    public UUID getPublisherKey() {
-        return publisherKey;
+    public String getOwner() {
+        return owner;
     }
 
     @Override
-    public void setPublisherKey(UUID publisherKey) {
-        this.publisherKey = publisherKey;
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     public static byte[] hexStringToByteArray(String s) {

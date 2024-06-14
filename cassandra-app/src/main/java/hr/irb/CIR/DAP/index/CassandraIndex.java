@@ -9,9 +9,6 @@ import com.datastax.oss.protocol.internal.util.Bytes;
 import org.json.JSONObject;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.util.*;
@@ -50,8 +47,7 @@ public class CassandraIndex extends AIndex{
     public UUID insertFile(String jsonData) throws Exception {
         JSONObject obj = new JSONObject(jsonData);
 
-        this.setPublisherKey(UUID.fromString(obj.getString("key")));
-        String key = getPublisherKey().toString();
+        this.setOwner(obj.getString("owner"));
         String fileContentString = obj.getString("file");
         byte[] file=AIndex.hexStringToByteArray(fileContentString);
         //(byte[])obj.get("file");
@@ -59,22 +55,22 @@ public class CassandraIndex extends AIndex{
         String documentId = obj.getString("documentId");
         String extension = obj.getString("extension");
 
-        UUID hash = fileToCassandra(file,documentId,extension,key);
+        UUID hash = fileToCassandra(file,documentId,extension);
         return hash;
     }
-    private UUID fileToCassandra(byte[] file,String documentId, String extension, String publisherId) throws Exception {
+    private UUID fileToCassandra(byte[] file,String documentId, String extension) throws Exception {
         ByteBuffer data = ByteBuffer.wrap(file);
         UUID guid = UUID.randomUUID();
         try (CqlSession session = CqlSession.builder().build()) {
             PreparedStatement statement = session.prepare(
-                    "INSERT INTO dap.fileStore (id,documentId,data,publisherId,extension) VALUES (?,?,?,?,?)"
+                    "INSERT INTO dap.fileStore (id,documentId,data,owner,extension) VALUES (?,?,?,?,?)"
             );
 
             BoundStatement boundStatement = statement.bind(
                     guid
                     ,documentId
                     ,data
-                    ,getPublisherKey().toString()
+                    ,getOwner()
                     ,extension);
             session.execute(boundStatement);
         } catch (Exception e) {
@@ -87,7 +83,7 @@ public class CassandraIndex extends AIndex{
         if (file.isEmpty()) return null;
 //        if (this.session == null) this.connect();
         byte[] fileBytes = file.getBytes();
-        UUID guid = fileToCassandra(fileBytes,documentId,extension,getPublisherKey().toString());
+        UUID guid = fileToCassandra(fileBytes,documentId,extension);
         return guid;
     }
 
@@ -109,12 +105,12 @@ public class CassandraIndex extends AIndex{
     }
 
     @Override
-    public byte[] getFileByPublishersId( String documentId) {
+    public byte[] getFileByOwner(String documentId) {
         if (!this.isConnected()) this.connect();
         if (session == null) session = CqlSession.builder().build();
-        String selectQuery = "SELECT data FROM dap.fileStore WHERE publisherId = ? AND documentId = ? LIMIT 1 ALLOW FILTERING";
+        String selectQuery = "SELECT data FROM dap.fileStore WHERE owner = ? AND documentId = ? LIMIT 1 ALLOW FILTERING";
         PreparedStatement selectStmt = session.prepare(selectQuery);
-        BoundStatement boundStmt = selectStmt.bind(getPublisherKey().toString(),documentId);
+        BoundStatement boundStmt = selectStmt.bind(getOwner(),documentId);
         ResultSet rs = session.execute(boundStmt);
 
         for (Row row : rs) {
@@ -132,11 +128,11 @@ public class CassandraIndex extends AIndex{
         BoundStatement boundStmt;
         PreparedStatement selectStmt;
         if (id != null) {
-            selectStmt = session.prepare("SELECT id, documentId, publisherId,extension FROM dap.fileStore WHERE id = ? LIMIT 1 ALLOW FILTERING ");
+            selectStmt = session.prepare("SELECT id, documentId, owner,extension FROM dap.fileStore WHERE id = ? LIMIT 1 ALLOW FILTERING ");
             boundStmt = selectStmt.bind(id);
         } else{
-            selectStmt = session.prepare("SELECT id, documentId, publisherId,extension FROM dap.fileStore WHERE publisherId = ? AND documentId = ? LIMIT 1 ALLOW FILTERING ");
-            boundStmt = selectStmt.bind(getPublisherKey().toString(),documentId);
+            selectStmt = session.prepare("SELECT id, documentId, owner,extension FROM dap.fileStore WHERE owner = ? AND documentId = ? LIMIT 1 ALLOW FILTERING ");
+            boundStmt = selectStmt.bind(getOwner(),documentId);
         }
 
         ResultSet rs = session.execute(boundStmt);
@@ -146,7 +142,7 @@ public class CassandraIndex extends AIndex{
             map.put("extension",row.getString("extension"));
             map.put("id",row.getUuid("id").toString());
             map.put("documentId",row.getString("documentId"));
-            map.put("publisherId",row.getString("publisherId"));
+            map.put("owner",row.getString("owner"));
         }
         return map;
     }
