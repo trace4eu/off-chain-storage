@@ -16,6 +16,7 @@ public class DbOptions {
     private String dbName;
     private Integer port;
     private String datacenter;
+    private String clusterName;
     public DbOptions(String propertiesFile) throws Exception {
         Properties properties = new Properties();
         try (InputStream input = new FileInputStream(propertiesFile)) {
@@ -27,6 +28,7 @@ public class DbOptions {
             this.dbName = properties.getProperty("database.dbname");
             this.port = Integer.parseInt(properties.getProperty("database.port"));
             this.datacenter = properties.getProperty("database.datacenter");
+            this.clusterName = properties.getProperty("database.clustername");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -149,5 +151,13 @@ public class DbOptions {
 
     public void setDatacenter(String datacenter) {
         this.datacenter = datacenter;
+    }
+
+    public String getClusterName() {
+        return clusterName;
+    }
+
+    public void setClusterName(String clusterName) {
+        this.clusterName = clusterName;
     }
 }
