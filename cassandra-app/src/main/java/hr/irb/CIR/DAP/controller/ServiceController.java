@@ -4,7 +4,6 @@ import java.util.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import hr.irb.CIR.Auth.LookupAuth;
 import hr.irb.CIR.DAP.repository.*;
 import hr.irb.CIR.DAP.restservice.RestOut;
 import hr.irb.Vars;
@@ -19,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 public class ServiceController {
 	IIndex indexer;
-	LookupAuth auth = new LookupAuth(null);
 	private void setUp() throws Exception {
 
 		if (this.indexer != null) {

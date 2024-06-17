@@ -57,19 +57,7 @@
 <!--			<version>6.4.2</version>-->
 <!--		</dependency>-->
 		<!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
-<<<<<<< Updated upstream
-		<!-- <dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>42.7.1</version>
-		</dependency> -->
-=======
-<!--		<dependency>-->
-<!--			<groupId>org.postgresql</groupId>-->
-<!--			<artifactId>postgresql</artifactId>-->
-<!--			<version>42.7.1</version>-->
-<!--		</dependency>-->
->>>>>>> Stashed changes
+
 
 		<!-- https://mvnrepository.com/artifact/org.json/json -->
 		<dependency>

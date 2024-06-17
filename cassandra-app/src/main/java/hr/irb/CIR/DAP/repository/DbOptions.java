@@ -1,5 +1,10 @@
 package hr.irb.CIR.DAP.repository;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,6 +15,22 @@ public class DbOptions {
     private String hostname;
     private String dbName;
     private Integer port;
+    private String datacenter;
+    public DbOptions(String propertiesFile) throws Exception {
+        Properties properties = new Properties();
+        try (InputStream input = new FileInputStream(propertiesFile)) {
+            properties.load(input);
+            this.url = properties.getProperty("database.url");
+            this.username = properties.getProperty("database.username");
+            this.password = properties.getProperty("database.password");
+            this.hostname = properties.getProperty("database.hostname");
+            this.dbName = properties.getProperty("database.dbname");
+            this.port = Integer.parseInt(properties.getProperty("database.port"));
+            this.datacenter = properties.getProperty("database.datacenter");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
     public DbOptions(String url, String username, String password, String hostname, String dbName, Integer port) {
         this.url = url;
         this.username = username;
@@ -120,5 +141,13 @@ public class DbOptions {
 
     public void setPort(Integer port) {
         this.port = port;
+    }
+
+    public String getDatacenter() {
+        return datacenter;
+    }
+
+    public void setDatacenter(String datacenter) {
+        this.datacenter = datacenter;
     }
 }
