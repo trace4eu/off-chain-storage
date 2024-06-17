@@ -1,4 +1,4 @@
-package hr.irb.CIR.DAP.index;
+package hr.irb.CIR.DAP.repository;
 
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.cql.BoundStatement;
@@ -23,11 +23,12 @@ public class CassandraIndex extends AIndex{
     public boolean connect() {
         String hostName= getOptions().getHostname();
         if (hostName==null) hostName="localhost";
-        InetSocketAddress node = new InetSocketAddress(hostName, 9042);
+        InetSocketAddress node = new InetSocketAddress("cass.trace4eu.eu", 9042);
         try {
             session = CqlSession.builder()
                     .withKeyspace(getOptions().getDbName())
                     .addContactPoint(node)
+                    .withLocalDatacenter("Mars")
                     .build();
 //            if (session == null) session = CqlSession.builder().build();
             this.connected  = true;
@@ -61,7 +62,8 @@ public class CassandraIndex extends AIndex{
     private UUID fileToCassandra(byte[] file,String documentId, String extension) throws Exception {
         ByteBuffer data = ByteBuffer.wrap(file);
         UUID guid = UUID.randomUUID();
-        try (CqlSession session = CqlSession.builder().build()) {
+        // try (CqlSession session = CqlSession.builder().build()) {
+        try {
             PreparedStatement statement = session.prepare(
                     "INSERT INTO dap.fileStore (id,documentId,data,owner,extension) VALUES (?,?,?,?,?)"
             );

@@ -1,4 +1,4 @@
-package hr.irb.CIR.DAP.index;
+package hr.irb.CIR.DAP.repository;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

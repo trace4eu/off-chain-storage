@@ -1,4 +1,4 @@
-package hr.irb.CIR.DAP.index;
+package hr.irb.CIR.DAP.repository;
 
 import org.springframework.web.multipart.MultipartFile;
 

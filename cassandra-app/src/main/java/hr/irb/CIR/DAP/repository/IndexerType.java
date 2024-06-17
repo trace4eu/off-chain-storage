@@ -1,4 +1,4 @@
-package hr.irb.CIR.DAP.index;
+package hr.irb.CIR.DAP.repository;
 public class IndexerType {
     @Deprecated
     public static final String Pg = "Pg";

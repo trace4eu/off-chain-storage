@@ -1,10 +1,9 @@
-package hr.irb.CIR.DAP.index;
+package hr.irb.CIR.DAP.repository;
 
 import hr.irb.CIR.GenericHelper;
 import org.json.JSONObject;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.sql.*;
 import java.util.*;
 @Deprecated

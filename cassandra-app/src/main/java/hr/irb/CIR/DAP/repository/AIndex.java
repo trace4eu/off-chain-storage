@@ -1,6 +1,4 @@
-package hr.irb.CIR.DAP.index;
-
-import java.util.UUID;
+package hr.irb.CIR.DAP.repository;
 
 public abstract class AIndex implements  IIndex{
     private Integer limit;

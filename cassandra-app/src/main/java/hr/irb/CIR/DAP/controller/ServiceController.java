@@ -1,21 +1,19 @@
-package hr.irb.CIR.DAP.restservice;
+package hr.irb.CIR.DAP.controller;
 
 import java.util.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import hr.irb.CIR.Auth.LookupAuth;
-import hr.irb.CIR.DAP.index.*;
+import hr.irb.CIR.DAP.repository.*;
+import hr.irb.CIR.DAP.restservice.RestOut;
 import hr.irb.Vars;
 import org.json.JSONObject;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
@@ -42,12 +40,13 @@ public class ServiceController {
 
 	@PostMapping("/FilePutJson")
 	public RestOut FilePutJson(
-			@RequestParam(value = "jsonData", defaultValue = "") String jsonData
+			// @RequestBody(value = "jsonData", defaultValue = "") String jsonData
 	) throws Exception {
 		this.setUp();
 		ObjectNode jsonObject = new ObjectMapper().createObjectNode();
 		try  {
-			String hash = this.indexer.insertFile(jsonData).toString();
+			// String hash = this.indexer.insertFile(jsonData).toString();
+			String hash = this.indexer.insertFile("{\"isPrivate\": true,\"owner\":\"onwerId\",\"documentId\":\"documentId3\",\"extension\":\"json\",\"file\":\"fileStringBase64\"}").toString();
 			jsonObject.put("hash", hash);
 		} catch (Exception e) {
 			jsonObject.put("error", e.getMessage());

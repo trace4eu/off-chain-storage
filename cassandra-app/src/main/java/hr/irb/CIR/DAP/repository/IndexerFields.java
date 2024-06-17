@@ -1,6 +1,5 @@
-package hr.irb.CIR.DAP.index;
+package hr.irb.CIR.DAP.repository;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 

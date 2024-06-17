@@ -1,4 +1,4 @@
-package hr.irb.CIR.DAP.index;
+package hr.irb.CIR.DAP.repository;
 
 public class IndexFactory {
     public static IIndex createIndexer(String type, DbOptions options) {
