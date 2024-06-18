@@ -1,10 +1,14 @@
 package com.trace4eu.offchain.restservice;
 
+import com.trace4eu.offchain.controller.ServiceController;
 import com.trace4eu.offchain.repository.DbOptions;
 import hr.irb.Vars;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
+
 @SpringBootApplication
+@ComponentScan(basePackageClasses = ServiceController.class)
 public class RestServiceApplication {
 
 	public static  void printMessage(){
