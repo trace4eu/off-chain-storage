@@ -6,6 +6,7 @@ import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.Row;
 import com.datastax.oss.protocol.internal.util.Bytes;
+import com.trace4eu.offchain.dto.CassandraConnection;
 import com.trace4eu.offchain.dto.FileStore;
 import com.trace4eu.offchain.dto.OutputFile;
 import com.trace4eu.offchain.dto.PutFileDTO;
@@ -22,25 +23,37 @@ public class CassandraIndex extends AIndex{
         this.setOptions(options);
         if (this.session == null) this.connect();
     }
+
     @Override
     public boolean connect() {
-        String hostName= getOptions().getHostname();
-        if (hostName==null) hostName="localhost";
-        InetSocketAddress node = new InetSocketAddress(getOptions().getHostname(), getOptions().getPort());
-//        InetSocketAddress node = new InetSocketAddress("cass.trace4eu.eu", 9042);
+        CassandraConnection cc = CassandraConnection.getInstance();
         try {
-            session = CqlSession.builder()
-                    .withKeyspace(getOptions().getDbName())
-                    .addContactPoint(node)
-                    .withLocalDatacenter(getOptions().getClusterName())
-                    .build();
-//            if (session == null) session = CqlSession.builder().build();
-            this.connected  = true;
+            session = cc.getSession();
+            this.connected  = (session != null) ? true : false;
         } catch (Exception e) {
             this.connected  = false;
         }
         return  this.isConnected();
     }
+
+//    @Override
+//    public boolean connect() {
+//        String hostName= getOptions().getHostname();
+//        if (hostName==null) hostName="localhost";
+//        InetSocketAddress node = new InetSocketAddress(getOptions().getHostname(), getOptions().getPort());
+//        try {
+//            session = CqlSession.builder()
+//                    .withKeyspace(getOptions().getDbName())
+//                    .addContactPoint(node)
+//                    .withLocalDatacenter(getOptions().getClusterName())
+//                    .build();
+////            if (session == null) session = CqlSession.builder().build();
+//            this.connected  = true;
+//        } catch (Exception e) {
+//            this.connected  = false;
+//        }
+//        return  this.isConnected();
+//    }
 
     @Override
     public void disconnect() {
