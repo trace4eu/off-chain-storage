@@ -33,13 +33,14 @@ public class DbOptions {
             ex.printStackTrace();
         }
     }
-    public DbOptions(String url, String username, String password, String hostname, String dbName, Integer port) {
+    public DbOptions(String url, String username, String password, String hostname, String dbName, Integer port, String clusterName) {
         this.url = url;
         this.username = username;
         this.password=password;
         this.hostname = hostname;
         this.dbName = dbName;
         this.port = port;
+        this.clusterName = clusterName;
     }
     public DbOptions(){}
     public String getUrl() {

@@ -6,10 +6,11 @@ public class IndexFactory {
             throw new RuntimeException("Options not available!");
         }
         switch (type) {
-            case IndexerType.Pg:
-                return new PgIndex(options);
             case IndexerType.Cassandra:
                 return new CassandraIndex(options);
+            case IndexerType.IPFS:
+                //TODO
+                return null;
             default:
                 throw new IllegalArgumentException("Invalid indexer type: " + type);
         }
