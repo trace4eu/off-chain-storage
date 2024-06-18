@@ -1,5 +1,6 @@
 package com.trace4eu.offchain.repository;
 
+import com.trace4eu.offchain.dto.PutFileDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
@@ -24,7 +25,7 @@ public interface IIndex {
     public void setOptions(DbOptions options) ;
 
     public UUID insertFile(MultipartFile file, String documentId, String extension) throws Exception;
-    public UUID insertFile(String jsonData) throws Exception;
+    public UUID insertFile(PutFileDTO importData) throws Exception;
     public byte[] getFile(UUID fileId);
     public byte[] getFileByOwner(String documentId);
     public HashMap<String,String> getFileInfo(UUID id, String documentId);

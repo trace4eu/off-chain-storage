@@ -6,6 +6,7 @@ import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.Row;
 import com.datastax.oss.protocol.internal.util.Bytes;
+import com.trace4eu.offchain.dto.PutFileDTO;
 import org.json.JSONObject;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -46,16 +47,33 @@ public class CassandraIndex extends AIndex{
     }
 
     //TODO not implemented yet
-    public UUID insertFile(String jsonData) throws Exception {
-        JSONObject obj = new JSONObject(jsonData);
+//    public UUID insertFile(String jsonData) throws Exception {
+//        JSONObject obj = new JSONObject(jsonData);
+//
+//        this.setOwner(obj.getString("owner"));
+//        String fileContentString = obj.getString("file");
+//        byte[] file=AIndex.hexStringToByteArray(fileContentString);
+//        //(byte[])obj.get("file");
+//        if (file.length==0) throw new Exception("File not found");
+//        String documentId = obj.getString("documentId");
+//        String extension = obj.getString("extension");
+//
+//        UUID hash = fileToCassandra(file,documentId,extension);
+//        return hash;
+//    }
 
-        this.setOwner(obj.getString("owner"));
-        String fileContentString = obj.getString("file");
+    public UUID insertFile(PutFileDTO importData) throws Exception {
+        this.setOwner(importData.owner);
+        if (importData.owner.isEmpty()) throw new Exception("Owner not available");
+
+        String fileContentString = importData.file;
         byte[] file=AIndex.hexStringToByteArray(fileContentString);
-        //(byte[])obj.get("file");
-        if (file.length==0) throw new Exception("File not found");
-        String documentId = obj.getString("documentId");
-        String extension = obj.getString("extension");
+        if (file.length==0) throw new Exception("File content not available");
+
+        String documentId = importData.documentId;
+        if (importData.documentId.isEmpty()) throw new Exception("Document Id or file name not available");
+
+        String extension = importData.extension;
 
         UUID hash = fileToCassandra(file,documentId,extension);
         return hash;

@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.trace4eu.offchain.dto.PutFileDTO;
 import com.trace4eu.offchain.repository.DbOptions;
 import com.trace4eu.offchain.repository.IIndex;
 import com.trace4eu.offchain.repository.IndexFactory;
@@ -42,12 +43,13 @@ public class ServiceController {
 	@PostMapping("/FilePutJson")
 	public RestOut FilePutJson(
 			// @RequestBody(value = "jsonData", defaultValue = "") String jsonData
+			@RequestBody PutFileDTO data
 	) throws Exception {
 		this.setUp();
 		ObjectNode jsonObject = new ObjectMapper().createObjectNode();
 		try  {
-			// String hash = this.indexer.insertFile(jsonData).toString();
-			String hash = this.indexer.insertFile("{\"isPrivate\": true,\"owner\":\"onwerId\",\"documentId\":\"documentId3\",\"extension\":\"json\",\"file\":\"fileStringBase64\"}").toString();
+			 String hash = this.indexer.insertFile(data).toString();
+			//String hash = this.indexer.insertFile("{\"isPrivate\": true,\"owner\":\"onwerId\",\"documentId\":\"documentId3\",\"extension\":\"json\",\"file\":\"fileStringBase64\"}").toString();
 			jsonObject.put("hash", hash);
 		} catch (Exception e) {
 			jsonObject.put("error", e.getMessage());
