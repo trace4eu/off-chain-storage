@@ -4,11 +4,14 @@ import java.util.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.trace4eu.offchain.dto.FileStore;
+import com.trace4eu.offchain.dto.OutputFile;
 import com.trace4eu.offchain.dto.PutFileDTO;
 import com.trace4eu.offchain.repository.DbOptions;
 import com.trace4eu.offchain.repository.IIndex;
 import com.trace4eu.offchain.repository.IndexFactory;
 import com.trace4eu.offchain.repository.IndexerType;
+import com.trace4eu.offchain.restservice.RestArrayOut;
 import com.trace4eu.offchain.restservice.RestOut;
 import hr.irb.Vars;
 import org.json.JSONObject;
@@ -124,6 +127,25 @@ public class ServiceController {
 				.body(fileContent);
 	}
 
+	@GetMapping("/offchain-storage/api/v1/files/list")
+	public ResponseEntity<List<OutputFile>> FilesList(
+			@RequestParam(value = "owner", defaultValue = "") String owner
+			,@RequestParam(value = "documentId", defaultValue = "") String documentId
+	) throws Exception {
+		this.setUp();
+
+		if (!owner.isEmpty())
+			this.indexer.setOwner(owner);
+
+		List<OutputFile> files = this.indexer.getListOfFiles(documentId,owner);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		return ResponseEntity.ok()
+				.headers(headers)
+				.body(files);
+	}
 	/**
 	 * gets info of file @ CASSANDRA
 	 * @param hash

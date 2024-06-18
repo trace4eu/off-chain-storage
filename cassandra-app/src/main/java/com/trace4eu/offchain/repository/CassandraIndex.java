@@ -6,6 +6,8 @@ import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.Row;
 import com.datastax.oss.protocol.internal.util.Bytes;
+import com.trace4eu.offchain.dto.FileStore;
+import com.trace4eu.offchain.dto.OutputFile;
 import com.trace4eu.offchain.dto.PutFileDTO;
 import org.json.JSONObject;
 import org.springframework.web.multipart.MultipartFile;
@@ -142,6 +144,42 @@ public class CassandraIndex extends AIndex{
             return  byteArray;
         }
         return null;
+    }
+
+    @Override
+    public List<OutputFile> getListOfFiles(String documentId, String owner) throws Exception {
+        if (!this.isConnected()) this.connect();
+        if (session == null) session = CqlSession.builder().build();
+
+        String selectQuery;
+        PreparedStatement selectStmt;
+        if (documentId.isEmpty() && owner.isEmpty())
+            throw new Exception("You need to provide a documentid/file name or owner");
+
+        if (!documentId.isEmpty()){
+            selectQuery = "SELECT id,documentid,owner,extension FROM dap.fileStore WHERE documentId = ? ALLOW FILTERING";
+        } else {
+            selectQuery = "SELECT id,documentid,owner,extension FROM dap.fileStore WHERE owner = ? ALLOW FILTERING";
+        }
+
+        selectStmt = session.prepare(selectQuery);
+
+        BoundStatement boundStmt = (!documentId.isEmpty())
+                ? selectStmt.bind(documentId)
+                : selectStmt.bind(owner);
+
+        ResultSet rs = session.execute(boundStmt);
+
+        List<OutputFile> results = new ArrayList<OutputFile>();
+        for (Row row : rs) {
+            OutputFile outFile  = new OutputFile();
+            outFile.setId(row.getUuid("id"));
+            outFile.setOwner(row.getString("owner"));
+            outFile.setDocumentid(row.getString("documentid"));
+            outFile.setExtension(row.getString("extension"));
+            results.add(outFile);
+        }
+        return results;
     }
 
     @Override

@@ -1,9 +1,12 @@
 package com.trace4eu.offchain.repository;
 
+import com.trace4eu.offchain.dto.FileStore;
+import com.trace4eu.offchain.dto.OutputFile;
 import com.trace4eu.offchain.dto.PutFileDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 public interface IIndex {
@@ -29,4 +32,5 @@ public interface IIndex {
     public byte[] getFile(UUID fileId);
     public byte[] getFileByOwner(String documentId);
     public HashMap<String,String> getFileInfo(UUID id, String documentId);
+    public List<OutputFile> getListOfFiles(String documentId, String owner) throws Exception;
 }
