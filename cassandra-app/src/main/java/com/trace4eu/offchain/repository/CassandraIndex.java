@@ -67,7 +67,9 @@ public class CassandraIndex extends AIndex{
         if (importData.owner.isEmpty()) throw new Exception("Owner not available");
 
         String fileContentString = importData.file;
-        byte[] file=AIndex.hexStringToByteArray(fileContentString);
+//        byte[] file=AIndex.hexStringToByteArray(fileContentString);
+        byte[] file = Base64.getDecoder().decode(fileContentString);
+
         if (file.length==0) throw new Exception("File content not available");
 
         String documentId = importData.documentId;

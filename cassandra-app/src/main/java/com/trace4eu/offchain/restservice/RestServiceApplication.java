@@ -10,11 +10,6 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @ComponentScan(basePackageClasses = ServiceController.class)
 public class RestServiceApplication {
-
-	public static  void printMessage(){
-		System.out.println("Usage:");
-		System.out.println("java -jar <application.jar> -i <config.options> <other java options>...");
-	}
 	public static void main(String[] args) throws Exception {
 //		System.out.println("STARTING THE SERVICE");
 		DbOptions options = null;
@@ -22,7 +17,8 @@ public class RestServiceApplication {
 			options = new DbOptions(args[1]);
 			Vars.CASSANDRA_DB_OPTIONS = options;
 		} else {
-			printMessage();
+			System.out.println("Usage:");
+			System.out.println("java -jar <application.jar> -i <config.options> <other java options>...");
 			return;
 		}
 

@@ -19,7 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-@RestController
+@RestController()
 public class ServiceController {
 	IIndex indexer;
 	private void setUp() throws Exception {
@@ -40,7 +40,8 @@ public class ServiceController {
 	}
 
 
-	@PostMapping("/FilePutJson")
+//	@PostMapping("/FilePutJson")
+	@PostMapping("/offchain-storage/api/v1/files")
 	public RestOut FilePutJson(
 			// @RequestBody(value = "jsonData", defaultValue = "") String jsonData
 			@RequestBody PutFileDTO data
@@ -83,47 +84,15 @@ public class ServiceController {
 		return new RestOut(jsonObject);
 	}
 
-	@GetMapping("/FileGetJson")
-	public ResponseEntity<byte[]> FileGetJson(
-			@RequestParam(value = "jsonData", defaultValue = "") String jsonData
-	) throws Exception {
-		JSONObject obj = new JSONObject(jsonData);
-		String owner = obj.getString("owner");
-		String hash = obj.getString("hash");
-		String documentId = obj.getString("documentId");
 
-		this.setUp();
-		byte[] fileContent;
-
-		if (!owner.isEmpty())
-			this.indexer.setOwner(owner);
-
-		fileContent =  (!hash.isEmpty())
-				? this.indexer.getFile(UUID.fromString(hash))
-				: this.indexer.getFileByOwner(documentId);
-
-		HashMap<String,String> fileInfo;
-
-		fileInfo =(hash.isEmpty())
-				? this.indexer.getFileInfo(null, documentId)
-				: this.indexer.getFileInfo(UUID.fromString(hash), documentId);
-
-		String filename = fileInfo.get("id")+"."+fileInfo.get("extension");
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-		headers.setContentDisposition(ContentDisposition.attachment().filename(filename).build());
-
-		return ResponseEntity.ok()
-				.headers(headers)
-				.body(fileContent);
-	}
 	/**
 	 * get   file from cassandra
 	 * @param hash
 	 * @return
 	 * @throws Exception
 	 */
-	@GetMapping("/FileGet")
+//	@GetMapping("/FileGet")
+	@GetMapping("/offchain-storage/api/v1/files")
 	public ResponseEntity<byte[]> FileGet(
 			@RequestParam(value = "hash", defaultValue = "") String hash
 			,@RequestParam(value = "owner", defaultValue = "") String owner
