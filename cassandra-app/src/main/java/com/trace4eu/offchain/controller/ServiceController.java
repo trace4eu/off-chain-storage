@@ -13,6 +13,7 @@ import com.trace4eu.offchain.repository.IndexFactory;
 import com.trace4eu.offchain.repository.IndexerType;
 import com.trace4eu.offchain.restservice.RestArrayOut;
 import com.trace4eu.offchain.restservice.RestOut;
+import hr.irb.CIR.GenericHelper;
 import hr.irb.Vars;
 import org.json.JSONObject;
 import org.springframework.http.ContentDisposition;
@@ -119,7 +120,11 @@ public class ServiceController {
 
 		String filename = fileInfo.get("id")+"."+fileInfo.get("extension");
 		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+
+		String ext = fileInfo.get("extension").toLowerCase();
+		MediaType mType = GenericHelper.getMediaType(ext);
+		//headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+		headers.setContentType(mType);
 		headers.setContentDisposition(ContentDisposition.attachment().filename(filename).build());
 
 		return ResponseEntity.ok()
