@@ -2,7 +2,7 @@ package hr.irb.CIR.DAP.repository;
 
 import java.util.Set;
 import java.util.UUID;
-
+@Deprecated
 public class IndexerFields {
     private UUID id;
     private String documentId;

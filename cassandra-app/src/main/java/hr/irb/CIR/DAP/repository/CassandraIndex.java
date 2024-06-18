@@ -23,12 +23,13 @@ public class CassandraIndex extends AIndex{
     public boolean connect() {
         String hostName= getOptions().getHostname();
         if (hostName==null) hostName="localhost";
-        InetSocketAddress node = new InetSocketAddress("cass.trace4eu.eu", 9042);
+        InetSocketAddress node = new InetSocketAddress(getOptions().getHostname(), getOptions().getPort());
+//        InetSocketAddress node = new InetSocketAddress("cass.trace4eu.eu", 9042);
         try {
             session = CqlSession.builder()
                     .withKeyspace(getOptions().getDbName())
                     .addContactPoint(node)
-                    .withLocalDatacenter("Mars")
+                    .withLocalDatacenter(getOptions().getClusterName())
                     .build();
 //            if (session == null) session = CqlSession.builder().build();
             this.connected  = true;
