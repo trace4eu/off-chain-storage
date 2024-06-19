@@ -35,12 +35,15 @@ public class CassandraConnection {
     }
 
     public static CassandraConnection getInstance() {
-        if (instance == null) {
+        if (instance == null /* || instance.getSession().isClosed()*/) {
             instance = new CassandraConnection();
         }
         return instance;
     }
 
+    public void disconnect(){
+        session.close();
+    }
     public CqlSession getSession() {
 //        if (this.session == null)
 //            this.connect();

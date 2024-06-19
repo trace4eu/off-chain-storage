@@ -28,7 +28,7 @@ public class CassandraIndex extends AIndex{
     public boolean connect() {
         CassandraConnection cc = CassandraConnection.getInstance();
         try {
-            session = cc.getSession();
+            if (session == null) session = cc.getSession();
             this.connected  = (session != null) ? true : false;
         } catch (Exception e) {
             this.connected  = false;
@@ -128,7 +128,7 @@ public class CassandraIndex extends AIndex{
     @Override
     public byte[] getFile(UUID fileId) {
         if (!this.isConnected()) this.connect();
-        if (session == null) session = CqlSession.builder().build();
+//        if (session == null) session = CqlSession.builder().build();
         String selectQuery = "SELECT data FROM dap.fileStore WHERE id = ? LIMIT 1";
         PreparedStatement selectStmt = session.prepare(selectQuery);
         BoundStatement boundStmt = selectStmt.bind(fileId);
@@ -145,7 +145,7 @@ public class CassandraIndex extends AIndex{
     @Override
     public byte[] getFileByOwner(String documentId) {
         if (!this.isConnected()) this.connect();
-        if (session == null) session = CqlSession.builder().build();
+//        if (session == null) session = CqlSession.builder().build();
         String selectQuery = "SELECT data FROM dap.fileStore WHERE owner = ? AND documentId = ? LIMIT 1 ALLOW FILTERING";
         PreparedStatement selectStmt = session.prepare(selectQuery);
         BoundStatement boundStmt = selectStmt.bind(getOwner(),documentId);
@@ -162,7 +162,7 @@ public class CassandraIndex extends AIndex{
     @Override
     public List<OutputFile> getListOfFiles(String documentId, String owner) throws Exception {
         if (!this.isConnected()) this.connect();
-        if (session == null) session = CqlSession.builder().build();
+//        if (session == null) session = CqlSession.builder().build();
 
         String selectQuery;
         PreparedStatement selectStmt;
@@ -198,7 +198,8 @@ public class CassandraIndex extends AIndex{
     @Override
     public HashMap<String, String> getFileInfo(UUID id, String documentId) {
         if (!this.isConnected()) this.connect();
-        if (session == null) session = CqlSession.builder().build();
+//        if (session == null) session = CqlSession.builder().build();
+//        if (session == null) session = CassandraConnection.getInstance().getSession();
         BoundStatement boundStmt;
         PreparedStatement selectStmt;
         if (id != null) {
