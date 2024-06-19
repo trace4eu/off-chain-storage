@@ -126,7 +126,7 @@ public class CassandraIndex extends AIndex{
 
     @Override
     public byte[] getFile(UUID fileId) {
-        if (!this.isConnected()) this.connect();
+//        if (!this.isConnected()) this.connect();
 //        if (session == null) session = CqlSession.builder().build();
         String selectQuery = "SELECT data FROM dap.fileStore WHERE id = ? LIMIT 1";
         PreparedStatement selectStmt = session.prepare(selectQuery);
@@ -143,7 +143,7 @@ public class CassandraIndex extends AIndex{
 
     @Override
     public byte[] getFileByOwner(String documentId) {
-        if (!this.isConnected()) this.connect();
+//        if (!this.isConnected()) this.connect();
 //        if (session == null) session = CqlSession.builder().build();
         String selectQuery = "SELECT data FROM dap.fileStore WHERE owner = ? AND documentId = ? LIMIT 1 ALLOW FILTERING";
         PreparedStatement selectStmt = session.prepare(selectQuery);
@@ -160,7 +160,7 @@ public class CassandraIndex extends AIndex{
 
     @Override
     public List<OutputFile> getListOfFiles(String documentId, String owner) throws Exception {
-        if (!this.isConnected()) this.connect();
+//        if (!this.isConnected()) this.connect();
 //        if (session == null) session = CqlSession.builder().build();
 
         String selectQuery;
@@ -191,12 +191,13 @@ public class CassandraIndex extends AIndex{
             outFile.setExtension(row.getString("extension"));
             results.add(outFile);
         }
+
         return results;
     }
 
     @Override
     public HashMap<String, String> getFileInfo(UUID id, String documentId) {
-        if (!this.isConnected()) this.connect();
+//        if (!this.isConnected()) this.connect();
 //        if (session == null) session = CqlSession.builder().build();
 //        if (session == null) session = CassandraConnection.getInstance().getSession();
         BoundStatement boundStmt;
