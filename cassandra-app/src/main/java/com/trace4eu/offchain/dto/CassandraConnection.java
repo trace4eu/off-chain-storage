@@ -29,9 +29,8 @@ public class CassandraConnection {
     }
     private CassandraConnection() {
         this.options = Vars.DB_OPTIONS;
-        this.connect();
-
-
+        if (session==null || session.isClosed())
+            this.connect();
     }
 
     public static CassandraConnection getInstance() {
