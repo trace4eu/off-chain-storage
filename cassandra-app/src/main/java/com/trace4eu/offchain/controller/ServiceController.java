@@ -93,25 +93,31 @@ public class ServiceController {
 	) throws Exception {
 		this.setUp();
 		byte[] fileContent;
+		try {
+			fileContent = this.indexer.getFile(UUID.fromString(id));
 
-		fileContent = this.indexer.getFile(UUID.fromString(id));
+			HashMap<String, String> fileInfo;
 
-		HashMap<String,String> fileInfo;
+			fileInfo = this.indexer.getFileInfo(UUID.fromString(id), null);
 
-		fileInfo = this.indexer.getFileInfo(UUID.fromString(id), null);
+			String filename = fileInfo.get("documentId") + "." + fileInfo.get("extension");
 
-		String filename = fileInfo.get("documentId")+"."+fileInfo.get("extension");
-		HttpHeaders headers = new HttpHeaders();
+			HttpHeaders headers = new HttpHeaders();
+			String ext = fileInfo.get("extension").toLowerCase();
+			MediaType mType = GenericHelper.getMediaType(ext);
+			headers.setContentType(mType);
+			headers.setContentDisposition(ContentDisposition.attachment().filename(filename).build());
+			return ResponseEntity.status(HttpStatus.OK)
+					.headers(headers)
+					.body(fileContent);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
 
-		String ext = fileInfo.get("extension").toLowerCase();
-		MediaType mType = GenericHelper.getMediaType(ext);
+
 		//headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-		headers.setContentType(mType);
-		headers.setContentDisposition(ContentDisposition.attachment().filename(filename).build());
 
-		return ResponseEntity.status(HttpStatus.OK)
-				.headers(headers)
-				.body(fileContent);
+
 	}
 
 	@GetMapping("/offchain-storage/api/v1/files/list")
