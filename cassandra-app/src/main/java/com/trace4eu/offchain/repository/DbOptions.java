@@ -87,23 +87,23 @@ public class DbOptions {
         this.dbName = dbName;
     }
 
-    public void setUrlFromData(boolean isHttp) throws Exception {
-        StringBuilder url = new StringBuilder();
-        url.append(isHttp ? "http://" : "https://");
-        if (this.getUsername() != null) {
-            url.append(getUsername());
-            if (this.getPassword()!=null) url.append(":"+this.password);
-            url.append("@");
-        }
-        url.append(getHostname());
-
-        if (getPort() != null)
-            url.append(":").append(getPort().toString());
-
-        url.append("/"). append(getDbName());
-
-        this.setUrl(url.toString());
-    }
+//    public void setUrlFromData(boolean isHttp) throws Exception {
+//        StringBuilder url = new StringBuilder();
+//        url.append(isHttp ? "http://" : "https://");
+//        if (this.getUsername() != null) {
+//            url.append(getUsername());
+//            if (this.getPassword()!=null) url.append(":"+this.password);
+//            url.append("@");
+//        }
+//        url.append(getHostname());
+//
+//        if (getPort() != null)
+//            url.append(":").append(getPort().toString());
+//
+//        url.append("/"). append(getDbName());
+//
+//        this.setUrl(url.toString());
+//    }
     @Deprecated
     private void extractDataFromUrl() throws Exception {
         if (this.getUrl() == null) throw new Exception("No url available");

@@ -13,10 +13,7 @@ import com.trace4eu.offchain.repository.IndexerType;
 import com.trace4eu.offchain.restservice.RestOut;
 import hr.irb.CIR.GenericHelper;
 import hr.irb.Vars;
-import org.springframework.http.ContentDisposition;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,22 +38,20 @@ public class ServiceController {
 	}
 
 
-//	@PostMapping("/FilePutJson")
 	@PostMapping("/offchain-storage/api/v1/files")
-	public RestOut FilePutJson(
-			// @RequestBody(value = "jsonData", defaultValue = "") String jsonData
+	public ResponseEntity<RestOut> FilePutJson(
 			@RequestBody PutFileDTO data
 	) throws Exception {
 		this.setUp();
 		ObjectNode jsonObject = new ObjectMapper().createObjectNode();
 		try  {
-			 String hash = this.indexer.insertFile(data).toString();
-			//String hash = this.indexer.insertFile("{\"isPrivate\": true,\"owner\":\"onwerId\",\"documentId\":\"documentId3\",\"extension\":\"json\",\"file\":\"fileStringBase64\"}").toString();
-			jsonObject.put("hash", hash);
+			String id = this.indexer.insertFile(data).toString();
+			jsonObject.put("id", id);
 		} catch (Exception e) {
 			jsonObject.put("error", e.getMessage());
 		}
-		return new RestOut(jsonObject);
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(new RestOut(jsonObject));
 	}
 
 	/**
@@ -68,10 +63,10 @@ public class ServiceController {
 	 */
 	@PostMapping("/FilePut")
 	public RestOut FilePut(
-		@RequestParam(value = "owner", defaultValue = "") String owner
-		,@RequestParam("file") MultipartFile file
-		,@RequestParam(value = "extension", defaultValue = "") String extension
-		,@RequestParam(value = "documentId", defaultValue = "") String documentId
+			@RequestParam(value = "owner", defaultValue = "") String owner
+			,@RequestParam("file") MultipartFile file
+			,@RequestParam(value = "extension", defaultValue = "") String extension
+			,@RequestParam(value = "documentId", defaultValue = "") String documentId
 	) throws Exception {
 		this.setUp();
 		ObjectNode jsonObject = new ObjectMapper().createObjectNode();
@@ -88,34 +83,24 @@ public class ServiceController {
 
 	/**
 	 * get   file from cassandra
-	 * @param hash
+	 * @param id
 	 * @return
 	 * @throws Exception
 	 */
-//	@GetMapping("/FileGet")
-	@GetMapping("/offchain-storage/api/v1/files")
+	@GetMapping("/offchain-storage/api/v1/files/{id}")
 	public ResponseEntity<byte[]> FileGet(
-			@RequestParam(value = "hash", defaultValue = "") String hash
-			,@RequestParam(value = "owner", defaultValue = "") String owner
-			,@RequestParam(value = "documentId", defaultValue = "") String documentId
+			@PathVariable(required = true) String id
 	) throws Exception {
 		this.setUp();
 		byte[] fileContent;
 
-		if (!owner.isEmpty())
-			this.indexer.setOwner(owner);
-
-		fileContent =  (!hash.isEmpty())
-			? this.indexer.getFile(UUID.fromString(hash))
-			: this.indexer.getFileByOwner(documentId);
+		fileContent = this.indexer.getFile(UUID.fromString(id));
 
 		HashMap<String,String> fileInfo;
 
-		fileInfo =(hash.isEmpty())
-			? this.indexer.getFileInfo(null, documentId)
-			: this.indexer.getFileInfo(UUID.fromString(hash), documentId);
+		fileInfo = this.indexer.getFileInfo(UUID.fromString(id), null);
 
-		String filename = fileInfo.get("id")+"."+fileInfo.get("extension");
+		String filename = fileInfo.get("documentId")+"."+fileInfo.get("extension");
 		HttpHeaders headers = new HttpHeaders();
 
 		String ext = fileInfo.get("extension").toLowerCase();
@@ -124,7 +109,7 @@ public class ServiceController {
 		headers.setContentType(mType);
 		headers.setContentDisposition(ContentDisposition.attachment().filename(filename).build());
 
-		return ResponseEntity.ok()
+		return ResponseEntity.status(HttpStatus.OK)
 				.headers(headers)
 				.body(fileContent);
 	}
