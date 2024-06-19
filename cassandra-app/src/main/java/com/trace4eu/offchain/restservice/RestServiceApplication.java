@@ -15,7 +15,7 @@ public class RestServiceApplication {
 		DbOptions options = null;
 		if (args.length >= 2 && args[0].equals("-i")) {
 			options = new DbOptions(args[1]);
-			Vars.CASSANDRA_DB_OPTIONS = options;
+			Vars.DB_OPTIONS = options;
 		} else {
 			System.out.println("Usage:");
 			System.out.println("java -jar <application.jar> -i <config.options> <other java options>...");

@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>hr.irb</groupId>
-	<artifactId>file-service-complete</artifactId>
-	<version>0.0.1</version>
-	<name>file-service-complete</name>
+	<artifactId>file-service</artifactId>
+	<version>0.0.2</version>
+	<name>file-service</name>
 	<description>Cassandra file service</description>
 	<properties>
 		<java.version>17</java.version>

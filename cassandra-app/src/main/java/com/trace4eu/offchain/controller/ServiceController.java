@@ -4,18 +4,15 @@ import java.util.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.trace4eu.offchain.dto.FileStore;
 import com.trace4eu.offchain.dto.OutputFile;
 import com.trace4eu.offchain.dto.PutFileDTO;
 import com.trace4eu.offchain.repository.DbOptions;
 import com.trace4eu.offchain.repository.IIndex;
 import com.trace4eu.offchain.repository.IndexFactory;
 import com.trace4eu.offchain.repository.IndexerType;
-import com.trace4eu.offchain.restservice.RestArrayOut;
 import com.trace4eu.offchain.restservice.RestOut;
 import hr.irb.CIR.GenericHelper;
 import hr.irb.Vars;
-import org.json.JSONObject;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -38,7 +35,7 @@ public class ServiceController {
 //		dbOptions.setDbName("dap");
 //		dbOptions.setHostname("localhost");
 //		dbOptions.setUrl("http://localhost/dap"); //neznam port koji koristi cassandra
-		DbOptions dbOptions = Vars.CASSANDRA_DB_OPTIONS;
+		DbOptions dbOptions = Vars.DB_OPTIONS;
 		indexer = IndexFactory.createIndexer(IndexerType.Cassandra,dbOptions);
 		indexer.connect();
 	}
