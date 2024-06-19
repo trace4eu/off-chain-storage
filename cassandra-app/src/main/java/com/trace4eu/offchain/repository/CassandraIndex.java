@@ -7,13 +7,10 @@ import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.Row;
 import com.datastax.oss.protocol.internal.util.Bytes;
 import com.trace4eu.offchain.dto.CassandraConnection;
-import com.trace4eu.offchain.dto.FileStore;
 import com.trace4eu.offchain.dto.OutputFile;
 import com.trace4eu.offchain.dto.PutFileDTO;
-import org.json.JSONObject;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.util.*;
 
@@ -168,6 +165,7 @@ public class CassandraIndex extends AIndex{
         if (documentId.isEmpty() && owner.isEmpty())
             throw new Exception("You need to provide a documentid/file name or owner");
 
+//        Integer cnt = this.getFileCoundPerOwner(owner);
         if (!documentId.isEmpty()){
             selectQuery = "SELECT id,documentid,owner,extension FROM dap.fileStore WHERE documentId = ? ALLOW FILTERING";
         } else {
@@ -195,6 +193,82 @@ public class CassandraIndex extends AIndex{
         return results;
     }
 
+
+
+    public List<OutputFile> getListOfFilesPaging(String documentId, String owner, Integer pageSize, Integer pageNumber) throws Exception {
+//        if (!this.isConnected()) this.connect();
+//        if (session == null) session = CqlSession.builder().build();
+        Integer count = this.getFileCountPerOwner(owner);
+        String selectQuery;
+        PreparedStatement selectStmt;
+        if (documentId.isEmpty() && owner.isEmpty())
+            throw new Exception("You need to provide a documentid/file name or owner");
+//TODO implement pagination here
+        Integer cnt = 0;
+        if (!documentId.isEmpty()){
+            cnt = this.getFileCountPerDocumentId(documentId);
+            selectQuery = "SELECT id,documentid,owner,extension FROM dap.fileStore WHERE documentId = ? ALLOW FILTERING";
+
+        } else {
+            cnt = this.getFileCountPerOwner(owner);
+            selectQuery = "SELECT id,documentid,owner,extension FROM dap.fileStore WHERE owner = ? ALLOW FILTERING";
+
+        }
+
+        selectStmt = session.prepare(selectQuery);
+
+        BoundStatement boundStmt = (!documentId.isEmpty())
+                ? selectStmt.bind(documentId)
+                : selectStmt.bind(owner);
+
+        ResultSet rs = session.execute(boundStmt);
+
+        List<OutputFile> results = new ArrayList<OutputFile>();
+        for (Row row : rs) {
+            OutputFile outFile  = new OutputFile();
+            outFile.setId(row.getUuid("id"));
+            outFile.setOwner(row.getString("owner"));
+            outFile.setDocumentid(row.getString("documentid"));
+            outFile.setExtension(row.getString("extension"));
+            results.add(outFile);
+        }
+
+        return results;
+    }
+    public Integer getFileCountPerDocumentId(String documentId){
+        //        if (!this.isConnected()) this.connect();
+//        if (session == null) session = CqlSession.builder().build();
+
+        String selectQuery = "SELECT count(id) as cnt FROM dap.fileStore WHERE documentId = ? ALLOW FILTERING";
+        PreparedStatement selectStmt = session.prepare(selectQuery);
+
+        BoundStatement boundStmt = selectStmt.bind(documentId);
+
+        ResultSet rs = session.execute(boundStmt);
+
+        for (Row row : rs) {
+            Integer cnt = row.getInt("cnt");
+            return cnt;
+        }
+        return 0;
+    }
+    public Integer getFileCountPerOwner(String owner){
+        //        if (!this.isConnected()) this.connect();
+//        if (session == null) session = CqlSession.builder().build();
+
+        String selectQuery = "SELECT count(1) as cnt FROM dap.fileStore WHERE owner = ? ALLOW FILTERING";
+        PreparedStatement selectStmt = session.prepare(selectQuery);
+
+        BoundStatement boundStmt = selectStmt.bind(owner);
+
+        ResultSet rs = session.execute(boundStmt);
+
+        for (Row row : rs) {
+            Integer cnt = row.getInt("cnt");
+            return cnt;
+        }
+        return 0;
+    }
     @Override
     public HashMap<String, String> getFileInfo(UUID id, String documentId) {
 //        if (!this.isConnected()) this.connect();

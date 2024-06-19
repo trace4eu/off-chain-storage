@@ -70,6 +70,14 @@ public class ServiceController {
 	) throws Exception {
 		this.setUp();
 		ObjectNode jsonObject = new ObjectMapper().createObjectNode();
+		if (documentId.isEmpty()) {
+			jsonObject.put("error", "documentId not received.");
+			return new RestOut(jsonObject);
+		}else if (owner.isEmpty()) {
+			jsonObject.put("error", "owner not received.");
+			return new RestOut(jsonObject);
+		}
+
 		if (!file.isEmpty()) {
 			this.indexer.setOwner(owner);
 			String hash = this.indexer.insertFile(file,documentId, extension).toString();
