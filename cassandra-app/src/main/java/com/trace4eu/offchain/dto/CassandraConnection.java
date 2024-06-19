@@ -8,8 +8,8 @@ import java.net.InetSocketAddress;
 
 public class CassandraConnection {
     private static CassandraConnection instance;
-    private CqlSession session;
-    private DbOptions options;
+    private static CqlSession session;
+    private static DbOptions options;
     private void connect(){
         String hostName= options.getHostname();
         if (hostName==null) hostName="localhost";

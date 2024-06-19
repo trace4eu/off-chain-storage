@@ -26,9 +26,8 @@ public class CassandraIndex extends AIndex{
 
     @Override
     public boolean connect() {
-        CassandraConnection cc = CassandraConnection.getInstance();
         try {
-            if (session == null) session = cc.getSession();
+            if (session == null) session = CassandraConnection.getInstance().getSession();
             this.connected  = (session != null) ? true : false;
         } catch (Exception e) {
             this.connected  = false;
