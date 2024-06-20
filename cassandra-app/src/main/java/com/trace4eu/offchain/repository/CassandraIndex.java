@@ -203,17 +203,17 @@ public class CassandraIndex extends AIndex{
         if (documentId.isEmpty() && owner.isEmpty())
             throw new Exception("You need to provide a documentid/file name or owner");
         if (!documentId.isEmpty()){
-            selectQuery = "SELECT id,documentid,owner,extension FROM dap.fileStore WHERE documentId = ? ALLOW FILTERING";
+            selectQuery = "SELECT id,documentid,owner,extension FROM dap.fileStore WHERE documentId = ? LIMIT ? ALLOW FILTERING";
 
         } else {
-            selectQuery = "SELECT id,documentid,owner,extension FROM dap.fileStore WHERE owner = ? ALLOW FILTERING";
+            selectQuery = "SELECT id,documentid,owner,extension FROM dap.fileStore WHERE owner = ? LIMIT ? ALLOW FILTERING";
         }
 
         selectStmt = session.prepare(selectQuery);
 
         BoundStatement boundStmt = (!documentId.isEmpty())
-                ? selectStmt.bind(documentId)
-                : selectStmt.bind(owner);
+                ? selectStmt.bind(documentId,(pageNumber+1)*pageSize)
+                : selectStmt.bind(owner,(pageNumber+1)*pageSize);
 
         ResultSet rs = session.execute(boundStmt);
 
