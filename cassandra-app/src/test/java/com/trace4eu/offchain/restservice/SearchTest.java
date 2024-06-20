@@ -25,8 +25,13 @@ public class SearchTest {
         Vars.DB_OPTIONS = new DbOptions(null,null,null,"cass.trace4eu.eu","dap",9042,"Mars");
         ndx = new CassandraIndex(Vars.DB_OPTIONS);
         ndx.connect();
-        List<OutputFile> l = ndx.getListOfFilesPaging("","pablo",1,0);
-        Assert.assertEquals(1,l.size());
+        List<OutputFile> l1 = ndx.getListOfFilesPaging("","pablo",1,0);
+        Assert.assertEquals(1,l1.size());
+        List<OutputFile> l2 = ndx.getListOfFilesPaging("","pablo",1,2);
+        Assert.assertEquals(1,l2.size());
+        Assert.assertNotEquals(l1.get(0).getId().toString(),l2.get(0).getId().toString());
+        List<OutputFile> l3 = ndx.getListOfFilesPaging("","pablo",2,0);
+        Assert.assertEquals(2,l3.size());
     }
 
 }

@@ -222,7 +222,7 @@ public class CassandraIndex extends AIndex{
         for (Row row : rs) {
             i++;
             if (i<pageNumber*pageSize) continue;
-            if (i > pageSize*(1+pageNumber)) break;
+            if (i >= pageSize*(1+pageNumber)) break;
 
             OutputFile outFile = new OutputFile();
             outFile.setId(row.getUuid("id"));
