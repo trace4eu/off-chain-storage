@@ -196,23 +196,17 @@ public class CassandraIndex extends AIndex{
 
 
     public List<OutputFile> getListOfFilesPaging(String documentId, String owner, Integer pageSize, Integer pageNumber) throws Exception {
-//        if (!this.isConnected()) this.connect();
-//        if (session == null) session = CqlSession.builder().build();
-        Integer count = this.getFileCountPerOwner(owner);
+        this.session = CassandraConnection.getInstance().getSession();
+//        Integer count = this.getFileCountPerOwner(owner);
         String selectQuery;
         PreparedStatement selectStmt;
         if (documentId.isEmpty() && owner.isEmpty())
             throw new Exception("You need to provide a documentid/file name or owner");
-//TODO implement pagination here
-        Integer cnt = 0;
         if (!documentId.isEmpty()){
-            cnt = this.getFileCountPerDocumentId(documentId);
             selectQuery = "SELECT id,documentid,owner,extension FROM dap.fileStore WHERE documentId = ? ALLOW FILTERING";
 
         } else {
-            cnt = this.getFileCountPerOwner(owner);
             selectQuery = "SELECT id,documentid,owner,extension FROM dap.fileStore WHERE owner = ? ALLOW FILTERING";
-
         }
 
         selectStmt = session.prepare(selectQuery);
@@ -224,13 +218,19 @@ public class CassandraIndex extends AIndex{
         ResultSet rs = session.execute(boundStmt);
 
         List<OutputFile> results = new ArrayList<OutputFile>();
+        int i =-1;
         for (Row row : rs) {
-            OutputFile outFile  = new OutputFile();
+            i++;
+            if (i<pageNumber*pageSize) continue;
+            if (i > pageSize*(1+pageNumber)) break;
+
+            OutputFile outFile = new OutputFile();
             outFile.setId(row.getUuid("id"));
             outFile.setOwner(row.getString("owner"));
             outFile.setDocumentid(row.getString("documentid"));
             outFile.setExtension(row.getString("extension"));
             results.add(outFile);
+
         }
 
         return results;

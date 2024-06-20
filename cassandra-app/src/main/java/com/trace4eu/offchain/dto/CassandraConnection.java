@@ -2,7 +2,7 @@ package com.trace4eu.offchain.dto;
 
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.trace4eu.offchain.repository.DbOptions;
-import hr.irb.Vars;
+import com.trace4eu.offchain.Vars;
 
 import java.net.InetSocketAddress;
 

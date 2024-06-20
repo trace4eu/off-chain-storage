@@ -2,7 +2,7 @@ package com.trace4eu.offchain.restservice;
 
 import com.trace4eu.offchain.controller.ServiceController;
 import com.trace4eu.offchain.repository.DbOptions;
-import hr.irb.Vars;
+import com.trace4eu.offchain.Vars;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
