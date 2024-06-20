@@ -128,17 +128,21 @@ public class ServiceController {
 
 	}
 
+
 	@GetMapping("/offchain-storage/api/v1/files/list")
 	public ResponseEntity<List<OutputFile>> FilesList(
 			@RequestParam(value = "owner", defaultValue = "") String owner
 			,@RequestParam(value = "documentId", defaultValue = "") String documentId
+			,@RequestParam(value = "page", defaultValue = "0") Integer page
+			,@RequestParam(value = "pageSize", defaultValue = "20") Integer pageSize
 	) throws Exception {
 		this.setUp();
 
 		if (!owner.isEmpty())
 			this.indexer.setOwner(owner);
 
-		List<OutputFile> files = this.indexer.getListOfFiles(documentId,owner);
+//		List<OutputFile> files = this.indexer.getListOfFiles(documentId,owner);
+		List<OutputFile> files = this.indexer.getListOfFilesPaging(documentId,owner,pageSize,page);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
