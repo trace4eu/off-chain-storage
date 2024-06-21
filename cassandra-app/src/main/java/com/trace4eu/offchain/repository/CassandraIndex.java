@@ -217,6 +217,7 @@ public class CassandraIndex extends AIndex{
         ResultSet rs = session.execute(boundStmt);
 
         List<OutputFile> results = new ArrayList<OutputFile>();
+
         int i =-1;
         for (Row row : rs) {
             i++;
@@ -229,7 +230,6 @@ public class CassandraIndex extends AIndex{
             outFile.setDocumentid(row.getString("documentid"));
             outFile.setExtension(row.getString("extension"));
             results.add(outFile);
-
         }
 
         return results;
