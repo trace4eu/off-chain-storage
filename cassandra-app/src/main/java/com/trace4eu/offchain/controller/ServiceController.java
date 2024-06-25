@@ -40,12 +40,17 @@ public class ServiceController {
 
 	@PostMapping("/offchain-storage/api/v1/files/delete")
 	public ResponseEntity<RestOut> FileDelete(
-			@RequestParam(value = "fileId", defaultValue = "") UUID fileId
+			@RequestParam(value = "fileId", defaultValue = "") String fileId
 			,@RequestParam(value = "owner", defaultValue = "") String owner
 	) throws Exception {
 		this.setUp();
 		ObjectNode jsonObject = new ObjectMapper().createObjectNode();
-		Boolean isDeleted = this.indexer.deleteFile(fileId,owner);
+		Boolean isDeleted=true;
+		try {
+			isDeleted = this.indexer.deleteFile(UUID.fromString(fileId), owner);
+		} catch (Exception e) {
+			jsonObject.put("error", "File is not found");
+		}
 		if (isDeleted){
 			jsonObject.put("isDeleted", isDeleted);
 		}else{
