@@ -16,6 +16,7 @@ import com.trace4eu.offchain.Vars;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.web3j.abi.datatypes.Bool;
 
 @RestController()
 public class ServiceController {
@@ -37,7 +38,22 @@ public class ServiceController {
 		indexer.connect();
 	}
 
-
+	@PostMapping("/offchain-storage/api/v1/files/delete")
+	public ResponseEntity<RestOut> FileDelete(
+			@RequestParam(value = "fileId", defaultValue = "") UUID fileId
+			,@RequestParam(value = "owner", defaultValue = "") String owner
+	) throws Exception {
+		this.setUp();
+		ObjectNode jsonObject = new ObjectMapper().createObjectNode();
+		Boolean isDeleted = this.indexer.deleteFile(fileId,owner);
+		if (isDeleted){
+			jsonObject.put("isDeleted", isDeleted);
+		}else{
+			jsonObject.put("error", "File is not found");
+		}
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(new RestOut(jsonObject));
+	}
 	@PostMapping("/offchain-storage/api/v1/files")
 	public ResponseEntity<RestOut> FilePutJson(
 			@RequestBody PutFileDTO data

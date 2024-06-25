@@ -34,5 +34,6 @@ public interface IIndex {
     public HashMap<String,String> getFileInfo(UUID id, String documentId);
     public List<OutputFile> getListOfFiles(String documentId, String owner) throws Exception;
     public List<OutputFile> getListOfFilesPaging(String documentId, String owner, Integer pageSize, Integer pageNumber) throws Exception ;
+    public Boolean deleteFile(UUID fileId, String owner);
 
     }

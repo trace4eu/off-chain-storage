@@ -251,6 +251,25 @@ public class CassandraIndex extends AIndex{
         }
         return 0;
     }
+    private Boolean fileExists(UUID fileId){
+        String selectQuery = "SELECT count(1) as cnt FROM dap.fileStore WHERE id = ? ALLOW FILTERING";
+        PreparedStatement selectStmt = session.prepare(selectQuery);
+        BoundStatement boundStmt = selectStmt.bind(fileId);
+        ResultSet rs = session.execute(boundStmt);
+        for (Row row : rs) {
+            Integer cnt = row.getInt("cnt");
+            return (cnt>0);
+        }
+        return false;
+    }
+    public Boolean deleteFile(UUID fileId, String owner){
+        if (!fileExists(fileId)) return false;
+        String selectQuery = "DELETE FROM dap.fileStore WHERE Id=? and owner = ? ";
+        PreparedStatement selectStmt = session.prepare(selectQuery);
+        BoundStatement boundStmt = selectStmt.bind(fileId,owner);
+        session.execute(boundStmt);
+        return true;
+    }
     public Integer getFileCountPerOwner(String owner){
         //        if (!this.isConnected()) this.connect();
 //        if (session == null) session = CqlSession.builder().build();
