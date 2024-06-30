@@ -12,14 +12,16 @@ import org.springframework.context.annotation.ComponentScan;
 public class RestServiceApplication {
 	public static void main(String[] args) throws Exception {
 //		System.out.println("STARTING THE SERVICE");
-		DbOptions options = null;
-		if (args.length >= 2 && args[0].equals("-i")) {
+		DbOptions options = new DbOptions();
+		if (args.length<2){
+			System.out.println("Usage:");
+			System.out.println("java -jar <application.jar> -i <config.options> -u user -p password <other java options>...");
+			return;
+		}
+
+		if (args[i].equals("-i")) {
 			options = new DbOptions(args[1]);
 			Vars.DB_OPTIONS = options;
-		} else {
-			System.out.println("Usage:");
-			System.out.println("java -jar <application.jar> -i <config.options> <other java options>...");
-			return;
 		}
 
 		SpringApplication.run(RestServiceApplication.class, args);
