@@ -15,7 +15,7 @@ public class RestServiceApplication {
 		DbOptions options = new DbOptions();
 		if (args.length<2){
 			System.out.println("Usage:");
-			System.out.println("java -jar <application.jar> -i <config.options> -u user -p password <other java options>...");
+			System.out.println("java -jar <application.jar> -i <config.options>  <other java options>...");
 			return;
 		}
 
