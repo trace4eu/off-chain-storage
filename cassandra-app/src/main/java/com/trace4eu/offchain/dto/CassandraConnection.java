@@ -1,6 +1,11 @@
 package com.trace4eu.offchain.dto;
 
 import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.auth.AuthProvider;
+import com.datastax.oss.driver.api.core.config.DefaultDriverOption;
+import com.datastax.oss.driver.api.core.config.DriverConfigLoader;
+import com.datastax.oss.driver.api.core.context.DriverContext;
+import com.datastax.oss.driver.internal.core.auth.PlainTextAuthProvider;
 import com.trace4eu.offchain.repository.DbOptions;
 import com.trace4eu.offchain.Vars;
 
@@ -13,10 +18,20 @@ public class CassandraConnection {
     private void connect(){
         String hostName= options.getHostname();
         if (hostName==null) hostName="localhost";
+
+        DriverConfigLoader loader = DriverConfigLoader.programmaticBuilder()
+                .withString(DefaultDriverOption.AUTH_PROVIDER_CLASS, PlainTextAuthProvider.class.getName())
+                .withString(DefaultDriverOption.AUTH_PROVIDER_USER_NAME, options.getUsername())
+                .withString(DefaultDriverOption.AUTH_PROVIDER_PASSWORD, options.getPassword())
+                .withString(DefaultDriverOption.CONTACT_POINTS, hostName+":"+options.getPort().toString())
+                .build();
+
         InetSocketAddress node = new InetSocketAddress(hostName, options.getPort());
+
         if (options.getClusterName().isEmpty()){
             session = CqlSession.builder()
                     .withKeyspace(options.getDbName())
+                    .withConfigLoader(loader)
                     .addContactPoint(node)
                     .build();
         }else {

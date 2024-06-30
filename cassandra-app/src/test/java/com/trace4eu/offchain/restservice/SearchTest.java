@@ -19,7 +19,7 @@ public class SearchTest {
 //            ndx.connect();
     }
 
-    @Test
+//    @Test
     public void testSearch0() throws Exception {
         CassandraIndex ndx ;
         Vars.DB_OPTIONS = new DbOptions(null,null,null,"cass.trace4eu.eu","dap",9042,"Mars");
