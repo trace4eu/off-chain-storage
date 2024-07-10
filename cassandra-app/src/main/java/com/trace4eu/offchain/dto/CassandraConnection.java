@@ -62,13 +62,16 @@ public class CassandraConnection {
         }
     }
     private void connect(){
-        if (this.options.getUsername() == null){
+        if (this.options.getUsername() == null || this.options.getUsername().isBlank() || this.options.getUsername().isEmpty()){
             this.connectWithoutPassword();
             return;
         }
         connectWithPassword();
     }
     private CassandraConnection() {
+//        String propFile =
+//        Vars.DB_OPTIONS = new DbOptions(propFile);
+
         this.options = Vars.DB_OPTIONS;
         if (session==null || session.isClosed())
             this.connect();

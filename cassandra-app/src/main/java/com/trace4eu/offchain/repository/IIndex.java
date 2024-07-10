@@ -27,7 +27,7 @@ public interface IIndex {
 
     public void setOptions(DbOptions options) ;
 
-    public UUID insertFile(MultipartFile file, String documentId, String extension) throws Exception;
+    public UUID insertFile(MultipartFile file, String documentId, String extension, Integer ttl) throws Exception;
     public UUID insertFile(PutFileDTO importData) throws Exception;
     public byte[] getFile(UUID fileId);
     public byte[] getFileByOwner(String documentId);

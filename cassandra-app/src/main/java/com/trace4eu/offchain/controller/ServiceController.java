@@ -29,11 +29,8 @@ public class ServiceController {
 			return;
 		}
 
-//		DbOptions dbOptions = new DbOptions();
-//		dbOptions.setDbName("dap");
-//		dbOptions.setHostname("localhost");
-//		dbOptions.setUrl("http://localhost/dap"); //neznam port koji koristi cassandra
 		DbOptions dbOptions = Vars.DB_OPTIONS;
+//		DbOptions dbOptions = new DbOptions("config.options");
 		indexer = IndexFactory.createIndexer(IndexerType.Cassandra,dbOptions);
 		indexer.connect();
 	}
@@ -88,6 +85,7 @@ public class ServiceController {
 			,@RequestParam("file") MultipartFile file
 			,@RequestParam(value = "extension", defaultValue = "") String extension
 			,@RequestParam(value = "documentId", defaultValue = "") String documentId
+			,@RequestParam(value = "expirationTime", defaultValue = "0") Integer ttl
 	) throws Exception {
 		this.setUp();
 		ObjectNode jsonObject = new ObjectMapper().createObjectNode();
@@ -101,7 +99,7 @@ public class ServiceController {
 
 		if (!file.isEmpty()) {
 			this.indexer.setOwner(owner);
-			String hash = this.indexer.insertFile(file,documentId, extension).toString();
+			String hash = this.indexer.insertFile(file,documentId, extension, ttl).toString();
 			jsonObject.put("hash", hash);
 		} else {
 			jsonObject.put("error", "No file received.");

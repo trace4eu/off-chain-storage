@@ -20,7 +20,7 @@ public class RestServiceApplication {
 		}
 
 		if (args[1].equals("-i")) {
-			options = new DbOptions(args[1]);
+			options = new DbOptions(args[2]);
 			Vars.DB_OPTIONS = options;
 		}
 

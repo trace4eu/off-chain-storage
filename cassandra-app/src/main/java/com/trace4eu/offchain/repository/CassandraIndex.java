@@ -88,17 +88,20 @@ public class CassandraIndex extends AIndex{
 
         String extension = importData.extension;
 
-        UUID hash = fileToCassandra(file,documentId,extension);
+        UUID hash = fileToCassandra(file,documentId,extension, importData.TTL);
         return hash;
     }
-    private UUID fileToCassandra(byte[] file,String documentId, String extension) throws Exception {
+    private UUID fileToCassandra(byte[] file,String documentId, String extension, Integer ttl) throws Exception {
         ByteBuffer data = ByteBuffer.wrap(file);
         UUID guid = UUID.randomUUID();
         // try (CqlSession session = CqlSession.builder().build()) {
         try {
-            PreparedStatement statement = session.prepare(
-                    "INSERT INTO dap.fileStore (id,documentId,data,owner,extension) VALUES (?,?,?,?,?)"
-            );
+            PreparedStatement statement;
+            String sql = "INSERT INTO dap.fileStore (id,documentId,data,owner,extension) VALUES (?,?,?,?,?)";
+            if (!(ttl == null | ttl == 0))
+                sql=sql+" USING TTL "+ttl.toString();
+
+            statement = session.prepare(sql);
 
             BoundStatement boundStatement = statement.bind(
                     guid
@@ -113,11 +116,11 @@ public class CassandraIndex extends AIndex{
         return guid;
     }
     @Override
-    public UUID insertFile(MultipartFile file, String documentId, String extension) throws Exception {
+    public UUID insertFile(MultipartFile file, String documentId, String extension, Integer ttl) throws Exception {
         if (file.isEmpty()) return null;
 //        if (this.session == null) this.connect();
         byte[] fileBytes = file.getBytes();
-        UUID guid = fileToCassandra(fileBytes,documentId,extension);
+        UUID guid = fileToCassandra(fileBytes,documentId,extension, ttl);
         return guid;
     }
 
