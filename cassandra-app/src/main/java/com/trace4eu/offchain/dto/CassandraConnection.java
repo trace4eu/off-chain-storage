@@ -15,15 +15,34 @@ public class CassandraConnection {
     private static CassandraConnection instance;
     private static CqlSession session;
     private static DbOptions options;
-    private void connect(){
-        String hostName= options.getHostname();
+    private void connectWithoutPassword(){
+        String hostName= getHostname();
+        InetSocketAddress node = new InetSocketAddress(hostName, options.getPort());
+        if (options.getClusterName().isEmpty()){
+            session = CqlSession.builder()
+                    .withKeyspace(options.getDbName())
+                    .addContactPoint(node)
+                    .build();
+        }else {
+            session = CqlSession.builder()
+                    .withKeyspace(options.getDbName())
+                    .addContactPoint(node)
+                    .withLocalDatacenter(options.getClusterName())
+                    .build();
+        }
+    }
+    private String getHostname(){
+        String hostName = options.getHostname();
         if (hostName==null) hostName="localhost";
-
+        return  hostName;
+    }
+    private void connectWithPassword(){
+        String hostName= getHostname();
         DriverConfigLoader loader = DriverConfigLoader.programmaticBuilder()
                 .withString(DefaultDriverOption.AUTH_PROVIDER_CLASS, PlainTextAuthProvider.class.getName())
                 .withString(DefaultDriverOption.AUTH_PROVIDER_USER_NAME, options.getUsername())
                 .withString(DefaultDriverOption.AUTH_PROVIDER_PASSWORD, options.getPassword())
-                .withString(DefaultDriverOption.CONTACT_POINTS, hostName+":"+options.getPort().toString())
+                .withString(DefaultDriverOption.CONTACT_POINTS, hostName + ":" + options.getPort().toString())
                 .build();
 
         InetSocketAddress node = new InetSocketAddress(hostName, options.getPort());
@@ -41,6 +60,13 @@ public class CassandraConnection {
                     .withLocalDatacenter(options.getClusterName())
                     .build();
         }
+    }
+    private void connect(){
+        if (this.options.getUsername() == null){
+            this.connectWithoutPassword();
+            return;
+        }
+        connectWithPassword();
     }
     private CassandraConnection() {
         this.options = Vars.DB_OPTIONS;
