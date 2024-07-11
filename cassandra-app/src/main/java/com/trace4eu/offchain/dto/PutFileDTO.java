@@ -5,5 +5,5 @@ public class PutFileDTO {
     public String extension;
     public String documentId;
     public String file; //base64 or hexstring
-    public Integer TTL;
+    public Integer expirationTime;
 }

@@ -88,7 +88,7 @@ public class CassandraIndex extends AIndex{
 
         String extension = importData.extension;
 
-        UUID hash = fileToCassandra(file,documentId,extension, importData.TTL);
+        UUID hash = fileToCassandra(file,documentId,extension, importData.expirationTime);
         return hash;
     }
     private UUID fileToCassandra(byte[] file,String documentId, String extension, Integer ttl) throws Exception {
