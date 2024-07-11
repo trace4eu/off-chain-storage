@@ -10,6 +10,7 @@ import com.trace4eu.offchain.repository.DbOptions;
 import com.trace4eu.offchain.Vars;
 
 import java.net.InetSocketAddress;
+import java.util.Arrays;
 
 public class CassandraConnection {
     private static CassandraConnection instance;
@@ -42,12 +43,14 @@ public class CassandraConnection {
                 .withString(DefaultDriverOption.AUTH_PROVIDER_CLASS, PlainTextAuthProvider.class.getName())
                 .withString(DefaultDriverOption.AUTH_PROVIDER_USER_NAME, options.getUsername())
                 .withString(DefaultDriverOption.AUTH_PROVIDER_PASSWORD, options.getPassword())
-                .withString(DefaultDriverOption.CONTACT_POINTS, hostName + ":" + options.getPort().toString())
-                .build();
+//                .withString(DefaultDriverOption.CONTACT_POINTS, hostName + ":" + options.getPort().toString())
+                .withStringList(DefaultDriverOption.CONTACT_POINTS, Arrays.asList( hostName + ":" + options.getPort().toString()))
 
+                .build();
         InetSocketAddress node = new InetSocketAddress(hostName, options.getPort());
 
-        if (options.getClusterName().isEmpty()){
+        if (options.getDatacenter().isEmpty()){
+
             session = CqlSession.builder()
                     .withKeyspace(options.getDbName())
                     .withConfigLoader(loader)
@@ -57,7 +60,8 @@ public class CassandraConnection {
             session = CqlSession.builder()
                     .withKeyspace(options.getDbName())
                     .addContactPoint(node)
-                    .withLocalDatacenter(options.getClusterName())
+                    .withConfigLoader(loader) //dodano naknadno
+                    .withLocalDatacenter(options.getDatacenter())
                     .build();
         }
     }
