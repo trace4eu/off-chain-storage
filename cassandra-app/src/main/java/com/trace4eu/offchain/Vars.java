@@ -8,7 +8,7 @@ import java.net.URISyntaxException;
 import java.net.URLDecoder;
 
 public class Vars {
-    public static DbOptions DB_OPTIONS = new DbOptions(null,null,null,"cass-dev.trace4eu.eu","dap",9042, "Mars");
+    public static DbOptions DB_OPTIONS;// = new DbOptions(null,null,null,"cass-dev.trace4eu.eu","dap",9042, "Mars");
 //    public static DbOptions DB_OPTIONS;
 
 //    static {
@@ -20,13 +20,13 @@ public class Vars {
 //    }
 
 
-    public static File getJarDir() {
-        try {
-            String path = DbOptions.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
-            File jarFile = new File(path);
-            return jarFile.getParentFile();
-        } catch (URISyntaxException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
+//    public static File getJarDir() {
+//        try {
+//            String path = DbOptions.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+//            File jarFile = new File(path);
+//            return jarFile.getParentFile();
+//        } catch (URISyntaxException ex) {
+//            throw new RuntimeException(ex);
+//        }
+//    }
 }

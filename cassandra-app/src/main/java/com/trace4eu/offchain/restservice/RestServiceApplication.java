@@ -1,10 +1,13 @@
 package com.trace4eu.offchain.restservice;
 
+import com.trace4eu.offchain.MyService;
 import com.trace4eu.offchain.controller.ServiceController;
 import com.trace4eu.offchain.repository.DbOptions;
 import com.trace4eu.offchain.Vars;
+import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
@@ -19,12 +22,15 @@ public class RestServiceApplication {
 			return;
 		}
 
-		if (args[1].equals("-i")) {
-			options = new DbOptions(args[2]);
-			Vars.DB_OPTIONS = options;
-		}
+//		if (args[1].equals("-i")) {
+//			options = new DbOptions(args[2]);
+//			Vars.DB_OPTIONS = options;
+//		}
 
 		SpringApplication.run(RestServiceApplication.class, args);
 	}
-
+	@Bean
+	public MyService myService(ApplicationArguments args) {
+		return new MyService(args);
+	}
 }
