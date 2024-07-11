@@ -98,7 +98,7 @@ public class CassandraIndex extends AIndex{
         try {
             PreparedStatement statement;
             String sql = "INSERT INTO dap.fileStore (id,documentId,data,owner,extension) VALUES (?,?,?,?,?)";
-            if (!(ttl == null | ttl == 0))
+            if (!(ttl == null || ttl == 0))
                 sql=sql+" USING TTL "+ttl.toString();
 
             statement = session.prepare(sql);
