@@ -16,6 +16,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.any())
+//                .apis(RequestHandlerSelectors.basePackage("com.trace4eu.offchain"))
                 .paths(PathSelectors.any())
                 .build();
     }

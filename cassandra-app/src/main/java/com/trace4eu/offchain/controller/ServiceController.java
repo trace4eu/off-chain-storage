@@ -14,6 +14,7 @@ import com.trace4eu.offchain.repository.IndexerType;
 import com.trace4eu.offchain.restservice.RestOut;
 import com.trace4eu.offchain.GenericHelper;
 import com.trace4eu.offchain.Vars;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +27,7 @@ public class ServiceController {
 	@Autowired
 	public ServiceController(MyService myService) throws Exception {
 //		this.myService = myService;
-
-		System.out.println(String.join(",",myService.getArgs().getSourceArgs()));
+//		System.out.println(String.join(",",myService.getArgs().getSourceArgs()));
 		String[] args = myService.getArgs().getSourceArgs();
 		if (args[0].equals("-i")) {
 			DbOptions options = new DbOptions(args[1]);
@@ -164,6 +164,7 @@ public class ServiceController {
 
 
 	@GetMapping("/offchain-storage/api/v1/files/list")
+	@ApiOperation(value = "Get all files of specific owner or look for specific document id", response = OutputFile.class, responseContainer = "List")
 	public ResponseEntity<List<OutputFile>> FilesList(
 			@RequestParam(value = "owner", defaultValue = "") String owner
 			,@RequestParam(value = "documentId", defaultValue = "") String documentId
