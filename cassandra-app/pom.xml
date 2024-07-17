@@ -59,10 +59,11 @@
 			<version>4.5.13</version>
 		</dependency>
 
-		<!--		<dependency>-->
+<!--		<dependency>-->
 <!--			<groupId>org.springframework.boot</groupId>-->
 <!--			<artifactId>spring-boot-starter-security</artifactId>-->
 <!--		</dependency>-->
+
 		<!--		&lt;!&ndash;	TODO	ovo povremeno zakomentirat radi pucanja  &ndash;&gt;-->
 		<!-- https://mvnrepository.com/artifact/com.datastax.oss/java-driver-core -->
 		<dependency>

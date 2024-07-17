@@ -19,7 +19,7 @@ public class CassandraConnection {
     private void connectWithoutPassword(){
         String hostName= getHostname();
         InetSocketAddress node = new InetSocketAddress(hostName, options.getPort());
-        if (options.getClusterName().isEmpty()){
+        if (options.getDatacenter().isEmpty()){
             session = CqlSession.builder()
                     .withKeyspace(options.getDbName())
                     .addContactPoint(node)
@@ -28,7 +28,7 @@ public class CassandraConnection {
             session = CqlSession.builder()
                     .withKeyspace(options.getDbName())
                     .addContactPoint(node)
-                    .withLocalDatacenter(options.getClusterName())
+                    .withLocalDatacenter(options.getDatacenter())
                     .build();
         }
     }

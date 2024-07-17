@@ -15,6 +15,8 @@ import com.trace4eu.offchain.restservice.RestOut;
 import com.trace4eu.offchain.GenericHelper;
 import com.trace4eu.offchain.Vars;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -101,6 +103,7 @@ public class ServiceController {
 			,@RequestParam(value = "extension", defaultValue = "") String extension
 			,@RequestParam(value = "documentId", defaultValue = "") String documentId
 			,@RequestParam(value = "expirationTime", defaultValue = "0") Integer ttl
+			,@RequestParam(value = "isPrivate", defaultValue = "false") Boolean isPrivate
 	) throws Exception {
 		this.setUp();
 		ObjectNode jsonObject = new ObjectMapper().createObjectNode();
@@ -114,7 +117,7 @@ public class ServiceController {
 
 		if (!file.isEmpty()) {
 			this.indexer.setOwner(owner);
-			String hash = this.indexer.insertFile(file,documentId, extension, ttl).toString();
+			String hash = this.indexer.insertFile(file,documentId, extension, ttl, isPrivate).toString();
 			jsonObject.put("hash", hash);
 		} else {
 			jsonObject.put("error", "No file received.");
@@ -155,21 +158,17 @@ public class ServiceController {
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
-
-
-		//headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-
-
 	}
 
 
 	@GetMapping("/offchain-storage/api/v1/files/list")
-	@ApiOperation(value = "Get all files of specific owner or look for specific document id", response = OutputFile.class, responseContainer = "List")
+	//@ApiOperation(value = "Get all files of specific owner or look for specific document id", response = OutputFile.class, responseContainer = "List")
+	@Operation(summary = "Get all files of specific owner or look for specific document id")
 	public ResponseEntity<List<OutputFile>> FilesList(
-			@RequestParam(value = "owner", defaultValue = "") String owner
-			,@RequestParam(value = "documentId", defaultValue = "") String documentId
-			,@RequestParam(value = "page", defaultValue = "0") Integer page
-			,@RequestParam(value = "pageSize", defaultValue = "20") Integer pageSize
+			@Parameter(description = "owner") @RequestParam(value = "owner", defaultValue = "") String owner
+			,@Parameter(description = "documentId") @RequestParam(value = "documentId", defaultValue = "") String documentId
+			,@Parameter(description = "page") @RequestParam(value = "page", defaultValue = "0") Integer page
+			,@Parameter(description = "pageSize") @RequestParam(value = "pageSize", defaultValue = "20") Integer pageSize
 	) throws Exception {
 		this.setUp();
 

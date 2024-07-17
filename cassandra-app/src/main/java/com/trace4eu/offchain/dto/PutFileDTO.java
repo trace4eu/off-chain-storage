@@ -6,4 +6,5 @@ public class PutFileDTO {
     public String documentId;
     public String file; //base64 or hexstring
     public Integer expirationTime;
+    public Boolean isPrivate;
 }
