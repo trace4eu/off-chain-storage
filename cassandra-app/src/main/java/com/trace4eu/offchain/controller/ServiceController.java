@@ -215,6 +215,7 @@ public class ServiceController {
 		jsonObject.put("extension",fileInfo.get("extension"));
 		jsonObject.put("owner",fileInfo.get("owner"));
 		jsonObject.put("documentId",fileInfo.get("documentId"));
+		jsonObject.put("isPrivate",fileInfo.get("isPrivate"));
 		return new RestOut(jsonObject);
 	}
 }

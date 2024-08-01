@@ -92,12 +92,16 @@ public class CassandraIndex extends AIndex{
 
         String extension = importData.extension;
 
+        if (importData.isPrivate == null ) importData.isPrivate = false;
+
         UUID hash = fileToCassandra(file,documentId,extension, importData.expirationTime, importData.isPrivate);
         return hash;
     }
     private UUID fileToCassandra(byte[] file,String documentId, String extension, Integer ttl, Boolean isPrivate) throws Exception {
         ByteBuffer data = ByteBuffer.wrap(file);
         UUID guid = UUID.randomUUID();
+
+        if ( isPrivate == null ) isPrivate = false;
         // try (CqlSession session = CqlSession.builder().build()) {
         try {
             PreparedStatement statement;
@@ -303,10 +307,10 @@ public class CassandraIndex extends AIndex{
         BoundStatement boundStmt;
         PreparedStatement selectStmt;
         if (id != null) {
-            selectStmt = session.prepare("SELECT id, documentId, owner,extension FROM dap.fileStore WHERE id = ? LIMIT 1 ALLOW FILTERING ");
+            selectStmt = session.prepare("SELECT id, isPrivate, documentId, owner,extension FROM dap.fileStore WHERE id = ? LIMIT 1 ALLOW FILTERING ");
             boundStmt = selectStmt.bind(id);
         } else{
-            selectStmt = session.prepare("SELECT id, documentId, owner,extension FROM dap.fileStore WHERE owner = ? AND documentId = ? LIMIT 1 ALLOW FILTERING ");
+            selectStmt = session.prepare("SELECT id, isPrivate, documentId, owner,extension FROM dap.fileStore WHERE owner = ? AND documentId = ? LIMIT 1 ALLOW FILTERING ");
             boundStmt = selectStmt.bind(getOwner(),documentId);
         }
 
@@ -318,6 +322,7 @@ public class CassandraIndex extends AIndex{
             map.put("id",row.getUuid("id").toString());
             map.put("documentId",row.getString("documentId"));
             map.put("owner",row.getString("owner"));
+            map.put("isPrivate",row.getString("isPrivate"));
         }
         return map;
     }
