@@ -218,4 +218,21 @@ public class ServiceController {
 		jsonObject.put("isPrivate",fileInfo.get("isPrivate"));
 		return new RestOut(jsonObject);
 	}
+
+	@GetMapping("/offchain-storage/api/v1/files/{id}/metadata")
+	public RestOut FileGetMetadata(
+			@PathVariable(required = true) String id
+	) throws Exception {
+		this.setUp();
+
+		ObjectMapper object  = new ObjectMapper();
+		ObjectNode jsonObject = object.createObjectNode();
+		HashMap<String, String> fileInfo = this.indexer.getFileInfo(UUID.fromString(id),null);
+		jsonObject.put("id",fileInfo.get("id"));
+		jsonObject.put("extension",fileInfo.get("extension"));
+		jsonObject.put("owner",fileInfo.get("owner"));
+		jsonObject.put("documentId",fileInfo.get("documentId"));
+		jsonObject.put("isPrivate",fileInfo.get("isPrivate"));
+		return new RestOut(jsonObject);
+	}
 }
