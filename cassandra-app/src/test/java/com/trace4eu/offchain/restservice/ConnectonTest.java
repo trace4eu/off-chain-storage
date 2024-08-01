@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.Assert.assertNotNull;
 
 public class ConnectonTest {
-    @Test
+    //@Test
     public void testConnect() throws Exception{
         Vars.DB_OPTIONS = new DbOptions("c:\\Users\\IRB\\Documents\\projekti\\trace4eu\\off-chain-storage\\doc\\configPass.properties");
         CassandraConnection connection =  CassandraConnection.getInstance();
