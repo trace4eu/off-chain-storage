@@ -11,6 +11,7 @@ import com.trace4eu.offchain.dto.OutputFile;
 import com.trace4eu.offchain.dto.PutFileDTO;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.*;
 
@@ -263,16 +264,21 @@ public class CassandraIndex extends AIndex{
         }
         return 0;
     }
-    private Boolean fileExists(UUID fileId){
-        String selectQuery = "SELECT count(1) as cnt FROM dap.fileStore WHERE id = ? ALLOW FILTERING";
+    public Boolean fileExists(UUID fileId){
+//        String selectQuery = "SELECT count(1) as cnt FROM dap.fileStore WHERE id = ? ALLOW FILTERING";
+//        PreparedStatement selectStmt = session.prepare(selectQuery);
+//        BoundStatement boundStmt = selectStmt.bind(fileId);
+//        ResultSet rs = session.execute(boundStmt);
+//        for (Row row : rs) {
+//            BigInteger cnt = row.getBigInteger("cnt");
+//            return cnt.compareTo(BigInteger.ZERO) > 0;
+//        }
+//        return false;
+        String selectQuery = "SELECT id FROM dap.fileStore WHERE id = ?";
         PreparedStatement selectStmt = session.prepare(selectQuery);
         BoundStatement boundStmt = selectStmt.bind(fileId);
         ResultSet rs = session.execute(boundStmt);
-        for (Row row : rs) {
-            Integer cnt = row.getInt("cnt");
-            return (cnt>0);
-        }
-        return false;
+        return rs.one() != null;
     }
     public Boolean deleteFile(UUID fileId, String owner){
         if (!fileExists(fileId)) return false;
@@ -322,7 +328,7 @@ public class CassandraIndex extends AIndex{
             map.put("id",row.getUuid("id").toString());
             map.put("documentId",row.getString("documentId"));
             map.put("owner",row.getString("owner"));
-            map.put("isPrivate",row.getString("isPrivate"));
+            map.put("isPrivate",String.valueOf(row.getBoolean("isPrivate")));
         }
         return map;
     }
