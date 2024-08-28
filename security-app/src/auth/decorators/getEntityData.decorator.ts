@@ -4,7 +4,7 @@ import InternalServerErrorException from '../../exceptions/internalServerError.e
 export const GetEntityData = createParamDecorator(
   (data: string, ctx: ExecutionContext) => {
     const req = ctx.switchToHttp().getRequest();
-    const { scopes, sub } = req;
+    const { scopes, sub } = req.user;
 
     if (!scopes || !sub)
       throw new InternalServerErrorException('Entity data not found');

@@ -5,7 +5,8 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { META_SCOPES } from '../decorators/scope.decorator';
+import { META_SCOPES, ValidScopes } from '../decorators/scope.decorator';
+import { InvalidScopeException } from '../exceptions/InvalidScope.exception';
 
 @Injectable()
 export class ValidateScopesInterceptor implements NestInterceptor {
@@ -18,14 +19,20 @@ export class ValidateScopesInterceptor implements NestInterceptor {
     if (!keys.find((key) => key === META_SCOPES)) {
       return next.handle();
     }
-    const requiredScopes = Reflect.getMetadata(
+    const requiredScopes: ValidScopes[] = Reflect.getMetadata(
       META_SCOPES,
       context.getHandler(),
     );
 
     const req = context.switchToHttp().getRequest();
     const { scopes } = req.user;
-    return next.handle();
-    // return throwError(() => new NotFoundException('Endpoint not found'));
+
+    for (const scope of scopes) {
+      if (requiredScopes.includes(scope)) {
+        return next.handle();
+      }
+    }
+
+    throw new InvalidScopeException();
   }
 }

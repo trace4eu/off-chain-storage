@@ -45,6 +45,16 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## Running the app with docker
+Build docker container:
+```bash
+build -t trace4eu-ocs .
+```
+Run container with env variables:
+```bash
+docker run -d --name trace4eu-ocs trace4eu-ocs:latest
+```
+
 ## Test
 
 ```bash

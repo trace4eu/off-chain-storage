@@ -3,6 +3,7 @@ import { ValidateScopesInterceptor } from '../interceptors/validateScopes.interc
 export enum ValidScopes {
   ocsRead = 'ocs:read',
   ocsWrite = 'ocs:write',
+  nonExisting = 'none',
 }
 
 export const META_SCOPES = 'scopes';

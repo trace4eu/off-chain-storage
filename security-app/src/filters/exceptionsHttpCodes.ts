@@ -1,5 +1,5 @@
 import { HttpStatus } from '@nestjs/common';
-import FileServiceNotAvailableException from '../exceptions/fileServiceNotAvailable.exception';
+import CassandraAppException from '../exceptions/cassandraApp.exception';
 import { InvalidScopeException } from '../auth/exceptions/InvalidScope.exception';
 import { AuthorizationHeaderException } from '../auth/exceptions/authorizationHeader.exception';
 import { AuthServiceValidationException } from '../auth/exceptions/authServiceValidation.exception';
@@ -8,7 +8,7 @@ import { BearerTokenException } from '../auth/exceptions/bearerToken.exception';
 import { BearerTokenNotValidException } from '../auth/exceptions/bearerTokenNotValid.exception';
 
 const ExceptionsHttpCodes = {
-  [FileServiceNotAvailableException.name]: HttpStatus.INTERNAL_SERVER_ERROR,
+  [CassandraAppException.name]: HttpStatus.INTERNAL_SERVER_ERROR,
   [InvalidScopeException.name]: HttpStatus.FORBIDDEN,
   [AuthorizationHeaderException.name]: HttpStatus.UNAUTHORIZED,
   [AuthServiceValidationException.name]: HttpStatus.UNAUTHORIZED,
