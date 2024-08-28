@@ -54,16 +54,7 @@
 			<scope>test</scope>
 		</dependency>
 
-<!--		<dependency>-->
-<!--			<groupId>io.springfox</groupId>-->
-<!--			<artifactId>springfox-swagger2</artifactId>-->
-<!--			<version>3.0.0</version>-->
-<!--		</dependency>-->
-<!--		<dependency>-->
-<!--			<groupId>io.springfox</groupId>-->
-<!--			<artifactId>springfox-swagger-ui</artifactId>-->
-<!--			<version>3.0.0</version>-->
-<!--		</dependency>-->
+
 
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
@@ -71,10 +62,6 @@
 			<version>4.5.13</version>
 		</dependency>
 
-<!--		<dependency>-->
-<!--			<groupId>org.springframework.boot</groupId>-->
-<!--			<artifactId>spring-boot-starter-security</artifactId>-->
-<!--		</dependency>-->
 
 		<!--		&lt;!&ndash;	TODO	ovo povremeno zakomentirat radi pucanja  &ndash;&gt;-->
 		<!-- https://mvnrepository.com/artifact/com.datastax.oss/java-driver-core -->
@@ -91,12 +78,7 @@
 			<version>20231013</version>
 		</dependency>
 
-		<!--		<dependency>-->
-<!--			<groupId>org.junit.jupiter</groupId>-->
-<!--			<artifactId>junit-jupiter-api</artifactId>-->
-<!--			<version>5.10.1</version>-->
-<!--			<scope>test</scope>-->
-<!--		</dependency>-->
+
 
 		<!-- Web3j core library -->
 		<dependency>
@@ -104,42 +86,37 @@
 			<artifactId>core</artifactId>
 			<version>5.0.0</version> <!-- or the latest version available -->
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>org.junit.jupiter</groupId>-->
-<!--			<artifactId>junit-jupiter</artifactId>-->
-<!--			<version>5.10.1</version>-->
-<!--			<scope>test</scope>-->
-<!--		</dependency>-->
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>5.11.0</version> <!-- Use the latest version -->
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.powermock</groupId>
-			<artifactId>powermock-module-junit4</artifactId>
-			<version>2.0.9</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.powermock</groupId>
-			<artifactId>powermock-api-mockito2</artifactId>
-			<version>2.0.9</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.cassandraunit</groupId>
-			<artifactId>cassandra-unit</artifactId>
-			<version>4.3.1.0</version>
-			<scope>test</scope>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.mockito</groupId>-->
+<!--			<artifactId>mockito-core</artifactId>-->
+<!--			<version>5.11.0</version> &lt;!&ndash; Use the latest version &ndash;&gt;-->
+<!--			<scope>test</scope>-->
+<!--		</dependency>-->
+<!--		<dependency>-->
+<!--			<groupId>org.powermock</groupId>-->
+<!--			<artifactId>powermock-module-junit4</artifactId>-->
+<!--			<version>2.0.9</version>-->
+<!--			<scope>test</scope>-->
+<!--		</dependency>-->
+<!--		<dependency>-->
+<!--			<groupId>org.powermock</groupId>-->
+<!--			<artifactId>powermock-api-mockito2</artifactId>-->
+<!--			<version>2.0.9</version>-->
+<!--			<scope>test</scope>-->
+<!--		</dependency>-->
+<!--		<dependency>-->
+<!--			<groupId>org.cassandraunit</groupId>-->
+<!--			<artifactId>cassandra-unit</artifactId>-->
+<!--			<version>4.3.1.0</version>-->
+<!--			<scope>test</scope>-->
+<!--		</dependency>-->
 	</dependencies>
 
 	<build>

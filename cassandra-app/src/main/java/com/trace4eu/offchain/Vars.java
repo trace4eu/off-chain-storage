@@ -8,7 +8,7 @@ import java.net.URISyntaxException;
 import java.net.URLDecoder;
 
 public class Vars {
-    public static DbOptions DB_OPTIONS;// = new DbOptions(null,null,null,"cass-dev.trace4eu.eu","dap",9042, "Mars");
+    public static DbOptions DB_OPTIONS;
 //    public static DbOptions DB_OPTIONS;
 
 //    static {

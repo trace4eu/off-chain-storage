@@ -185,39 +185,6 @@ public class ServiceController {
 				.headers(headers)
 				.body(files);
 	}
-//	/**
-//	 * gets info of file @ CASSANDRA
-//	 * @param hash
-//	 * @param owner
-//	 * @param documentId
-//	 * @return
-//	 * @throws Exception
-//	 */
-//	@GetMapping("/FileGetInfo")
-//	public RestOut FileGetInfo(
-//			@RequestParam(value = "hash", defaultValue = "") String hash
-//			,@RequestParam(value = "owner", defaultValue = "") String owner
-//			,@RequestParam(value = "documentId", defaultValue = "") String documentId
-//	) throws Exception {
-//		this.setUp();
-//
-//		ObjectMapper object  = new ObjectMapper();
-//		ObjectNode jsonObject = object.createObjectNode();
-//		HashMap<String, String> fileInfo = new HashMap<>();
-//
-//		if (!hash.isEmpty()){
-//			fileInfo = this.indexer.getFileInfo(UUID.fromString(hash),null);
-//		}else{
-//			this.indexer.setOwner(owner);
-//			fileInfo = this.indexer.getFileInfo(null,documentId);
-//		}
-//		jsonObject.put("id",fileInfo.get("id"));
-//		jsonObject.put("extension",fileInfo.get("extension"));
-//		jsonObject.put("owner",fileInfo.get("owner"));
-//		jsonObject.put("documentId",fileInfo.get("documentId"));
-//		jsonObject.put("isPrivate",fileInfo.get("isPrivate"));
-//		return new RestOut(jsonObject);
-//	}
 
 	@GetMapping("/offchain-storage/api/v1/files/{id}/metadata")
 	public RestOut FileGetMetadata(
