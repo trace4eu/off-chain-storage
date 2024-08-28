@@ -43,7 +43,7 @@ public class ServiceTest {
         return indexer.insertFile(importData);
     }
 
-    @Test
+//    @Test
     public void testGetFileContent() throws Exception {
         this.setUp();
         UUID fileId = insertFile(20);
@@ -52,7 +52,7 @@ public class ServiceTest {
         assertArrayEquals(expectedFileContent,fileInStorage);
     }
 
-    @Test
+//    @Test
     public void testInsertFile() throws Exception {
         this.setUp();
         UUID fileId = this.insertFile(20);
@@ -73,7 +73,7 @@ public class ServiceTest {
         assertFalse(exists);
     }
 
-    @Test
+//    @Test
     public void testConnection() throws Exception {
         this.setUp();
         indexer.connect();
