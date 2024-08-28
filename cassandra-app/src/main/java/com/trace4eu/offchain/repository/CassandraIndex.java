@@ -11,7 +11,6 @@ import com.trace4eu.offchain.dto.OutputFile;
 import com.trace4eu.offchain.dto.PutFileDTO;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.*;
 
@@ -37,24 +36,7 @@ public class CassandraIndex extends AIndex{
         if (this.session == null) connect();
         return this.session;
     }
-//    @Override
-//    public boolean connect() {
-//        String hostName= getOptions().getHostname();
-//        if (hostName==null) hostName="localhost";
-//        InetSocketAddress node = new InetSocketAddress(getOptions().getHostname(), getOptions().getPort());
-//        try {
-//            session = CqlSession.builder()
-//                    .withKeyspace(getOptions().getDbName())
-//                    .addContactPoint(node)
-//                    .withLocalDatacenter(getOptions().getClusterName())
-//                    .build();
-////            if (session == null) session = CqlSession.builder().build();
-//            this.connected  = true;
-//        } catch (Exception e) {
-//            this.connected  = false;
-//        }
-//        return  this.isConnected();
-//    }
+
 
     @Override
     public void disconnect() {
@@ -62,21 +44,7 @@ public class CassandraIndex extends AIndex{
         super.disconnect();
     }
 
-    //TODO not implemented yet
-//    public UUID insertFile(String jsonData) throws Exception {
-//        JSONObject obj = new JSONObject(jsonData);
-//
-//        this.setOwner(obj.getString("owner"));
-//        String fileContentString = obj.getString("file");
-//        byte[] file=AIndex.hexStringToByteArray(fileContentString);
-//        //(byte[])obj.get("file");
-//        if (file.length==0) throw new Exception("File not found");
-//        String documentId = obj.getString("documentId");
-//        String extension = obj.getString("extension");
-//
-//        UUID hash = fileToCassandra(file,documentId,extension);
-//        return hash;
-//    }
+
 
     public UUID insertFile(PutFileDTO importData) throws Exception {
         this.setOwner(importData.owner);
@@ -106,7 +74,7 @@ public class CassandraIndex extends AIndex{
         // try (CqlSession session = CqlSession.builder().build()) {
         try {
             PreparedStatement statement;
-            String sql = "INSERT INTO dap.fileStore (id,documentId,data,owner,extension,isPrivate) VALUES (?,?,?,?,?,?)";
+            String sql = "INSERT INTO ocs.fileStore (id,documentId,data,owner,extension,isPrivate) VALUES (?,?,?,?,?,?)";
             if (!(ttl == null || ttl == 0))
                 sql=sql+" USING TTL "+ttl.toString();
 
@@ -138,7 +106,7 @@ public class CassandraIndex extends AIndex{
     public byte[] getFile(UUID fileId) {
 //        if (!this.isConnected()) this.connect();
 //        if (session == null) session = CqlSession.builder().build();
-        String selectQuery = "SELECT data FROM dap.fileStore WHERE id = ? LIMIT 1";
+        String selectQuery = "SELECT data FROM ocs.fileStore WHERE id = ? LIMIT 1";
         PreparedStatement selectStmt = session.prepare(selectQuery);
         BoundStatement boundStmt = selectStmt.bind(fileId);
         ResultSet rs = session.execute(boundStmt);
@@ -155,7 +123,7 @@ public class CassandraIndex extends AIndex{
     public byte[] getFileByOwner(String documentId) {
 //        if (!this.isConnected()) this.connect();
 //        if (session == null) session = CqlSession.builder().build();
-        String selectQuery = "SELECT data FROM dap.fileStore WHERE owner = ? AND documentId = ? LIMIT 1 ALLOW FILTERING";
+        String selectQuery = "SELECT data FROM ocs.fileStore WHERE owner = ? AND documentId = ? LIMIT 1 ALLOW FILTERING";
         PreparedStatement selectStmt = session.prepare(selectQuery);
         BoundStatement boundStmt = selectStmt.bind(getOwner(),documentId);
         ResultSet rs = session.execute(boundStmt);
@@ -180,9 +148,9 @@ public class CassandraIndex extends AIndex{
 
 //        Integer cnt = this.getFileCoundPerOwner(owner);
         if (!documentId.isEmpty()){
-            selectQuery = "SELECT id,documentid,owner,extension FROM dap.fileStore WHERE documentId = ? ALLOW FILTERING";
+            selectQuery = "SELECT id,documentid,owner,extension FROM ocs.fileStore WHERE documentId = ? ALLOW FILTERING";
         } else {
-            selectQuery = "SELECT id,documentid,owner,extension FROM dap.fileStore WHERE owner = ? ALLOW FILTERING";
+            selectQuery = "SELECT id,documentid,owner,extension FROM ocs.fileStore WHERE owner = ? ALLOW FILTERING";
         }
 
         selectStmt = session.prepare(selectQuery);
@@ -217,8 +185,8 @@ public class CassandraIndex extends AIndex{
             throw new Exception("You need to provide a documentid/file name or owner");
 
         selectQuery = (!documentId.isEmpty())
-            ? "SELECT id,documentid,owner,extension FROM dap.fileStore WHERE documentId = ? LIMIT ? ALLOW FILTERING"
-            : "SELECT id,documentid,owner,extension FROM dap.fileStore WHERE owner = ? LIMIT ? ALLOW FILTERING";
+            ? "SELECT id,documentid,owner,extension FROM ocs.fileStore WHERE documentId = ? LIMIT ? ALLOW FILTERING"
+            : "SELECT id,documentid,owner,extension FROM ocs.fileStore WHERE owner = ? LIMIT ? ALLOW FILTERING";
 
 
         selectStmt = session.prepare(selectQuery);
@@ -251,7 +219,7 @@ public class CassandraIndex extends AIndex{
         //        if (!this.isConnected()) this.connect();
 //        if (session == null) session = CqlSession.builder().build();
 
-        String selectQuery = "SELECT count(id) as cnt FROM dap.fileStore WHERE documentId = ? ALLOW FILTERING";
+        String selectQuery = "SELECT count(id) as cnt FROM ocs.fileStore WHERE documentId = ? ALLOW FILTERING";
         PreparedStatement selectStmt = session.prepare(selectQuery);
 
         BoundStatement boundStmt = selectStmt.bind(documentId);
@@ -265,16 +233,7 @@ public class CassandraIndex extends AIndex{
         return 0;
     }
     public Boolean fileExists(UUID fileId){
-//        String selectQuery = "SELECT count(1) as cnt FROM dap.fileStore WHERE id = ? ALLOW FILTERING";
-//        PreparedStatement selectStmt = session.prepare(selectQuery);
-//        BoundStatement boundStmt = selectStmt.bind(fileId);
-//        ResultSet rs = session.execute(boundStmt);
-//        for (Row row : rs) {
-//            BigInteger cnt = row.getBigInteger("cnt");
-//            return cnt.compareTo(BigInteger.ZERO) > 0;
-//        }
-//        return false;
-        String selectQuery = "SELECT id FROM dap.fileStore WHERE id = ?";
+        String selectQuery = "SELECT id FROM ocs.fileStore WHERE id = ?";
         PreparedStatement selectStmt = session.prepare(selectQuery);
         BoundStatement boundStmt = selectStmt.bind(fileId);
         ResultSet rs = session.execute(boundStmt);
@@ -282,7 +241,7 @@ public class CassandraIndex extends AIndex{
     }
     public Boolean deleteFile(UUID fileId, String owner){
         if (!fileExists(fileId)) return false;
-        String selectQuery = "DELETE FROM dap.fileStore WHERE Id=? and owner = ? ";
+        String selectQuery = "DELETE FROM ocs.fileStore WHERE Id=? and owner = ? ";
         PreparedStatement selectStmt = session.prepare(selectQuery);
         BoundStatement boundStmt = selectStmt.bind(fileId,owner);
         session.execute(boundStmt);
@@ -292,7 +251,7 @@ public class CassandraIndex extends AIndex{
         //        if (!this.isConnected()) this.connect();
 //        if (session == null) session = CqlSession.builder().build();
 
-        String selectQuery = "SELECT count(1) as cnt FROM dap.fileStore WHERE owner = ? ALLOW FILTERING";
+        String selectQuery = "SELECT count(1) as cnt FROM ocs.fileStore WHERE owner = ? ALLOW FILTERING";
         PreparedStatement selectStmt = session.prepare(selectQuery);
 
         BoundStatement boundStmt = selectStmt.bind(owner);
@@ -313,10 +272,10 @@ public class CassandraIndex extends AIndex{
         BoundStatement boundStmt;
         PreparedStatement selectStmt;
         if (id != null) {
-            selectStmt = session.prepare("SELECT id, isPrivate, documentId, owner,extension FROM dap.fileStore WHERE id = ? LIMIT 1 ALLOW FILTERING ");
+            selectStmt = session.prepare("SELECT id, isPrivate, documentId, owner,extension FROM ocs.fileStore WHERE id = ? LIMIT 1 ALLOW FILTERING ");
             boundStmt = selectStmt.bind(id);
         } else{
-            selectStmt = session.prepare("SELECT id, isPrivate, documentId, owner,extension FROM dap.fileStore WHERE owner = ? AND documentId = ? LIMIT 1 ALLOW FILTERING ");
+            selectStmt = session.prepare("SELECT id, isPrivate, documentId, owner,extension FROM ocs.fileStore WHERE owner = ? AND documentId = ? LIMIT 1 ALLOW FILTERING ");
             boundStmt = selectStmt.bind(getOwner(),documentId);
         }
 
