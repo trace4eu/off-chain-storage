@@ -22,7 +22,7 @@ async function bootstrap() {
     .setTitle('Trace4EU - off-chain storage')
     .setVersion('0.1')
     .setDescription('Off-chain storage api documentation')
-    .addOAuth2()
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup(`${apiUrlPrefix}/api-docs`, app, document);

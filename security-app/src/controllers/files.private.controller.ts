@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
-import { ApiOAuth2, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateFileDto } from '../dtos/createFile.dto';
 import {
   ScopesProtected,
@@ -11,14 +11,14 @@ import { CreateFileResponse } from '../interfaces/createFileResponse.interface';
 import { GetEntityData } from '../auth/decorators/getEntityData.decorator';
 import { EntityData } from '../auth/strategies/auth.trace4eu.strategy';
 
-@ApiTags('files')
+@ApiTags('files (private)')
+@ApiBearerAuth()
 @Controller('files')
-export class AppController {
+export class FilesPrivateController {
   constructor(private readonly appService: AppService) {}
 
   @ScopesProtected([ValidScopes.ocsWrite])
   @UseGuards(JwtAuthGuardTrace4eu)
-  @ApiOAuth2([ValidScopes.ocsWrite])
   @Post()
   @ApiResponse({
     status: 201,
@@ -28,7 +28,6 @@ export class AppController {
     return this.appService.createFile(request);
   }
 
-  @ApiOAuth2([ValidScopes.ocsRead])
   @ScopesProtected([ValidScopes.ocsRead])
   @UseGuards(JwtAuthGuardTrace4eu)
   @Get('/:fileId')
