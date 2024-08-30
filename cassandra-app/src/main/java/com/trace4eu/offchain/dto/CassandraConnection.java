@@ -1,10 +1,8 @@
 package com.trace4eu.offchain.dto;
 
 import com.datastax.oss.driver.api.core.CqlSession;
-import com.datastax.oss.driver.api.core.auth.AuthProvider;
 import com.datastax.oss.driver.api.core.config.DefaultDriverOption;
 import com.datastax.oss.driver.api.core.config.DriverConfigLoader;
-import com.datastax.oss.driver.api.core.context.DriverContext;
 import com.datastax.oss.driver.internal.core.auth.PlainTextAuthProvider;
 import com.trace4eu.offchain.repository.DbOptions;
 import com.trace4eu.offchain.Vars;

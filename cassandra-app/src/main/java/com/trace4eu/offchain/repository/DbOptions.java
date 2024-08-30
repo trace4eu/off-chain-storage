@@ -9,7 +9,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DbOptions {
-    private String url;
     private String username;
     private String password;
     private String hostname;
@@ -21,7 +20,6 @@ public class DbOptions {
         Properties properties = new Properties();
         try (InputStream input = new FileInputStream(propertiesFile)) {
             properties.load(input);
-            this.url = properties.getProperty("database.url");
             this.username = properties.getProperty("database.username");
             this.password = properties.getProperty("database.password");
             this.hostname = properties.getProperty("database.hostname");
@@ -33,27 +31,9 @@ public class DbOptions {
             ex.printStackTrace();
         }
     }
-    public DbOptions(String url, String username, String password, String hostname, String dbName, Integer port, String clusterName) {
-        this.url = url;
-        this.username = username;
-        this.password=password;
-        this.hostname = hostname;
-        this.dbName = dbName;
-        this.port = port;
-        this.clusterName = clusterName;
-    }
-    public DbOptions(){}
-    public String getUrl() {
-        return url;
-    }
 
-    public void setUrl(String url) throws Exception {
-        this.url = url;
-        if (getUrl()!=null && !this.getUrl().startsWith("http")){
-            this.url = "http://"+this.url;
-        }
-        //this.extractDataFromUrl();
-    }
+    public DbOptions(){}
+
 
     public String getUsername() {
         return username;
@@ -87,56 +67,8 @@ public class DbOptions {
         this.dbName = dbName;
     }
 
-//    public void setUrlFromData(boolean isHttp) throws Exception {
-//        StringBuilder url = new StringBuilder();
-//        url.append(isHttp ? "http://" : "https://");
-//        if (this.getUsername() != null) {
-//            url.append(getUsername());
-//            if (this.getPassword()!=null) url.append(":"+this.password);
-//            url.append("@");
-//        }
-//        url.append(getHostname());
-//
-//        if (getPort() != null)
-//            url.append(":").append(getPort().toString());
-//
-//        url.append("/"). append(getDbName());
-//
-//        this.setUrl(url.toString());
-//    }
-    @Deprecated
-    private void extractDataFromUrl() throws Exception {
-        if (this.getUrl() == null) throw new Exception("No url available");
-        Pattern pattern;
-        String login, password, hostname,database;
-        if (this.getUrl().startsWith("https")){
-            pattern= Pattern.compile("https?://(.*?):(.*?)@(.*?)/(.*?)");
-        } else {
-            pattern= Pattern.compile("http?://(.*?):(.*?)@(.*?)/(.*?)");
-        }
-        Matcher matcher = pattern.matcher(getUrl());
-        if (matcher.find()) {
-            login = matcher.group(1);
-            password = matcher.group(2);
-            hostname = matcher.group(3);
-            database = matcher.group(4);
 
-            this.setUsername(login);
-            this.setPassword(password);
-            this.setHostname(hostname);
-            this.setDbName(database);
-        } else {
-            pattern = Pattern.compile("^http?://[a-zA-Z0-9]+@[a-zA-Z0-9]+/[a-zA-Z0-9]+$");
-            Matcher m = pattern.matcher(this.getUrl());
-            if (m.find()){
-//TODO nije dovrseno
-            }else{
 
-            }
-
-//            throw new Exception("URL format is incorrect.");
-        }
-    }
 
     public Integer getPort() {
         return port;
