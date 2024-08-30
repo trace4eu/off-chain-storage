@@ -48,11 +48,11 @@ $ npm run start:prod
 ## Running the app with docker
 Build docker container:
 ```bash
-build -t trace4eu-ocs .
+docker build --build-arg API_PORT=3000 -t trace4eu-ocs .
 ```
 Run container with env variables:
 ```bash
-docker run -d --name trace4eu-ocs trace4eu-ocs:latest
+docker run --env-file .env -d -p 3000:3000 --name trace4eu-ocs trace4eu-ocs:latest
 ```
 
 ## Test
