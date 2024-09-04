@@ -24,8 +24,11 @@ export class FilesPrivateController {
     status: 201,
     description: 'The record has been successfully created.',
   })
-  createFile(@Body() request: CreateFileDto): Promise<CreateFileResponse> {
-    return this.appService.createFile(request);
+  createFile(
+    @Body() request: CreateFileDto,
+    @GetEntityData() entityData: EntityData,
+  ): Promise<CreateFileResponse> {
+    return this.appService.createFile(request, entityData.sub);
   }
 
   @ScopesProtected([ValidScopes.ocsRead])
@@ -36,15 +39,5 @@ export class FilesPrivateController {
     @GetEntityData() entityData: EntityData,
   ): Promise<any> {
     return this.appService.readFile(fileId, entityData.sub);
-  }
-
-  @Get('/public/:fileId')
-  getPublicFile(@Param('fileId') fileId: string) {
-    return fileId;
-  }
-
-  @Get()
-  listFiles(): string {
-    return 'hello';
   }
 }

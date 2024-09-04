@@ -3,6 +3,7 @@ import { UnauthorizedException } from '../exceptions/unauthorized.exception';
 import CustomError from '../exceptions/customError';
 import InternalServerErrorException from '../exceptions/internalServerError.exception';
 import BadRequestException from '../exceptions/badRequest.exception';
+import NotFoundException from '../exceptions/notFound.exception';
 
 const logger = new Logger();
 
@@ -19,6 +20,11 @@ export class ExceptionTypeFactory {
     }
     if (exception.name === 'BadRequestException') {
       return new BadRequestException(
+        (exception as BadRequestException).getResponse().message,
+      );
+    }
+    if (exception.name === 'NotFoundException') {
+      return new NotFoundException(
         (exception as BadRequestException).getResponse().message,
       );
     }

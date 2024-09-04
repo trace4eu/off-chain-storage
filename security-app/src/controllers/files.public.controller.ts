@@ -1,19 +1,20 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import AppService from '../services/app.service';
+import { RequestsSearchFields } from '../interfaces/requestSearchFields.interface';
 
 @ApiTags('files (public)')
-@Controller('files')
+@Controller('/public/files')
 export class FilesPublicController {
   constructor(private readonly appService: AppService) {}
 
-  @Get('/public/:fileId')
+  @Get('/:fileId')
   getPublicFile(@Param('fileId') fileId: string) {
-    return fileId;
+    return this.appService.readFile(fileId);
   }
 
   @Get()
-  listFiles(): string {
-    return 'hello';
+  listFiles(@Query() searchObject?: RequestsSearchFields): Promise<any> {
+    return this.appService.getFiles(searchObject);
   }
 }

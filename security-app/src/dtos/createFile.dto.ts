@@ -9,6 +9,8 @@ import {
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateFileDto {
+  owner: string;
+
   @IsString()
   @ApiProperty({
     description: 'extension of the file: json, pdf, ...',

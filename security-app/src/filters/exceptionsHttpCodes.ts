@@ -8,6 +8,7 @@ import { BearerTokenException } from '../auth/exceptions/bearerToken.exception';
 import { BearerTokenNotValidException } from '../auth/exceptions/bearerTokenNotValid.exception';
 import FileNotFoundException from '../exceptions/fileNotFound.exception';
 import ForbiddenException from '../exceptions/forbidden.exception';
+import NotFoundException from '../exceptions/notFound.exception';
 
 const ExceptionsHttpCodes = {
   [CassandraAppException.name]: HttpStatus.INTERNAL_SERVER_ERROR,
@@ -19,6 +20,7 @@ const ExceptionsHttpCodes = {
   [BearerTokenNotValidException.name]: HttpStatus.UNAUTHORIZED,
   [FileNotFoundException.name]: HttpStatus.BAD_REQUEST,
   [ForbiddenException.name]: HttpStatus.FORBIDDEN,
+  [NotFoundException.name]: HttpStatus.NOT_FOUND,
   unknown: HttpStatus.INTERNAL_SERVER_ERROR,
 };
 
