@@ -7,10 +7,12 @@ import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.Row;
 import com.datastax.oss.protocol.internal.util.Bytes;
 import com.trace4eu.offchain.dto.CassandraConnection;
+import com.trace4eu.offchain.dto.FileSearchResults;
 import com.trace4eu.offchain.dto.OutputFile;
 import com.trace4eu.offchain.dto.PutFileDTO;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.*;
 
@@ -137,56 +139,16 @@ public class CassandraIndex extends AIndex{
     }
 
     @Override
-    public List<OutputFile> getListOfFiles(String documentId, String owner) throws Exception {
-//        if (!this.isConnected()) this.connect();
-//        if (session == null) session = CqlSession.builder().build();
-
-        String selectQuery;
-        PreparedStatement selectStmt;
-        if (documentId.isEmpty() && owner.isEmpty())
-            throw new Exception("You need to provide a documentid/file name or owner");
-
-//        Integer cnt = this.getFileCoundPerOwner(owner);
-        if (!documentId.isEmpty()){
-            selectQuery = "SELECT id,documentid,owner,extension FROM ocs.fileStore WHERE documentId = ? ALLOW FILTERING";
-        } else {
-            selectQuery = "SELECT id,documentid,owner,extension FROM ocs.fileStore WHERE owner = ? ALLOW FILTERING";
-        }
-
-        selectStmt = session.prepare(selectQuery);
-
-        BoundStatement boundStmt = (!documentId.isEmpty())
-                ? selectStmt.bind(documentId)
-                : selectStmt.bind(owner);
-
-        ResultSet rs = session.execute(boundStmt);
-
-        List<OutputFile> results = new ArrayList<OutputFile>();
-        for (Row row : rs) {
-            OutputFile outFile  = new OutputFile();
-            outFile.setId(row.getUuid("id"));
-            outFile.setOwner(row.getString("owner"));
-            outFile.setDocumentid(row.getString("documentid"));
-            outFile.setExtension(row.getString("extension"));
-            results.add(outFile);
-        }
-
-        return results;
-    }
-
-
-
-    public List<OutputFile> getListOfFilesPaging(String documentId, String owner, Integer pageSize, Integer pageNumber) throws Exception {
+    public FileSearchResults getListOfFilesPaging(String documentId, String owner, Integer pageSize, Integer pageNumber) throws Exception {
         this.session = CassandraConnection.getInstance().getSession();
-//        Integer count = this.getFileCountPerOwner(owner);
         String selectQuery;
         PreparedStatement selectStmt;
         if (documentId.isEmpty() && owner.isEmpty())
             throw new Exception("You need to provide a documentid/file name or owner");
 
         selectQuery = (!documentId.isEmpty())
-            ? "SELECT id,documentid,owner,extension FROM ocs.fileStore WHERE documentId = ? LIMIT ? ALLOW FILTERING"
-            : "SELECT id,documentid,owner,extension FROM ocs.fileStore WHERE owner = ? LIMIT ? ALLOW FILTERING";
+                ? "SELECT id,documentid,owner,extension FROM ocs.fileStore WHERE documentId = ? LIMIT ? ALLOW FILTERING"
+                : "SELECT id,documentid,owner,extension FROM ocs.fileStore WHERE owner = ? LIMIT ? ALLOW FILTERING";
 
 
         selectStmt = session.prepare(selectQuery);
@@ -197,7 +159,7 @@ public class CassandraIndex extends AIndex{
 
         ResultSet rs = session.execute(boundStmt);
 
-        List<OutputFile> results = new ArrayList<OutputFile>();
+        List<OutputFile> records = new ArrayList<OutputFile>();
 
         int i =-1;
         for (Row row : rs) {
@@ -210,16 +172,63 @@ public class CassandraIndex extends AIndex{
             outFile.setOwner(row.getString("owner"));
             outFile.setDocumentid(row.getString("documentid"));
             outFile.setExtension(row.getString("extension"));
-            results.add(outFile);
+            records.add(outFile);
         }
 
-        return results;
+        Integer total = (!documentId.isEmpty())
+            ? this.getFileCountPerDocumentId(documentId)
+            : this.getFileCountPerOwner(owner);
+
+        FileSearchResults result = new FileSearchResults();
+        result.setRecords(records);
+        result.setTotal(total);
+        result.setPageSize(pageSize);
+        result.setCurrentPage(pageNumber);
+        return result;
     }
+//    public List<OutputFile> getListOfFilesPaging(String documentId, String owner, Integer pageSize, Integer pageNumber) throws Exception {
+//        this.session = CassandraConnection.getInstance().getSession();
+//        String selectQuery;
+//        PreparedStatement selectStmt;
+//        if (documentId.isEmpty() && owner.isEmpty())
+//            throw new Exception("You need to provide a documentid/file name or owner");
+//
+//        selectQuery = (!documentId.isEmpty())
+//            ? "SELECT id,documentid,owner,extension FROM ocs.fileStore WHERE documentId = ? LIMIT ? ALLOW FILTERING"
+//            : "SELECT id,documentid,owner,extension FROM ocs.fileStore WHERE owner = ? LIMIT ? ALLOW FILTERING";
+//
+//
+//        selectStmt = session.prepare(selectQuery);
+//
+//        BoundStatement boundStmt = (!documentId.isEmpty())
+//                ? selectStmt.bind(documentId,(pageNumber+1)*pageSize)
+//                : selectStmt.bind(owner,(pageNumber+1)*pageSize);
+//
+//        ResultSet rs = session.execute(boundStmt);
+//
+//        List<OutputFile> results = new ArrayList<OutputFile>();
+//
+//        int i =-1;
+//        for (Row row : rs) {
+//            i++;
+//            if (i<pageNumber*pageSize) continue;
+//            //if (i >= pageSize*(1+pageNumber)) break;
+//
+//            OutputFile outFile = new OutputFile();
+//            outFile.setId(row.getUuid("id"));
+//            outFile.setOwner(row.getString("owner"));
+//            outFile.setDocumentid(row.getString("documentid"));
+//            outFile.setExtension(row.getString("extension"));
+//            results.add(outFile);
+//        }
+//
+//        return results;
+//    }
     public Integer getFileCountPerDocumentId(String documentId){
         //        if (!this.isConnected()) this.connect();
 //        if (session == null) session = CqlSession.builder().build();
 
-        String selectQuery = "SELECT count(id) as cnt FROM ocs.fileStore WHERE documentId = ? ALLOW FILTERING";
+        String selectQuery = "SELECT cast(COUNT(id) as int)   as cnt FROM ocs.fileStore WHERE documentId = ? ALLOW FILTERING";
         PreparedStatement selectStmt = session.prepare(selectQuery);
 
         BoundStatement boundStmt = selectStmt.bind(documentId);
@@ -251,7 +260,7 @@ public class CassandraIndex extends AIndex{
         //        if (!this.isConnected()) this.connect();
 //        if (session == null) session = CqlSession.builder().build();
 
-        String selectQuery = "SELECT count(1) as cnt FROM ocs.fileStore WHERE owner = ? ALLOW FILTERING";
+        String selectQuery = "SELECT cast(count(1) as int) as cnt FROM ocs.fileStore WHERE owner = ? ALLOW FILTERING";
         PreparedStatement selectStmt = session.prepare(selectQuery);
 
         BoundStatement boundStmt = selectStmt.bind(owner);
@@ -259,7 +268,9 @@ public class CassandraIndex extends AIndex{
         ResultSet rs = session.execute(boundStmt);
 
         for (Row row : rs) {
+//            BigInteger cnt = row.getBigInteger("cnt");
             Integer cnt = row.getInt("cnt");
+            //BigInteger cnt = row.get(0, BigInteger.class);
             return cnt;
         }
         return 0;

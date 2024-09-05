@@ -5,7 +5,9 @@ import java.util.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.trace4eu.offchain.MyService;
+import com.trace4eu.offchain.dto.FileSearchResults;
 import com.trace4eu.offchain.dto.OutputFile;
+import com.trace4eu.offchain.dto.OutputFileExtended;
 import com.trace4eu.offchain.dto.PutFileDTO;
 import com.trace4eu.offchain.repository.DbOptions;
 import com.trace4eu.offchain.repository.IIndex;
@@ -161,10 +163,29 @@ public class ServiceController {
 	}
 
 
+//	@GetMapping("/offchain-storage/api/v1/files/list")
+//	public ResponseEntity<List<OutputFile>> FilesList(
+//			@Parameter(description = "owner") @RequestParam(value = "owner", defaultValue = "") String owner
+//			,@Parameter(description = "documentId") @RequestParam(value = "documentId", defaultValue = "") String documentId
+//			,@Parameter(description = "page") @RequestParam(value = "page", defaultValue = "0") Integer page
+//			,@Parameter(description = "pageSize") @RequestParam(value = "pageSize", defaultValue = "20") Integer pageSize
+//	) throws Exception {
+//		this.setUp();
+//
+//		if (!owner.isEmpty())
+//			this.indexer.setOwner(owner);
+//
+//		List<OutputFile> files = this.indexer.getListOfFilesPaging(documentId,owner,pageSize,page);
+//
+//		HttpHeaders headers = new HttpHeaders();
+//		headers.setContentType(MediaType.APPLICATION_JSON);
+//
+//		return ResponseEntity.ok()
+//				.headers(headers)
+//				.body(files);
+//	}
 	@GetMapping("/offchain-storage/api/v1/files/list")
-	//@ApiOperation(value = "Get all files of specific owner or look for specific document id", response = OutputFile.class, responseContainer = "List")
-	@Operation(summary = "Get all files of specific owner or look for specific document id")
-	public ResponseEntity<List<OutputFile>> FilesList(
+	public ResponseEntity<FileSearchResults> FilesList(
 			@Parameter(description = "owner") @RequestParam(value = "owner", defaultValue = "") String owner
 			,@Parameter(description = "documentId") @RequestParam(value = "documentId", defaultValue = "") String documentId
 			,@Parameter(description = "page") @RequestParam(value = "page", defaultValue = "0") Integer page
@@ -175,8 +196,7 @@ public class ServiceController {
 		if (!owner.isEmpty())
 			this.indexer.setOwner(owner);
 
-//		List<OutputFile> files = this.indexer.getListOfFiles(documentId,owner);
-		List<OutputFile> files = this.indexer.getListOfFilesPaging(documentId,owner,pageSize,page);
+		FileSearchResults files = this.indexer.getListOfFilesPaging(documentId,owner,pageSize,page);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
@@ -185,21 +205,42 @@ public class ServiceController {
 				.headers(headers)
 				.body(files);
 	}
+//	@GetMapping("/offchain-storage/api/v1/files/{id}/metadata")
+//	public RestOut FileGetMetadata(
+//			@PathVariable(required = true) String id
+//	) throws Exception {
+//		this.setUp();
+//
+//		ObjectMapper object  = new ObjectMapper();
+//		ObjectNode jsonObject = object.createObjectNode();
+//		HashMap<String, String> fileInfo = this.indexer.getFileInfo(UUID.fromString(id),null);
+//		jsonObject.put("id",fileInfo.get("id"));
+//		jsonObject.put("extension",fileInfo.get("extension"));
+//		jsonObject.put("owner",fileInfo.get("owner"));
+//		jsonObject.put("documentId",fileInfo.get("documentId"));
+//		jsonObject.put("isPrivate",fileInfo.get("isPrivate"));
+//		return new RestOut(jsonObject);
+//	}
 
 	@GetMapping("/offchain-storage/api/v1/files/{id}/metadata")
-	public RestOut FileGetMetadata(
+	public ResponseEntity<OutputFileExtended> FileGetMetadata(
 			@PathVariable(required = true) String id
 	) throws Exception {
 		this.setUp();
-
-		ObjectMapper object  = new ObjectMapper();
-		ObjectNode jsonObject = object.createObjectNode();
 		HashMap<String, String> fileInfo = this.indexer.getFileInfo(UUID.fromString(id),null);
-		jsonObject.put("id",fileInfo.get("id"));
-		jsonObject.put("extension",fileInfo.get("extension"));
-		jsonObject.put("owner",fileInfo.get("owner"));
-		jsonObject.put("documentId",fileInfo.get("documentId"));
-		jsonObject.put("isPrivate",fileInfo.get("isPrivate"));
-		return new RestOut(jsonObject);
+
+		OutputFileExtended res = new OutputFileExtended();
+		res.setId(UUID.fromString(fileInfo.get("id")));
+		res.setPrivate(Boolean.parseBoolean(fileInfo.get("isPrivate")));
+		res.setDocumentid(fileInfo.get("documentid"));
+		res.setOwner(fileInfo.get("owner"));
+		res.setExtension(fileInfo.get("extension"));
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		return ResponseEntity.ok()
+				.headers(headers)
+				.body(res);
 	}
 }

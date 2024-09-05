@@ -41,7 +41,6 @@ public class CassandraConnection {
                 .withString(DefaultDriverOption.AUTH_PROVIDER_CLASS, PlainTextAuthProvider.class.getName())
                 .withString(DefaultDriverOption.AUTH_PROVIDER_USER_NAME, options.getUsername())
                 .withString(DefaultDriverOption.AUTH_PROVIDER_PASSWORD, options.getPassword())
-//                .withString(DefaultDriverOption.CONTACT_POINTS, hostName + ":" + options.getPort().toString())
                 .withStringList(DefaultDriverOption.CONTACT_POINTS, Arrays.asList( hostName + ":" + options.getPort().toString()))
 
                 .build();
