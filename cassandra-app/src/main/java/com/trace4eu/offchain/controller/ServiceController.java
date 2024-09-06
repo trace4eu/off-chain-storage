@@ -232,7 +232,7 @@ public class ServiceController {
 		OutputFileExtended res = new OutputFileExtended();
 		res.setId(UUID.fromString(fileInfo.get("id")));
 		res.setPrivate(Boolean.parseBoolean(fileInfo.get("isPrivate")));
-		res.setDocumentid(fileInfo.get("documentid"));
+		res.setDocumentid(fileInfo.get("documentId"));
 		res.setOwner(fileInfo.get("owner"));
 		res.setExtension(fileInfo.get("extension"));
 
