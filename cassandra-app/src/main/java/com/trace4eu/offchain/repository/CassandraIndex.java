@@ -12,7 +12,6 @@ import com.trace4eu.offchain.dto.OutputFile;
 import com.trace4eu.offchain.dto.PutFileDTO;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.*;
 

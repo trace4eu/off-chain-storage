@@ -2,10 +2,10 @@ package com.trace4eu.offchain;
 
 import org.springframework.boot.ApplicationArguments;
 
-public class MyService {
+public class ArgumentService {
     private final ApplicationArguments args;
 
-    public MyService(ApplicationArguments args) {
+    public ArgumentService(ApplicationArguments args) {
         this.args = args;
     }
 

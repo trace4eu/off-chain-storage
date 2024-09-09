@@ -4,9 +4,8 @@ import java.util.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.trace4eu.offchain.MyService;
+import com.trace4eu.offchain.ArgumentService;
 import com.trace4eu.offchain.dto.FileSearchResults;
-import com.trace4eu.offchain.dto.OutputFile;
 import com.trace4eu.offchain.dto.OutputFileExtended;
 import com.trace4eu.offchain.dto.PutFileDTO;
 import com.trace4eu.offchain.repository.DbOptions;
@@ -16,8 +15,6 @@ import com.trace4eu.offchain.repository.IndexerType;
 import com.trace4eu.offchain.restservice.RestOut;
 import com.trace4eu.offchain.GenericHelper;
 import com.trace4eu.offchain.Vars;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -29,7 +26,7 @@ public class ServiceController {
 	IIndex indexer;
 //	private final MyService myService;
 	@Autowired
-	public ServiceController(MyService myService) throws Exception {
+	public ServiceController(ArgumentService myService) throws Exception {
 //		this.myService = myService;
 //		System.out.println(String.join(",",myService.getArgs().getSourceArgs()));
 		String[] args = myService.getArgs().getSourceArgs();
