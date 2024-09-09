@@ -1,5 +1,10 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CreateFileDto } from '../dtos/createFile.dto';
 import {
   ScopesProtected,
@@ -24,6 +29,10 @@ export class FilesPrivateController {
     status: 201,
     description: 'The record has been successfully created.',
   })
+  @ApiOperation({
+    summary: 'Create a file',
+    description: 'This creates a file to be stored in the ocs component',
+  })
   createFile(
     @Body() request: CreateFileDto,
     @GetEntityData() entityData: EntityData,
@@ -34,6 +43,15 @@ export class FilesPrivateController {
   @ScopesProtected([ValidScopes.ocsRead])
   @UseGuards(JwtAuthGuardTrace4eu)
   @Get('/:fileId')
+  @ApiOperation({
+    summary: 'Get a file',
+    description: 'Get a file from the ocs component',
+  })
+  @ApiResponse({
+    status: 200,
+    description:
+      "The binary content of the file will be returned. If it's a json, content-type will be application/json so the content-type is returned accordingly with the content. If no mapping can be done, the default one is application/octet-stream",
+  })
   getFile(
     @Param('fileId') fileId: string,
     @GetEntityData() entityData: EntityData,

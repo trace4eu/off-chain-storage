@@ -1,11 +1,9 @@
-const regex = /^true$/i;
-
 export interface FileMetadataPrimitives {
   id: string;
-  extension: string;
+  extension?: string;
   owner: string;
   documentId: string;
-  isPrivate?: string | undefined;
+  private?: boolean | undefined;
 }
 
 export class FileMetadata {
@@ -20,16 +18,17 @@ export class FileMetadata {
   ): FileMetadata {
     const fileMetadata = new FileMetadata();
     fileMetadata.id = fileMetadataPrimitives.id;
-    fileMetadata.extension = fileMetadataPrimitives.extension;
     fileMetadata.owner = fileMetadataPrimitives.owner;
     fileMetadata.documentId = fileMetadataPrimitives.documentId;
 
-    if (fileMetadataPrimitives.isPrivate)
-      fileMetadata.isPrivate = regex.test(fileMetadataPrimitives.isPrivate);
+    if (typeof fileMetadataPrimitives.private === 'boolean')
+      fileMetadata.isPrivate = fileMetadataPrimitives.private;
+    if (fileMetadataPrimitives.extension)
+      fileMetadata.extension = fileMetadataPrimitives.extension;
     return fileMetadata;
   }
 
-  checkAccess(tokenSubject: string | undefined): boolean {
+  isAccessAllowed(tokenSubject?: string | undefined): boolean {
     if (this.isPrivate) {
       return this.owner === tokenSubject;
     }

@@ -1,5 +1,5 @@
 import { Logger, Injectable } from '@nestjs/common';
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosError, AxiosInstance } from 'axios';
 import { CreateFileDto } from '../dtos/createFile.dto';
 import {
   CreateFileCassandraAppResponse,
@@ -9,9 +9,11 @@ import { ConfigService } from '@nestjs/config';
 import CassandraAppException from '../exceptions/cassandraApp.exception';
 import { ApiConfig } from '../../config/configuration';
 import ForbiddenException from '../exceptions/forbidden.exception';
-import { FileMetadata } from '../domain/fileMetadata';
-import { FileServiceResponseData } from '../interfaces/FileServiceResponseData.interface';
+import { FileMetadata, FileMetadataPrimitives } from '../domain/fileMetadata';
 import { RequestsSearchFields } from '../interfaces/requestSearchFields.interface';
+import { ListFilesResponse, RecordInfo } from '../dtos/listFilesResponse.dto';
+import BadRequestException from '../exceptions/badRequest.exception';
+import FileNotFoundException from '../exceptions/fileNotFound.exception';
 
 @Injectable()
 export default class AppService {
@@ -48,6 +50,8 @@ export default class AppService {
       const response = await this.axios.get(`${this.cassandraAppUrl}/${id}`);
       return response.data;
     } catch (error) {
+      if ((error as AxiosError).status === 404)
+        throw new FileNotFoundException();
       this.logger.error(error.stack);
       throw new CassandraAppException();
     }
@@ -65,12 +69,13 @@ export default class AppService {
       throw new CassandraAppException();
     }
     const fileMetadata = FileMetadata.fromPrimitives(
-      (response.data as FileServiceResponseData).data,
+      response.data as FileMetadataPrimitives,
     );
-    return fileMetadata.checkAccess(clientId);
+
+    return fileMetadata.isAccessAllowed(clientId);
   }
 
-  async getFiles(searchObject?: RequestsSearchFields) {
+  async getFiles(searchObject?: RequestsSearchFields | undefined) {
     try {
       let searchUrlEncoded = '?';
       if (searchObject?.owner)
@@ -86,7 +91,12 @@ export default class AppService {
       const response = await this.axios.get(
         `${this.cassandraAppUrl}/list${searchUrlEncoded}`,
       );
-      return response.data;
+      const listFiles = response.data as ListFilesResponse;
+      listFiles.records = listFiles.records.map((record: RecordInfo) => {
+        if (!record.extension) delete record.extension;
+        return record;
+      });
+      return listFiles;
     } catch (error) {
       this.logger.error(error.stack);
       throw new CassandraAppException();

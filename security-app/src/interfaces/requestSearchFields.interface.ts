@@ -1,6 +1,6 @@
 export interface RequestsSearchFields {
-  owner?: string;
-  documentId?: string;
-  page?: string;
-  pageSize?: string;
+  owner?: string | undefined;
+  documentId?: string | undefined;
+  page?: number | undefined;
+  pageSize?: number | undefined;
 }
