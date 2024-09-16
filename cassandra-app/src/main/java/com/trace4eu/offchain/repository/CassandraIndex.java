@@ -124,7 +124,8 @@ public class CassandraIndex extends AIndex{
     public byte[] getFileByOwner(String documentId) {
 //        if (!this.isConnected()) this.connect();
 //        if (session == null) session = CqlSession.builder().build();
-        String selectQuery = "SELECT data FROM ocs.fileStore WHERE owner = ? AND documentId = ? LIMIT 1 ALLOW FILTERING";
+        //String selectQuery = "SELECT data FROM ocs.fileStore WHERE owner = ? AND documentId = ? LIMIT 1 ALLOW FILTERING";
+        String selectQuery = "SELECT data FROM ocs.mv_fileStore_owner WHERE owner = ? AND documentId = ? LIMIT 1 ";
         PreparedStatement selectStmt = session.prepare(selectQuery);
         BoundStatement boundStmt = selectStmt.bind(getOwner(),documentId);
         ResultSet rs = session.execute(boundStmt);
@@ -145,10 +146,12 @@ public class CassandraIndex extends AIndex{
         if (documentId.isEmpty() && owner.isEmpty())
             throw new Exception("You need to provide a documentid/file name or owner");
 
+//        selectQuery = (!documentId.isEmpty())
+//            ? "SELECT id,documentid,owner,extension,isPrivate FROM ocs.fileStore WHERE documentId = ? LIMIT ? ALLOW FILTERING"
+//            : "SELECT id,documentid,owner,extension,isPrivate FROM ocs.fileStore WHERE owner = ? LIMIT ? ALLOW FILTERING";
         selectQuery = (!documentId.isEmpty())
-                ? "SELECT id,documentid,owner,extension FROM ocs.fileStore WHERE documentId = ? LIMIT ? ALLOW FILTERING"
-                : "SELECT id,documentid,owner,extension FROM ocs.fileStore WHERE owner = ? LIMIT ? ALLOW FILTERING";
-
+            ? "SELECT id,documentid,owner,extension,isPrivate FROM ocs.mv_fileStore_docid WHERE documentId = ? LIMIT ? "
+            : "SELECT id,documentid,owner,extension,isPrivate FROM ocs.mv_fileStore_owner WHERE owner = ? LIMIT ? ";
 
         selectStmt = session.prepare(selectQuery);
 
@@ -164,7 +167,6 @@ public class CassandraIndex extends AIndex{
         for (Row row : rs) {
             i++;
             if (i<pageNumber*pageSize) continue;
-            //if (i >= pageSize*(1+pageNumber)) break;
 
             OutputFile outFile = new OutputFile();
             outFile.setId(row.getUuid("id"));
@@ -185,49 +187,15 @@ public class CassandraIndex extends AIndex{
         result.setCurrentPage(pageNumber);
         return result;
     }
-//    public List<OutputFile> getListOfFilesPaging(String documentId, String owner, Integer pageSize, Integer pageNumber) throws Exception {
-//        this.session = CassandraConnection.getInstance().getSession();
-//        String selectQuery;
-//        PreparedStatement selectStmt;
-//        if (documentId.isEmpty() && owner.isEmpty())
-//            throw new Exception("You need to provide a documentid/file name or owner");
-//
-//        selectQuery = (!documentId.isEmpty())
-//            ? "SELECT id,documentid,owner,extension FROM ocs.fileStore WHERE documentId = ? LIMIT ? ALLOW FILTERING"
-//            : "SELECT id,documentid,owner,extension FROM ocs.fileStore WHERE owner = ? LIMIT ? ALLOW FILTERING";
-//
-//
-//        selectStmt = session.prepare(selectQuery);
-//
-//        BoundStatement boundStmt = (!documentId.isEmpty())
-//                ? selectStmt.bind(documentId,(pageNumber+1)*pageSize)
-//                : selectStmt.bind(owner,(pageNumber+1)*pageSize);
-//
-//        ResultSet rs = session.execute(boundStmt);
-//
-//        List<OutputFile> results = new ArrayList<OutputFile>();
-//
-//        int i =-1;
-//        for (Row row : rs) {
-//            i++;
-//            if (i<pageNumber*pageSize) continue;
-//            //if (i >= pageSize*(1+pageNumber)) break;
-//
-//            OutputFile outFile = new OutputFile();
-//            outFile.setId(row.getUuid("id"));
-//            outFile.setOwner(row.getString("owner"));
-//            outFile.setDocumentid(row.getString("documentid"));
-//            outFile.setExtension(row.getString("extension"));
-//            results.add(outFile);
-//        }
-//
-//        return results;
-//    }
+
+
     public Integer getFileCountPerDocumentId(String documentId){
         //        if (!this.isConnected()) this.connect();
 //        if (session == null) session = CqlSession.builder().build();
 
-        String selectQuery = "SELECT cast(COUNT(id) as int)   as cnt FROM ocs.fileStore WHERE documentId = ? ALLOW FILTERING";
+//        String selectQuery = "SELECT cast(COUNT(id) as int)   as cnt FROM ocs.fileStore WHERE documentId = ? ALLOW FILTERING";
+        String selectQuery = "SELECT cast(COUNT(id) as int)   as cnt FROM ocs.mv_fileStore_docid WHERE documentId = ?";
+
         PreparedStatement selectStmt = session.prepare(selectQuery);
 
         BoundStatement boundStmt = selectStmt.bind(documentId);
@@ -259,7 +227,9 @@ public class CassandraIndex extends AIndex{
         //        if (!this.isConnected()) this.connect();
 //        if (session == null) session = CqlSession.builder().build();
 
-        String selectQuery = "SELECT cast(count(1) as int) as cnt FROM ocs.fileStore WHERE owner = ? ALLOW FILTERING";
+//        String selectQuery = "SELECT cast(count(1) as int) as cnt FROM ocs.fileStore WHERE owner = ? ALLOW FILTERING";
+        String selectQuery = "SELECT cast(count(1) as int) as cnt FROM ocs.mv_fileStore_owner WHERE owner = ?";
+
         PreparedStatement selectStmt = session.prepare(selectQuery);
 
         BoundStatement boundStmt = selectStmt.bind(owner);
@@ -285,7 +255,8 @@ public class CassandraIndex extends AIndex{
             selectStmt = session.prepare("SELECT id, isPrivate, documentId, owner,extension FROM ocs.fileStore WHERE id = ? LIMIT 1 ALLOW FILTERING ");
             boundStmt = selectStmt.bind(id);
         } else{
-            selectStmt = session.prepare("SELECT id, isPrivate, documentId, owner,extension FROM ocs.fileStore WHERE owner = ? AND documentId = ? LIMIT 1 ALLOW FILTERING ");
+//            selectStmt = session.prepare("SELECT id, isPrivate, documentId, owner,extension FROM ocs.fileStore WHERE owner = ? AND documentId = ? LIMIT 1 ALLOW FILTERING ");
+            selectStmt = session.prepare("SELECT id, isPrivate, documentId, owner,extension FROM ocs.mv_fileStore_owner WHERE owner = ? AND documentId = ? LIMIT 1 ");
             boundStmt = selectStmt.bind(getOwner(),documentId);
         }
 
