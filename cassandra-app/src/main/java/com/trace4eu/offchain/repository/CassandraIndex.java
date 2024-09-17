@@ -121,24 +121,6 @@ public class CassandraIndex extends AIndex{
     }
 
     @Override
-    public byte[] getFileByOwner(String documentId) {
-//        if (!this.isConnected()) this.connect();
-//        if (session == null) session = CqlSession.builder().build();
-        //String selectQuery = "SELECT data FROM ocs.fileStore WHERE owner = ? AND documentId = ? LIMIT 1 ALLOW FILTERING";
-        String selectQuery = "SELECT data FROM ocs.mv_fileStore_owner WHERE owner = ? AND documentId = ? LIMIT 1 ";
-        PreparedStatement selectStmt = session.prepare(selectQuery);
-        BoundStatement boundStmt = selectStmt.bind(getOwner(),documentId);
-        ResultSet rs = session.execute(boundStmt);
-
-        for (Row row : rs) {
-            ByteBuffer byteBuffer = row.getByteBuffer("data");
-            byte[] byteArray = Bytes.getArray(byteBuffer);
-            return  byteArray;
-        }
-        return null;
-    }
-
-    @Override
     public FileSearchResults getListOfFilesPaging(String documentId, String owner, Integer pageSize, Integer pageNumber) throws Exception {
         this.session = CassandraConnection.getInstance().getSession();
         String selectQuery;
@@ -217,7 +199,9 @@ public class CassandraIndex extends AIndex{
     }
     public Boolean deleteFile(UUID fileId, String owner){
         if (!fileExists(fileId)) return false;
-        String selectQuery = "DELETE FROM ocs.fileStore WHERE Id=? and owner = ? ";
+        String ownerInDb = this.getFileInfo(fileId,null).get("owner");
+        if (ownerInDb != owner) return false;
+        String selectQuery = "DELETE FROM ocs.fileStore WHERE Id=? ";
         PreparedStatement selectStmt = session.prepare(selectQuery);
         BoundStatement boundStmt = selectStmt.bind(fileId,owner);
         session.execute(boundStmt);
@@ -252,11 +236,13 @@ public class CassandraIndex extends AIndex{
         BoundStatement boundStmt;
         PreparedStatement selectStmt;
         if (id != null) {
-            selectStmt = session.prepare("SELECT id, isPrivate, documentId, owner,extension FROM ocs.fileStore WHERE id = ? LIMIT 1 ALLOW FILTERING ");
+//            selectStmt = session.prepare("SELECT id, isPrivate, documentId, owner,extension FROM ocs.fileStore WHERE id = ? LIMIT 1 ALLOW FILTERING ");
+            selectStmt = session.prepare("SELECT id, isPrivate, documentId, owner,extension FROM ocs.fileStore WHERE id = ? LIMIT 1 ");
             boundStmt = selectStmt.bind(id);
         } else{
+            //this query might be problematic
 //            selectStmt = session.prepare("SELECT id, isPrivate, documentId, owner,extension FROM ocs.fileStore WHERE owner = ? AND documentId = ? LIMIT 1 ALLOW FILTERING ");
-            selectStmt = session.prepare("SELECT id, isPrivate, documentId, owner,extension FROM ocs.mv_fileStore_owner WHERE owner = ? AND documentId = ? LIMIT 1 ");
+            selectStmt = session.prepare("SELECT id, isPrivate, documentId, owner,extension FROM ocs.mv_fileStore_owner WHERE owner = ? AND documentId = ? LIMIT 1 allow filtering");
             boundStmt = selectStmt.bind(getOwner(),documentId);
         }
 
