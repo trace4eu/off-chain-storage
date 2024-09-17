@@ -60,7 +60,7 @@ public class ServiceTest {
         boolean exists = indexer.fileExists(fileId);
         assertTrue(exists);
 
-        Map<String,String> fileInfo = indexer.getFileInfo(fileId,null);
+        Map<String,String> fileInfo = indexer.getFileInfo(fileId);
         assertNotEquals(fileInfo.size(),0);
         assertEquals("txt",fileInfo.get("extension"));
         assertEquals(fileId.toString(), fileInfo.get("id"));

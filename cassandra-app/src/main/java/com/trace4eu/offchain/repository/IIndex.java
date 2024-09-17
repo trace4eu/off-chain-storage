@@ -31,7 +31,7 @@ public interface IIndex {
     public UUID insertFile(MultipartFile file, String documentId, String extension, Integer ttl, Boolean isPrivate) throws Exception;
     public UUID insertFile(PutFileDTO importData) throws Exception;
     public byte[] getFile(UUID fileId);
-    public HashMap<String,String> getFileInfo(UUID id, String documentId);
+    public HashMap<String,String> getFileInfo(UUID id);
     public FileSearchResults getListOfFilesPaging(String documentId, String owner, Integer pageSize, Integer pageNumber) throws Exception ;
     public Boolean deleteFile(UUID fileId, String owner);
     public Boolean fileExists(UUID fileId);

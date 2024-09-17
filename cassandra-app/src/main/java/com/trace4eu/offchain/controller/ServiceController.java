@@ -142,7 +142,7 @@ public class ServiceController {
 
 			HashMap<String, String> fileInfo;
 
-			fileInfo = this.indexer.getFileInfo(UUID.fromString(id), null);
+			fileInfo = this.indexer.getFileInfo(UUID.fromString(id));
 
 			String filename = fileInfo.get("documentId") + "." + fileInfo.get("extension");
 
@@ -187,7 +187,7 @@ public class ServiceController {
 			@PathVariable(required = true) String id
 	) throws Exception {
 		this.setUp();
-		HashMap<String, String> fileInfo = this.indexer.getFileInfo(UUID.fromString(id),null);
+		HashMap<String, String> fileInfo = this.indexer.getFileInfo(UUID.fromString(id));
 
 		OutputFileExtended res = new OutputFileExtended();
 		res.setId(UUID.fromString(fileInfo.get("id")));

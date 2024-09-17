@@ -199,7 +199,7 @@ public class CassandraIndex extends AIndex{
     }
     public Boolean deleteFile(UUID fileId, String owner){
         if (!fileExists(fileId)) return false;
-        String ownerInDb = this.getFileInfo(fileId,null).get("owner");
+        String ownerInDb = this.getFileInfo(fileId).get("owner");
         if (ownerInDb != owner) return false;
         String selectQuery = "DELETE FROM ocs.fileStore WHERE Id=? ";
         PreparedStatement selectStmt = session.prepare(selectQuery);
@@ -229,22 +229,14 @@ public class CassandraIndex extends AIndex{
         return 0;
     }
     @Override
-    public HashMap<String, String> getFileInfo(UUID id, String documentId) {
+    public HashMap<String, String> getFileInfo(UUID id) {
 //        if (!this.isConnected()) this.connect();
 //        if (session == null) session = CqlSession.builder().build();
 //        if (session == null) session = CassandraConnection.getInstance().getSession();
         BoundStatement boundStmt;
         PreparedStatement selectStmt;
-        if (id != null) {
-//            selectStmt = session.prepare("SELECT id, isPrivate, documentId, owner,extension FROM ocs.fileStore WHERE id = ? LIMIT 1 ALLOW FILTERING ");
-            selectStmt = session.prepare("SELECT id, isPrivate, documentId, owner,extension FROM ocs.fileStore WHERE id = ? LIMIT 1 ");
-            boundStmt = selectStmt.bind(id);
-        } else{
-            //this query might be problematic
-//            selectStmt = session.prepare("SELECT id, isPrivate, documentId, owner,extension FROM ocs.fileStore WHERE owner = ? AND documentId = ? LIMIT 1 ALLOW FILTERING ");
-            selectStmt = session.prepare("SELECT id, isPrivate, documentId, owner,extension FROM ocs.mv_fileStore_owner WHERE owner = ? AND documentId = ? LIMIT 1 allow filtering");
-            boundStmt = selectStmt.bind(getOwner(),documentId);
-        }
+        selectStmt = session.prepare("SELECT id, isPrivate, documentId, owner,extension FROM ocs.fileStore WHERE id = ? LIMIT 1 ");
+        boundStmt = selectStmt.bind(id);
 
         ResultSet rs = session.execute(boundStmt);
 
