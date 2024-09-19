@@ -33,9 +33,12 @@ AND speculative_retry = '99p';
 CREATE INDEX fs_docid_idx ON fileStore (documentId);
 CREATE INDEX fs_publisherId_idx ON fileStore (owner);
 
+drop materialized view mv_fileStore_docid;
+drop materialized view mv_fileStore_owner;
+
 create materialized view 
 if not exists mv_fileStore_docid as
-    select      id,documentId,owner,extension
+    select      id,documentId,owner,extension,isprivate
     from        fileStore
     WHERE       documentId IS NOT NULL 
     AND         owner IS NOT NULL 
@@ -44,7 +47,12 @@ if not exists mv_fileStore_docid as
 
 create materialized view 
 if not exists mv_fileStore_owner as
-    select      id,documentId,owner,extension
+    select      id,documentId,owner,extension,isprivate
     from        fileStore
-    primary key (owner,documentId);
+    WHERE       owner IS NOT NULL 
+    AND         documentId IS NOT NULL 
+    AND         id IS NOT NULL
+    primary key (owner,id);
 
+
+ 
