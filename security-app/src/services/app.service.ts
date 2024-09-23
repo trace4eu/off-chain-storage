@@ -75,7 +75,7 @@ export default class AppService {
       response = await this.axios.get(`${this.cassandraAppUrl}/${id}/metadata`);
     } catch (error) {
       this.logger.error(error.stack);
-      throw new CassandraAppException();
+      throw new ForbiddenException();
     }
     const fileMetadata = FileMetadata.fromPrimitives(
       response.data as FileMetadataPrimitives,

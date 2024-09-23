@@ -2,7 +2,7 @@ import {
   Body,
   Controller,
   Get,
-  Param,
+  Param, ParseUUIDPipe,
   Post,
   Res,
   UseGuards,
@@ -62,7 +62,7 @@ export class FilesPrivateController {
       "The binary content of the file will be returned. If it's a json, content-type will be application/json so the content-type is returned accordingly with the content. If no mapping can be done, the default one is application/octet-stream",
   })
   async getFile(
-    @Param('fileId') fileId: string,
+    @Param('fileId', ParseUUIDPipe) fileId: string,
     @GetEntityData() entityData: EntityData,
     @Res() response: Response,
   ) {

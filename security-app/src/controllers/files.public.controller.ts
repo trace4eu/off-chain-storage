@@ -1,4 +1,11 @@
-import { Controller, Get, Param, Query, Res } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Query,
+  Res,
+} from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import AppService from '../services/app.service';
 import { RequestsSearchFields } from '../interfaces/requestSearchFields.interface';
@@ -21,7 +28,7 @@ export class FilesPublicController {
   })
   @Get('/:fileId')
   async getPublicFile(
-    @Param('fileId') fileId: string,
+    @Param('fileId', ParseUUIDPipe) fileId: string,
     @Res() response: Response,
   ) {
     const data = await this.appService.readFile(fileId);

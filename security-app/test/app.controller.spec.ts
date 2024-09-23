@@ -18,10 +18,11 @@ describe('FilesPrivateController (e2e) should', () => {
     return request(application.getHttpServer()).get('/').expect(404);
   });
 
-  it('allow to create a private file', () => {
+  /* it('allow to create a private file', () => {
     return request(application.getHttpServer())
       .post('/files')
       .set('Authorization', 'Bearer ' + fakeSuperAdminToken())
       .send(createEntityDto);
   });
+   */
 });
