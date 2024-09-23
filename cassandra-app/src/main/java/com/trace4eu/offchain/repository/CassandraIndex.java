@@ -163,7 +163,7 @@ public class CassandraIndex extends AIndex{
             : this.getFileCountPerOwner(owner);
 
         FileSearchResults result = new FileSearchResults();
-        result.setRecords(records);
+        result.setFiles(records);
         result.setTotal(total);
         result.setPageSize(pageSize);
         result.setCurrentPage(pageNumber);

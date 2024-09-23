@@ -1,11 +1,10 @@
 package com.trace4eu.offchain.dto;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FileSearchResults {
-    private List<OutputFile> records = new ArrayList<OutputFile>();
+    private List<OutputFile> files = new ArrayList<OutputFile>();
     private Integer currentPage;
     private Integer total;
     private Integer pageSize;
@@ -28,12 +27,12 @@ public class FileSearchResults {
         this.pageSize = pageSize;
     }
 
-    public List<OutputFile> getRecords() {
-        return records;
+    public List<OutputFile> getFiles() {
+        return files;
     }
 
-    public void setRecords(List<OutputFile> records) {
-        this.records = records;
+    public void setFiles(List<OutputFile> files) {
+        this.files = files;
     }
 
     public Integer getTotal() {
