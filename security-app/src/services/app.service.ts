@@ -11,9 +11,10 @@ import { ApiConfig } from '../../config/configuration';
 import ForbiddenException from '../exceptions/forbidden.exception';
 import { FileMetadata, FileMetadataPrimitives } from '../domain/fileMetadata';
 import { RequestsSearchFields } from '../interfaces/requestSearchFields.interface';
-import { ListFilesResponse, RecordInfo } from '../dtos/listFilesResponse.dto';
+import { ListFilesResponse, File } from '../dtos/listFilesResponse.dto';
 import BadRequestException from '../exceptions/badRequest.exception';
 import FileNotFoundException from '../exceptions/fileNotFound.exception';
+import { FileData } from '../interfaces/fileData.interface';
 
 @Injectable()
 export default class AppService {
@@ -42,13 +43,21 @@ export default class AppService {
     }
   }
 
-  async readFile(id: string, clientId?: string): Promise<any> {
+  async readFile(id: string, clientId?: string): Promise<FileData> {
     const isAccessAllowed = await this.checkAccess(id, clientId);
     if (!isAccessAllowed) throw new ForbiddenException();
 
     try {
       const response = await this.axios.get(`${this.cassandraAppUrl}/${id}`);
-      return response.data;
+      return {
+        data: response.data,
+        header: {
+          'content-disposition':
+            response.headers['content-disposition'] ?? undefined,
+          'content-type': response.headers['content-type'] ?? undefined,
+          'content-length': response.headers['content-length'] ?? undefined,
+        },
+      };
     } catch (error) {
       if ((error as AxiosError).status === 404)
         throw new FileNotFoundException();
@@ -92,9 +101,9 @@ export default class AppService {
         `${this.cassandraAppUrl}/list${searchUrlEncoded}`,
       );
       const listFiles = response.data as ListFilesResponse;
-      listFiles.records = listFiles.records.map((record: RecordInfo) => {
-        if (!record.extension) delete record.extension;
-        return record;
+      listFiles.files = listFiles.files.map((file: File) => {
+        if (!file.extension) delete file.extension;
+        return file;
       });
       return listFiles;
     } catch (error) {

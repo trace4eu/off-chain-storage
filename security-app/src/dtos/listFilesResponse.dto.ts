@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class RecordInfo {
+export class File {
   @ApiProperty()
   id: string;
   @ApiProperty()
@@ -12,9 +12,9 @@ export class RecordInfo {
 }
 export class ListFilesResponse {
   @ApiProperty({
-    type: [RecordInfo],
+    type: [File],
   })
-  records: RecordInfo[];
+  files: File[];
   @ApiProperty()
   currentPage: number;
   @ApiProperty()

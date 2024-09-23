@@ -1,14 +1,9 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
-import {
-  ApiOperation,
-  ApiQuery,
-  ApiResponse,
-  ApiTags,
-  getSchemaPath,
-} from '@nestjs/swagger';
+import { Controller, Get, Param, Query, Res } from '@nestjs/common';
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import AppService from '../services/app.service';
 import { RequestsSearchFields } from '../interfaces/requestSearchFields.interface';
 import { ListFilesResponse } from '../dtos/listFilesResponse.dto';
+import { Response } from 'express';
 
 @ApiTags('files (public)')
 @Controller('/public/files')
@@ -25,8 +20,21 @@ export class FilesPublicController {
       "The binary content of the file will be returned. If it's a json, content-type will be application/json so the content-type is returned accordingly with the content. If no mapping can be done, the default one is application/octet-stream",
   })
   @Get('/:fileId')
-  getPublicFile(@Param('fileId') fileId: string) {
-    return this.appService.readFile(fileId);
+  async getPublicFile(
+    @Param('fileId') fileId: string,
+    @Res() response: Response,
+  ) {
+    const data = await this.appService.readFile(fileId);
+    if (data.header['content-disposition'])
+      response.setHeader(
+        'content-disposition',
+        data.header['content-disposition'],
+      );
+    if (data.header['content-length'])
+      response.setHeader('content-length', data.header['content-length']);
+    if (data.header['content-type'])
+      response.setHeader('content-type', data.header['content-type']);
+    return response.send(data.data);
   }
 
   @ApiQuery({ name: 'owner', type: 'string', required: false })

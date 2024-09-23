@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -15,6 +23,7 @@ import AppService from '../services/app.service';
 import { CreateFileResponse } from '../interfaces/createFileResponse.interface';
 import { GetEntityData } from '../auth/decorators/getEntityData.decorator';
 import { EntityData } from '../auth/strategies/auth.trace4eu.strategy';
+import { Response } from 'express';
 
 @ApiTags('files (private)')
 @ApiBearerAuth()
@@ -52,10 +61,21 @@ export class FilesPrivateController {
     description:
       "The binary content of the file will be returned. If it's a json, content-type will be application/json so the content-type is returned accordingly with the content. If no mapping can be done, the default one is application/octet-stream",
   })
-  getFile(
+  async getFile(
     @Param('fileId') fileId: string,
     @GetEntityData() entityData: EntityData,
-  ): Promise<any> {
-    return this.appService.readFile(fileId, entityData.sub);
+    @Res() response: Response,
+  ) {
+    const data = await this.appService.readFile(fileId, entityData.sub);
+    if (data.header['content-disposition'])
+      response.setHeader(
+        'content-disposition',
+        data.header['content-disposition'],
+      );
+    if (data.header['content-length'])
+      response.setHeader('content-length', data.header['content-length']);
+    if (data.header['content-type'])
+      response.setHeader('content-type', data.header['content-type']);
+    return response.send(data.data);
   }
 }
