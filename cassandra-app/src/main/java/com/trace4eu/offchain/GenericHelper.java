@@ -21,6 +21,15 @@ public class GenericHelper {
         }
         return jsonObject;
     }
+
+    public static boolean isValidUUID(String uuid) {
+        try {
+            UUID.fromString(uuid);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
     public static MediaType getMediaType(String extension) {
         final Map<String, String> FILE_EXTENSION_MEDIA_TYPES = new HashMap<>();
         FILE_EXTENSION_MEDIA_TYPES.put("txt", "text/plain");

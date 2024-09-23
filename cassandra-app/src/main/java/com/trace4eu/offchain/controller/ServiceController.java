@@ -34,7 +34,7 @@ public class ServiceController {
 			DbOptions options = new DbOptions(args[1]);
 			Vars.DB_OPTIONS = options;
 		}
-
+		this.setUp(); //added
 	}
 
 	private void setUp() throws Exception {
@@ -56,7 +56,7 @@ public class ServiceController {
 			@RequestParam(value = "fileId", defaultValue = "") String fileId
 			,@RequestParam(value = "owner", defaultValue = "") String owner
 	) throws Exception {
-		this.setUp();
+//		this.setUp();
 		ObjectNode jsonObject = new ObjectMapper().createObjectNode();
 		Boolean isDeleted=true;
 		try {
@@ -76,7 +76,7 @@ public class ServiceController {
 	public ResponseEntity<RestOut> FilePutJson(
 			@RequestBody PutFileDTO data
 	) throws Exception {
-		this.setUp();
+//		this.setUp();
 		ObjectNode jsonObject = new ObjectMapper().createObjectNode();
 		try  {
 			String id = this.indexer.insertFile(data).toString();
@@ -104,7 +104,7 @@ public class ServiceController {
 			,@RequestParam(value = "expirationTime", defaultValue = "0") Integer ttl
 			,@RequestParam(value = "isPrivate", defaultValue = "false") Boolean isPrivate
 	) throws Exception {
-		this.setUp();
+//		this.setUp();
 		ObjectNode jsonObject = new ObjectMapper().createObjectNode();
 		if (documentId.isEmpty()) {
 			jsonObject.put("error", "documentId not received.");
@@ -135,9 +135,12 @@ public class ServiceController {
 	public ResponseEntity<byte[]> FileGet(
 			@PathVariable(required = true) String id
 	) throws Exception {
-		this.setUp();
+//		this.setUp();
 		byte[] fileContent;
 		try {
+			if (!GenericHelper.isValidUUID(id))
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
 			fileContent = this.indexer.getFile(UUID.fromString(id));
 
 			HashMap<String, String> fileInfo;
@@ -166,7 +169,7 @@ public class ServiceController {
 			,@Parameter(description = "page") @RequestParam(value = "page", defaultValue = "0") Integer page
 			,@Parameter(description = "pageSize") @RequestParam(value = "pageSize", defaultValue = "20") Integer pageSize
 	) throws Exception {
-		this.setUp();
+//		this.setUp();
 
 		if (!owner.isEmpty())
 			this.indexer.setOwner(owner);
@@ -186,7 +189,10 @@ public class ServiceController {
 	public ResponseEntity<OutputFileExtended> FileGetMetadata(
 			@PathVariable(required = true) String id
 	) throws Exception {
-		this.setUp();
+//		this.setUp();
+		if (!GenericHelper.isValidUUID(id))
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
 		HashMap<String, String> fileInfo = this.indexer.getFileInfo(UUID.fromString(id));
 
 		OutputFileExtended res = new OutputFileExtended();

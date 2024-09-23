@@ -7,7 +7,7 @@ CREATE TABLE ocs.filestore (
     data blob,
     documentid text,
     extension text,
-    isprivate boolean,
+    isPrivate boolean,
     owner text
 ) WITH additional_write_policy = '99p'
 AND allow_auto_snapshot = true
@@ -38,7 +38,7 @@ drop materialized view mv_fileStore_owner;
 
 create materialized view 
 if not exists mv_fileStore_docid as
-    select      id,documentId,owner,extension,isprivate
+    select      id,documentId,owner,extension,isPrivate
     from        fileStore
     WHERE       documentId IS NOT NULL 
     AND         owner IS NOT NULL 
@@ -47,7 +47,7 @@ if not exists mv_fileStore_docid as
 
 create materialized view 
 if not exists mv_fileStore_owner as
-    select      id,documentId,owner,extension,isprivate
+    select      id,documentId,owner,extension,isPrivate
     from        fileStore
     WHERE       owner IS NOT NULL 
     AND         documentId IS NOT NULL 
