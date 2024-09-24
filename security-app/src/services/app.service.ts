@@ -1,4 +1,4 @@
-import { Logger, Injectable } from '@nestjs/common';
+import { Injectable, HttpStatus } from '@nestjs/common';
 import axios, { AxiosError, AxiosInstance } from 'axios';
 import { CreateFileDto } from '../dtos/createFile.dto';
 import {
@@ -12,18 +12,16 @@ import ForbiddenException from '../exceptions/forbidden.exception';
 import { FileMetadata, FileMetadataPrimitives } from '../domain/fileMetadata';
 import { RequestsSearchFields } from '../interfaces/requestSearchFields.interface';
 import { ListFilesResponse, File } from '../dtos/listFilesResponse.dto';
-import BadRequestException from '../exceptions/badRequest.exception';
 import FileNotFoundException from '../exceptions/fileNotFound.exception';
 import { FileData } from '../interfaces/fileData.interface';
+import NotFoundException from '../exceptions/notFound.exception';
 
 @Injectable()
 export default class AppService {
-  private readonly logger;
   private axios: AxiosInstance;
   private readonly cassandraAppUrl: string;
   constructor(private readonly configService: ConfigService<ApiConfig, true>) {
     this.cassandraAppUrl = this.configService.get<string>('cassandraAppUrl');
-    this.logger = new Logger(AppService.name);
     this.axios = axios.create({
       timeout: 10000, // Timeout in milliseconds (5 seconds)
     });
@@ -38,7 +36,6 @@ export default class AppService {
       const response = await this.axios.post(this.cassandraAppUrl, request);
       return (response.data as CreateFileCassandraAppResponse).data;
     } catch (error) {
-      this.logger.error(error.stack);
       throw new CassandraAppException();
     }
   }
@@ -61,7 +58,6 @@ export default class AppService {
     } catch (error) {
       if ((error as AxiosError).status === 404)
         throw new FileNotFoundException();
-      this.logger.error(error.stack);
       throw new CassandraAppException();
     }
   }
@@ -74,7 +70,8 @@ export default class AppService {
     try {
       response = await this.axios.get(`${this.cassandraAppUrl}/${id}/metadata`);
     } catch (error) {
-      this.logger.error(error.stack);
+      if ((error as AxiosError).status === HttpStatus.NOT_FOUND)
+        throw new NotFoundException('File not found');
       throw new ForbiddenException();
     }
     const fileMetadata = FileMetadata.fromPrimitives(
@@ -107,7 +104,6 @@ export default class AppService {
       });
       return listFiles;
     } catch (error) {
-      this.logger.error(error.stack);
       throw new CassandraAppException();
     }
   }

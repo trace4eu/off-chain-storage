@@ -25,7 +25,7 @@ export class ExceptionTypeFactory {
     }
     if (exception.name === 'NotFoundException') {
       return new NotFoundException(
-        (exception as BadRequestException).getResponse().message,
+        (exception as NotFoundException).getResponse().message,
       );
     }
     logger.error({
