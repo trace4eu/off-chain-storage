@@ -195,6 +195,9 @@ public class ServiceController {
 
 		HashMap<String, String> fileInfo = this.indexer.getFileInfo(UUID.fromString(id));
 
+		if (fileInfo.size()==0)
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
 		OutputFileExtended res = new OutputFileExtended();
 		res.setId(UUID.fromString(fileInfo.get("id")));
 		res.setPrivate(Boolean.parseBoolean(fileInfo.get("isPrivate")));
