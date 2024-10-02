@@ -16,6 +16,10 @@ export class ExceptionTypeFactory {
       return new UnauthorizedException();
     }
     if (exception instanceof CustomError) {
+      logger.error({
+        message: exception.message,
+        customError: exception.stack,
+      });
       return exception as CustomError;
     }
     if (exception.name === 'BadRequestException') {

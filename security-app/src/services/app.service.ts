@@ -15,6 +15,7 @@ import { ListFilesResponse, File } from '../dtos/listFilesResponse.dto';
 import FileNotFoundException from '../exceptions/fileNotFound.exception';
 import { FileData } from '../interfaces/fileData.interface';
 import NotFoundException from '../exceptions/notFound.exception';
+import BadRequestException from "../exceptions/badRequest.exception";
 
 @Injectable()
 export default class AppService {
@@ -82,6 +83,19 @@ export default class AppService {
   }
 
   async getFiles(searchObject?: RequestsSearchFields | undefined) {
+    let isFilterQueryValid = false;
+    if (searchObject && searchObject.owner && searchObject.owner.length > 0)
+      isFilterQueryValid = true;
+    if (
+      searchObject &&
+      searchObject.documentId &&
+      searchObject.documentId.length > 0
+    )
+      isFilterQueryValid = true;
+    if (!isFilterQueryValid)
+      throw new BadRequestException(
+        'at least documentId or owner should be provided',
+      );
     try {
       let searchUrlEncoded = '?';
       if (searchObject?.owner)
