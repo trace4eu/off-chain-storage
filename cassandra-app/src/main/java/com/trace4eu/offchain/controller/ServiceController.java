@@ -16,6 +16,7 @@ import com.trace4eu.offchain.restservice.RestOut;
 import com.trace4eu.offchain.GenericHelper;
 import com.trace4eu.offchain.Vars;
 import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -24,11 +25,8 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController()
 public class ServiceController {
 	IIndex indexer;
-//	private final MyService myService;
 	@Autowired
 	public ServiceController(ArgumentService myService) throws Exception {
-//		this.myService = myService;
-//		System.out.println(String.join(",",myService.getArgs().getSourceArgs()));
 		String[] args = myService.getArgs().getSourceArgs();
 		if (args[0].equals("-i")) {
 			DbOptions options = new DbOptions(args[1]);
@@ -37,8 +35,8 @@ public class ServiceController {
 		this.setUp(); //added
 	}
 
+	@PostConstruct
 	private void setUp() throws Exception {
-
 		if (this.indexer != null) {
 			if (!this.indexer.isConnected())
 				this.indexer.connect();
@@ -46,7 +44,6 @@ public class ServiceController {
 		}
 
 		DbOptions dbOptions = Vars.DB_OPTIONS;
-//		DbOptions dbOptions = new DbOptions("config.options");
 		indexer = IndexFactory.createIndexer(IndexerType.Cassandra,dbOptions);
 		indexer.connect();
 	}
