@@ -17,16 +17,26 @@ public class CassandraConnection {
     private void connectWithoutPassword(){
         String hostName= getHostname();
         InetSocketAddress node = new InetSocketAddress(hostName, options.getPort());
+
+        DriverConfigLoader loader = DriverConfigLoader.programmaticBuilder()
+//                .withStringList(DefaultDriverOption.CONTACT_POINTS, Arrays.asList( hostName + ":" + options.getPort().toString()))
+                .withInt(DefaultDriverOption.CONNECTION_POOL_LOCAL_SIZE, options.getCONNECTION_POOL_LOCAL_SIZE())
+                .withInt(DefaultDriverOption.CONNECTION_POOL_REMOTE_SIZE, options.getCONNECTION_POOL_REMOTE_SIZE())
+                .withInt(DefaultDriverOption.CONNECTION_MAX_REQUESTS, options.getCONNECTION_MAX_REQUESTS())
+                .build();
+
         if (options.getDatacenter().isEmpty()){
             session = CqlSession.builder()
                     .withKeyspace(options.getDbName())
                     .addContactPoint(node)
+                    .withConfigLoader(loader)
                     .build();
         }else {
             session = CqlSession.builder()
                     .withKeyspace(options.getDbName())
                     .addContactPoint(node)
                     .withLocalDatacenter(options.getDatacenter())
+                    .withConfigLoader(loader)
                     .build();
         }
     }
@@ -42,7 +52,9 @@ public class CassandraConnection {
                 .withString(DefaultDriverOption.AUTH_PROVIDER_USER_NAME, options.getUsername())
                 .withString(DefaultDriverOption.AUTH_PROVIDER_PASSWORD, options.getPassword())
                 .withStringList(DefaultDriverOption.CONTACT_POINTS, Arrays.asList( hostName + ":" + options.getPort().toString()))
-
+                .withInt(DefaultDriverOption.CONNECTION_POOL_LOCAL_SIZE, options.getCONNECTION_POOL_LOCAL_SIZE())
+                .withInt(DefaultDriverOption.CONNECTION_POOL_REMOTE_SIZE, options.getCONNECTION_POOL_REMOTE_SIZE())
+                .withInt(DefaultDriverOption.CONNECTION_MAX_REQUESTS, options.getCONNECTION_MAX_REQUESTS())
                 .build();
         InetSocketAddress node = new InetSocketAddress(hostName, options.getPort());
 

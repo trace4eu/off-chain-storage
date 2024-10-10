@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>hr.irb</groupId>
 	<artifactId>file-service</artifactId>
-	<version>0.0.4.7</version>
+	<version>0.0.4.8</version>
 	<name>file-service</name>
 	<description>Cassandra file service</description>
 	<properties>
