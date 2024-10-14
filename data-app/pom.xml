@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>hr.irb</groupId>
-	<artifactId>file-service</artifactId>
-	<version>0.0.4.8</version>
-	<name>file-service</name>
-	<description>Cassandra file service</description>
+	<artifactId>ocs-data-app</artifactId>
+	<version>0.4.9</version>
+	<name>ocs-data-app</name>
+	<description>OCS Data App</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
@@ -93,30 +93,6 @@
 			<scope>test</scope>
 		</dependency>
 
-<!--		<dependency>-->
-<!--			<groupId>org.mockito</groupId>-->
-<!--			<artifactId>mockito-core</artifactId>-->
-<!--			<version>5.11.0</version> &lt;!&ndash; Use the latest version &ndash;&gt;-->
-<!--			<scope>test</scope>-->
-<!--		</dependency>-->
-<!--		<dependency>-->
-<!--			<groupId>org.powermock</groupId>-->
-<!--			<artifactId>powermock-module-junit4</artifactId>-->
-<!--			<version>2.0.9</version>-->
-<!--			<scope>test</scope>-->
-<!--		</dependency>-->
-<!--		<dependency>-->
-<!--			<groupId>org.powermock</groupId>-->
-<!--			<artifactId>powermock-api-mockito2</artifactId>-->
-<!--			<version>2.0.9</version>-->
-<!--			<scope>test</scope>-->
-<!--		</dependency>-->
-<!--		<dependency>-->
-<!--			<groupId>org.cassandraunit</groupId>-->
-<!--			<artifactId>cassandra-unit</artifactId>-->
-<!--			<version>4.3.1.0</version>-->
-<!--			<scope>test</scope>-->
-<!--		</dependency>-->
 	</dependencies>
 
 	<build>

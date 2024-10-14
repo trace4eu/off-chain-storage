@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public class OutputFile {
     private UUID id ;
-    private  String documentid ;
+    private  String documentId;
     private  String extension ;
     private  String owner;
 
@@ -18,12 +18,12 @@ public class OutputFile {
 
 
 
-    public String getDocumentid() {
-        return documentid;
+    public String getDocumentId() {
+        return documentId;
     }
 
-    public void setDocumentid(String documentid) {
-        this.documentid = documentid;
+    public void setDocumentId(String documentId) {
+        this.documentId = documentId;
     }
 
     public String getExtension() {

@@ -153,7 +153,7 @@ public class CassandraIndex extends AIndex{
             OutputFile outFile = new OutputFile();
             outFile.setId(row.getUuid("id"));
             outFile.setOwner(row.getString("owner"));
-            outFile.setDocumentid(row.getString("documentid"));
+            outFile.setDocumentId(row.getString("documentid"));
             outFile.setExtension(row.getString("extension"));
             records.add(outFile);
         }

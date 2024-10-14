@@ -5,9 +5,90 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2da06780-3938-4b17-af12-eec0e3baef2d" name="Changes" comment="gitignore update">
-      <change beforePath="$PROJECT_DIR$/cassandra-app/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/cassandra-app/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/.mvn/wrapper/maven-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/CONTRIBUTING.adoc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/LICENSE.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/LICENSE.writing.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/gradlew" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/gradlew.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/manifest.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/mvnw" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/mvnw.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/settings.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/src/main/java/com/trace4eu/offchain/ArgumentService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/src/main/java/com/trace4eu/offchain/GenericHelper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/src/main/java/com/trace4eu/offchain/Vars.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/src/main/java/com/trace4eu/offchain/controller/ServiceController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/src/main/java/com/trace4eu/offchain/dto/CassandraConnection.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/src/main/java/com/trace4eu/offchain/dto/FileSearchResults.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/src/main/java/com/trace4eu/offchain/dto/OutputFile.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/src/main/java/com/trace4eu/offchain/dto/OutputFileExtended.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/src/main/java/com/trace4eu/offchain/dto/PutFileDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/src/main/java/com/trace4eu/offchain/repository/AIndex.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/src/main/java/com/trace4eu/offchain/repository/CassandraIndex.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/src/main/java/com/trace4eu/offchain/repository/DbOptions.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/src/main/java/com/trace4eu/offchain/repository/IIndex.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/src/main/java/com/trace4eu/offchain/repository/IndexFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/src/main/java/com/trace4eu/offchain/repository/IndexerType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/src/main/java/com/trace4eu/offchain/restservice/RestArrayOut.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/src/main/java/com/trace4eu/offchain/restservice/RestOut.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/src/main/java/com/trace4eu/offchain/restservice/RestServiceApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-app/src/test/java/com/trace4eu/offchain/restservice/ServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/security-app/src/dtos/fileMetadata.dto.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/.idea/compiler.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/.idea/jarRepositories.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/.idea/uiDesigner.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/.mvn/wrapper/maven-wrapper.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/CONTRIBUTING.adoc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/LICENSE.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/LICENSE.writing.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/build.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/gradlew" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/gradlew.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/manifest.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/mvnw" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/mvnw.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/settings.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/src/main/java/com/trace4eu/offchain/ArgumentService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/src/main/java/com/trace4eu/offchain/GenericHelper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/src/main/java/com/trace4eu/offchain/Vars.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/src/main/java/com/trace4eu/offchain/controller/ServiceController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/src/main/java/com/trace4eu/offchain/dto/CassandraConnection.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/src/main/java/com/trace4eu/offchain/dto/FileSearchResults.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/src/main/java/com/trace4eu/offchain/dto/OutputFile.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/src/main/java/com/trace4eu/offchain/dto/OutputFileExtended.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/src/main/java/com/trace4eu/offchain/dto/PutFileDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/src/main/java/com/trace4eu/offchain/repository/AIndex.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/src/main/java/com/trace4eu/offchain/repository/CassandraIndex.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/src/main/java/com/trace4eu/offchain/repository/DbOptions.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/src/main/java/com/trace4eu/offchain/repository/IIndex.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/src/main/java/com/trace4eu/offchain/repository/IndexFactory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/src/main/java/com/trace4eu/offchain/repository/IndexerType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/src/main/java/com/trace4eu/offchain/restservice/RestArrayOut.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/src/main/java/com/trace4eu/offchain/restservice/RestOut.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/src/main/java/com/trace4eu/offchain/restservice/RestServiceApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cassandra-app/src/test/java/com/trace4eu/offchain/restservice/ServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/security-app/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/security-app/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/security-app/src/controllers/files.private.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/security-app/src/controllers/files.private.controller.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/security-app/src/controllers/files.public.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/security-app/src/controllers/files.public.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/security-app/src/domain/fileMetadata.ts" beforeDir="false" afterPath="$PROJECT_DIR$/security-app/src/domain/fileMetadata.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/security-app/src/dtos/createFile.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/security-app/src/dtos/fileCreation.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/security-app/src/dtos/listFilesResponse.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/security-app/src/dtos/files.dto.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/security-app/src/services/app.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/security-app/src/services/app.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -100,6 +181,19 @@
     </key>
   </component>
   <component name="RunManager" selected="npm.start:debug">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="off-chain-storage" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="off-chain-storage" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="FilesPrivateController (e2e) (2)" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
       <jest-package value="$PROJECT_DIR$/security-app/node_modules/jest" />
@@ -169,15 +263,6 @@
       <envs />
       <method v="2" />
     </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Jest.Tests in test/" />
-        <item itemvalue="Jest.FilesPrivateController (e2e) should.return 404 when no path matches the ones configured in the application" />
-        <item itemvalue="Jest.FilesPrivateController (e2e) should" />
-        <item itemvalue="Jest.FilesPrivateController (e2e) (2)" />
-        <item itemvalue="Jest.FilesPrivateController (e2e)./ (GET)" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -225,6 +310,8 @@
       <workItem from="1728517815480" duration="2056000" />
       <workItem from="1728541418048" duration="1811000" />
       <workItem from="1728632130507" duration="1452000" />
+      <workItem from="1728909706535" duration="1777000" />
+      <workItem from="1728925666655" duration="6881000" />
     </task>
     <task id="LOCAL-00001" summary="gitignore update">
       <option name="closed" value="true" />
@@ -265,19 +352,7 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="FILTERS">
-                <map>
-                  <entry key="branch">
-                    <value>
-                      <list>
-                        <option value="feat/first-prototype" />
-                      </list>
-                    </value>
-                  </entry>
-                </map>
-              </option>
-            </State>
+            <State />
           </value>
         </entry>
       </map>
@@ -290,105 +365,41 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/security-app/src/auth/strategies/local.strategy.ts</url>
-          <line>29</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-        <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/security-app/src/auth/strategies/local.strategy.ts</url>
-          <line>58</line>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/security-app/src/auth/strategies/local.strategy.ts</url>
-          <line>26</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-        <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/security-app/src/auth/guards/auth.trace4eu.guard.ts</url>
-          <line>10</line>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-        <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/security-app/src/auth/guards/auth.trace4eu.guard.ts</url>
-          <line>13</line>
-          <option name="timeStamp" value="13" />
-        </line-breakpoint>
-        <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/security-app/src/auth/strategies/auth.trace4eu.strategy.ts</url>
-          <line>31</line>
-          <option name="timeStamp" value="16" />
-        </line-breakpoint>
-        <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/security-app/src/auth/strategies/auth.trace4eu.strategy.ts</url>
-          <line>34</line>
-          <option name="timeStamp" value="17" />
-        </line-breakpoint>
-        <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/security-app/src/filters/exceptionFactory.ts</url>
-          <line>24</line>
-          <option name="timeStamp" value="20" />
-        </line-breakpoint>
-        <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/security-app/src/auth/infrastructure/authServiceConnector.ts</url>
-          <line>36</line>
-          <option name="timeStamp" value="21" />
-        </line-breakpoint>
-        <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/security-app/src/auth/strategies/auth.trace4eu.strategy.ts</url>
-          <line>40</line>
-          <option name="timeStamp" value="22" />
-        </line-breakpoint>
-        <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/security-app/src/auth/decorators/getEntityData.decorator.ts</url>
-          <line>5</line>
-          <option name="timeStamp" value="30" />
-        </line-breakpoint>
-        <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/security-app/src/auth/infrastructure/authServiceConnector.ts</url>
-          <line>44</line>
-          <option name="timeStamp" value="31" />
-        </line-breakpoint>
-        <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/security-app/src/auth/infrastructure/authServiceConnector.ts</url>
-          <line>45</line>
-          <option name="timeStamp" value="32" />
-        </line-breakpoint>
-        <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/security-app/src/auth/infrastructure/authServiceConnector.ts</url>
-          <line>46</line>
-          <option name="timeStamp" value="33" />
-        </line-breakpoint>
-        <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/security-app/src/domain/fileMetadata.ts</url>
-          <line>43</line>
-          <option name="timeStamp" value="38" />
-        </line-breakpoint>
-        <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/security-app/src/domain/fileMetadata.ts</url>
-          <line>18</line>
-          <option name="timeStamp" value="56" />
-        </line-breakpoint>
-        <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/security-app/src/domain/fileMetadata.ts</url>
-          <line>42</line>
-          <option name="timeStamp" value="62" />
-        </line-breakpoint>
-        <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/security-app/src/auth/infrastructure/authServiceConnector.ts</url>
-          <line>37</line>
-          <option name="timeStamp" value="65" />
-        </line-breakpoint>
-        <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/security-app/src/domain/fileMetadata.ts</url>
-          <line>23</line>
-          <option name="timeStamp" value="66" />
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/security-app/src/services/app.service.ts</url>
+          <line>85</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/security-app/src/filters/exceptionFactory.ts</url>
-          <line>17</line>
-          <option name="timeStamp" value="68" />
+          <url>file://$PROJECT_DIR$/security-app/src/services/app.service.ts</url>
+          <line>93</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/security-app/src/domain/fileMetadata.ts</url>
+          <line>18</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/security-app/src/services/app.service.ts</url>
+          <line>77</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/security-app/src/services/app.service.ts</url>
+          <line>97</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/security-app/src/services/app.service.ts</url>
+          <line>96</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="6" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

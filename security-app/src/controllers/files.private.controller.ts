@@ -13,7 +13,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { CreateFileDto } from '../dtos/createFile.dto';
+import { FileCreation } from '../dtos/fileCreation';
 import {
   ScopesProtected,
   ValidScopes,
@@ -43,7 +43,7 @@ export class FilesPrivateController {
     description: 'This creates a file to be stored in the ocs component',
   })
   createFile(
-    @Body() request: CreateFileDto,
+    @Body() request: FileCreation,
     @GetEntityData() entityData: EntityData,
   ): Promise<CreateFileResponse> {
     return this.appService.createFile(request, entityData.sub);
