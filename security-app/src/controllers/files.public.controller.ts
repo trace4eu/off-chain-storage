@@ -62,4 +62,17 @@ export class FilesPublicController {
   ): Promise<ListFilesResponse> {
     return this.appService.getFiles(searchObject);
   }
+
+  @ApiOperation({
+    summary: 'Get file metadata',
+    description: 'Get file metadata from the ocs component',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Metadata related to the file',
+  })
+  @Get('/:fileId/metadata')
+  async getFileMetadata(@Param('fileId', ParseUUIDPipe) fileId: string) {
+    return await this.appService.getMetadata(fileId);
+  }
 }

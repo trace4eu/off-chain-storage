@@ -82,6 +82,21 @@ export default class AppService {
     return fileMetadata.isAccessAllowed(clientId);
   }
 
+  async getMetadata(fileId: string) {
+    let response;
+    try {
+      response = await this.axios.get(`${this.cassandraAppUrl}/${fileId}/metadata`);
+    } catch (error) {
+      if ((error as AxiosError).status === HttpStatus.NOT_FOUND)
+        throw new NotFoundException('File not found');
+      throw new CassandraAppException();
+    }
+    const fileMetadata = FileMetadata.fromPrimitives(
+      response.data as FileMetadataPrimitives,
+    ).toPrimitives();
+    delete fileMetadata.private;
+  }
+
   async getFiles(searchObject?: RequestsSearchFields | undefined) {
     let isFilterQueryValid = false;
     if (searchObject && searchObject.owner && searchObject.owner.length > 0)
