@@ -5,6 +5,7 @@ import type { ApiConfig } from '../config/configuration';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import AllExceptionsFilter from './filters/allExceptions.filter';
+import * as bodyParser from 'body-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -15,6 +16,8 @@ async function bootstrap() {
   const configService = app.get<ConfigService<ApiConfig, true>>(ConfigService);
   const apiUrlPrefix = configService.get<string>('apiUrlPrefix');
   const port = configService.get<number>('apiPort');
+  app.use(bodyParser.json({ limit: '10mb' }));
+  app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
   app.setGlobalPrefix(apiUrlPrefix);
 
