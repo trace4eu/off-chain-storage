@@ -1,5 +1,6 @@
 package com.trace4eu.offchain.restservice;
 
+import com.trace4eu.offchain.GenericHelper;
 import com.trace4eu.offchain.Vars;
 import com.trace4eu.offchain.dto.PutFileDTO;
 import com.trace4eu.offchain.repository.CassandraIndex;
@@ -73,10 +74,64 @@ public class ServiceTest {
         assertFalse(exists);
     }
 
-//    @Test
+    //@Test
     public void testConnection() throws Exception {
         this.setUp();
         indexer.connect();
         assertTrue(indexer.isConnected());
+    }
+
+//    @Test
+    public void testUpload200kb() throws Exception {
+        this.setUp();
+        indexer.connect();
+
+        int size = 102400;
+        StringBuilder sb = new StringBuilder(size);
+
+        for (int i = 0; i < size; i++) {
+            sb.append('a');
+        }
+
+        String largeString = sb.toString();
+        String encodedString = GenericHelper.toHexString(largeString)+"==";
+
+        PutFileDTO importData = new PutFileDTO();
+
+        importData.isPrivate = true;
+        importData.expirationTime = 600;
+        importData.file = encodedString;
+        importData.documentId = "someDocumentId";
+        importData.owner="some owner";
+        importData.extension="txt";
+        UUID uid = indexer.insertFile(importData);
+
+    }
+
+//    @Test
+    public void testUpload5MB() throws Exception {
+        this.setUp();
+        indexer.connect();
+
+        int size = 5*10^6;
+        StringBuilder sb = new StringBuilder(size);
+
+        for (int i = 0; i < size; i++) {
+            sb.append('a');
+        }
+
+        String largeString = sb.toString();
+        String encodedString = GenericHelper.toHexString(largeString)+"==";
+
+        PutFileDTO importData = new PutFileDTO();
+
+        importData.isPrivate = true;
+        importData.expirationTime = 600;
+        importData.file = encodedString;
+        importData.documentId = "someDocumentId";
+        importData.owner="some owner";
+        importData.extension="txt";
+        UUID uid = indexer.insertFile(importData);
+
     }
 }
