@@ -1,6 +1,6 @@
 import { Injectable, HttpStatus } from '@nestjs/common';
 import axios, { AxiosError, AxiosInstance } from 'axios';
-import { CreateFileDto } from '../dtos/createFile.dto';
+import { FileCreation } from '../dtos/fileCreation';
 import {
   CreateFileCassandraAppResponse,
   CreateFileResponse,
@@ -11,7 +11,7 @@ import { ApiConfig } from '../../config/configuration';
 import ForbiddenException from '../exceptions/forbidden.exception';
 import { FileMetadata, FileMetadataPrimitives } from '../domain/fileMetadata';
 import { RequestsSearchFields } from '../interfaces/requestSearchFields.interface';
-import { ListFilesResponse, File } from '../dtos/listFilesResponse.dto';
+import { FilesPaginated, File } from '../dtos/files.dto';
 import FileNotFoundException from '../exceptions/fileNotFound.exception';
 import { FileData } from '../interfaces/fileData.interface';
 import NotFoundException from '../exceptions/notFound.exception';
@@ -29,7 +29,7 @@ export default class AppService {
   }
 
   async createFile(
-    request: CreateFileDto,
+    request: FileCreation,
     clientId?: string,
   ): Promise<CreateFileResponse> {
     request.owner = clientId as string;
@@ -82,6 +82,22 @@ export default class AppService {
     return fileMetadata.isAccessAllowed(clientId);
   }
 
+  async getMetadata(fileId: string) {
+    let response;
+    try {
+      response = await this.axios.get(`${this.cassandraAppUrl}/${fileId}/metadata`);
+    } catch (error) {
+      if ((error as AxiosError).status === HttpStatus.NOT_FOUND)
+        throw new NotFoundException('File not found');
+      throw new CassandraAppException();
+    }
+    const fileMetadata = FileMetadata.fromPrimitives(
+      response.data as FileMetadataPrimitives,
+    ).toPrimitives();
+    delete fileMetadata.private;
+    return fileMetadata;
+  }
+
   async getFiles(searchObject?: RequestsSearchFields | undefined) {
     let isFilterQueryValid = false;
     if (searchObject && searchObject.owner && searchObject.owner.length > 0)
@@ -111,7 +127,7 @@ export default class AppService {
       const response = await this.axios.get(
         `${this.cassandraAppUrl}/list${searchUrlEncoded}`,
       );
-      const listFiles = response.data as ListFilesResponse;
+      const listFiles = response.data as FilesPaginated;
       listFiles.files = listFiles.files.map((file: File) => {
         if (!file.extension) delete file.extension;
         return file;

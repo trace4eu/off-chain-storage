@@ -9,8 +9,9 @@ import {
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import AppService from '../services/app.service';
 import { RequestsSearchFields } from '../interfaces/requestSearchFields.interface';
-import { ListFilesResponse } from '../dtos/listFilesResponse.dto';
+import { FilesPaginated } from '../dtos/files.dto';
 import { Response } from 'express';
+import { FileMetadata } from '../dtos/fileMetadata.dto';
 
 @ApiTags('files (public)')
 @Controller('/public/files')
@@ -35,12 +36,15 @@ export class FilesPublicController {
     if (data.header['content-disposition'])
       response.setHeader(
         'content-disposition',
-        data.header['content-disposition'],
+        data.header['content-disposition'] as string,
       );
     if (data.header['content-length'])
-      response.setHeader('content-length', data.header['content-length']);
+      response.setHeader(
+        'content-length',
+        data.header['content-length'] as string,
+      );
     if (data.header['content-type'])
-      response.setHeader('content-type', data.header['content-type']);
+      response.setHeader('content-type', data.header['content-type'] as string);
     return response.send(data.data);
   }
 
@@ -54,12 +58,26 @@ export class FilesPublicController {
   })
   @ApiResponse({
     status: 200,
-    type: ListFilesResponse,
+    type: FilesPaginated,
   })
   @Get()
   listFiles(
     @Query() searchObject?: RequestsSearchFields,
-  ): Promise<ListFilesResponse> {
+  ): Promise<FilesPaginated> {
     return this.appService.getFiles(searchObject);
+  }
+
+  @ApiOperation({
+    summary: 'Get file metadata',
+    description: 'Get file metadata from the ocs component',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Metadata related to the file',
+    type: FileMetadata,
+  })
+  @Get('/:fileId/metadata')
+  async getFileMetadata(@Param('fileId', ParseUUIDPipe) fileId: string) {
+    return await this.appService.getMetadata(fileId);
   }
 }

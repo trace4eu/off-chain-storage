@@ -1,2 +1,2 @@
-/cassandra-app/target
 *.properties
+.idea/

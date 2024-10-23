@@ -8,7 +8,7 @@ import {
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateFileDto {
+export class FileCreation {
   owner: string;
 
   @IsString()

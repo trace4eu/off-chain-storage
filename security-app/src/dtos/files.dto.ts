@@ -10,7 +10,7 @@ export class File {
   @ApiProperty()
   owner: string;
 }
-export class ListFilesResponse {
+export class FilesPaginated {
   @ApiProperty({
     type: [File],
   })

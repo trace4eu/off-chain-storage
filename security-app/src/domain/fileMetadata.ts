@@ -28,6 +28,17 @@ export class FileMetadata {
     return fileMetadata;
   }
 
+  toPrimitives(): FileMetadataPrimitives {
+    const primitives: FileMetadataPrimitives = {
+      id: this.id,
+      owner: this.owner,
+      documentId: this.documentId,
+    }
+    if (this.isPrivate) primitives.private = this.isPrivate;
+    if (this.extension) primitives.extension = this.extension;
+    return primitives;
+  }
+
   isAccessAllowed(tokenSubject?: string | undefined): boolean {
     if (this.isPrivate) {
       return this.owner === tokenSubject;
