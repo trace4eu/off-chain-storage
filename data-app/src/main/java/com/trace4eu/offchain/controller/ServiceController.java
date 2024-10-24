@@ -17,6 +17,7 @@ import com.trace4eu.offchain.GenericHelper;
 import com.trace4eu.offchain.Vars;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.MultipartConfigElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,10 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController()
 public class ServiceController {
 	IIndex indexer;
+
+	@Autowired
+	private MultipartConfigElement multipartConfigElement;
+
 	@Autowired
 	public ServiceController(ArgumentService myService) throws Exception {
 		String[] args = myService.getArgs().getSourceArgs();

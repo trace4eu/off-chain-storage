@@ -128,7 +128,7 @@ public class ServiceTest {
         importData.isPrivate = true;
         importData.expirationTime = 600;
         importData.file = encodedString;
-        importData.documentId = "someDocumentId";
+        importData.documentId = "doc 5MB test";
         importData.owner="some owner";
         importData.extension="txt";
         UUID uid = indexer.insertFile(importData);
