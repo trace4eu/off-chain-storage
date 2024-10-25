@@ -1,10 +1,10 @@
 import {
   IsBase64,
   IsBoolean,
-  IsInt,
+  IsNumber,
   IsOptional,
-  IsPositive,
   IsString,
+  Min,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -30,8 +30,8 @@ export class FileCreation {
   file: string;
 
   @IsOptional()
-  @IsInt()
-  @IsPositive()
+  @IsNumber()
+  @Min(0)
   @ApiProperty({
     required: false,
     description: 'TTL in seconds',
