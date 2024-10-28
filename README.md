@@ -3,7 +3,7 @@
 It's composed by:
 
 
-- Apache Cassandra cluster. The documentation about how it is configured and deployed can be found here [here](https://nextcloud.trace4eu.eu/f/81334).  
+- Apache Cassandra cluster. The documentation about how it is configured and deployed can be found here [here](https://nextcloud.trace4eu.eu/f/81808).  
 
 - data layer ([data-app](data-app)). It's a Java Spring Boot application used for accessing Apache Cassandra database.  
 
