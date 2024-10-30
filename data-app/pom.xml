@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>hr.irb</groupId>
 	<artifactId>ocs-data-app</artifactId>
-	<version>0.5.0</version>
+	<version>0.5.1</version>
 	<name>ocs-data-app</name>
 	<description>OCS Data App</description>
 	<properties>
