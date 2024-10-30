@@ -54,5 +54,7 @@ if not exists mv_fileStore_owner as
     AND         id IS NOT NULL
     primary key (owner,id);
 
-ALTER TABLE fileStore ADD created_at timestamp;
+ALTER TABLE fileStore ADD createdAt timestamp;
+
+#ALTER TABLE fileStore drop column created_at;
  
