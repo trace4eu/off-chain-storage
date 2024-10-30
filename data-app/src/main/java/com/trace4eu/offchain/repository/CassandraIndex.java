@@ -75,7 +75,7 @@ public class CassandraIndex extends AIndex{
         // try (CqlSession session = CqlSession.builder().build()) {
         try {
             PreparedStatement statement;
-            String sql = "INSERT INTO ocs.fileStore (id,documentId,data,owner,extension,isPrivate,created_at) VALUES (?,?,?,?,?,?,toTimestamp(now()))";
+            String sql = "INSERT INTO ocs.fileStore (id,documentId,data,owner,extension,isPrivate,createdAt) VALUES (?,?,?,?,?,?,toTimestamp(now()))";
             if (!(ttl == null || ttl == 0))
                 sql=sql+" USING TTL "+ttl.toString();
 
