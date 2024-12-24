@@ -1,3 +1,4 @@
 *.properties
 .idea/
 /cassandra-app/target
+.DS_Store
