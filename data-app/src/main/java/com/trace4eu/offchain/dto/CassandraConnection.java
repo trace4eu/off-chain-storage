@@ -5,7 +5,6 @@ import com.datastax.oss.driver.api.core.config.DefaultDriverOption;
 import com.datastax.oss.driver.api.core.config.DriverConfigLoader;
 import com.datastax.oss.driver.internal.core.auth.PlainTextAuthProvider;
 import com.trace4eu.offchain.repository.DbOptions;
-import com.trace4eu.offchain.Vars;
 
 import java.net.InetSocketAddress;
 import java.util.Arrays;
@@ -81,18 +80,19 @@ public class CassandraConnection {
         }
         connectWithPassword();
     }
-    private CassandraConnection() {
+    private CassandraConnection(DbOptions options) {
 //        String propFile =
 //        Vars.DB_OPTIONS = new DbOptions(propFile);
 
-        this.options = Vars.DB_OPTIONS;
+//        this.options = Vars.DB_OPTIONS;
+        this.options = options;
         if (session==null || session.isClosed())
             this.connect();
     }
 
-    public static CassandraConnection getInstance() {
+    public static CassandraConnection getInstance(DbOptions options) {
         if (instance == null /* || instance.getSession().isClosed()*/) {
-            instance = new CassandraConnection();
+            instance = new CassandraConnection(options);
         }
         return instance;
     }

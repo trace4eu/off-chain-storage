@@ -1,7 +1,6 @@
 package com.trace4eu.offchain.restservice;
 
 import com.trace4eu.offchain.ArgumentService;
-import com.trace4eu.offchain.Vars;
 import com.trace4eu.offchain.controller.ServiceController;
 import com.trace4eu.offchain.repository.*;
 import org.springframework.boot.ApplicationArguments;
@@ -28,7 +27,7 @@ public class RestServiceApplication {
 
 	private static Boolean isConnectionOk(String configFile) throws Exception {
 		DbOptions options = new DbOptions(configFile);
-		Vars.DB_OPTIONS = options;
+//		Vars.DB_OPTIONS = options;
 		IIndex indexer = IndexFactory.createIndexer(IndexerType.Cassandra,options);
 		return indexer.connect();
 //		return  ndx.isConnected();

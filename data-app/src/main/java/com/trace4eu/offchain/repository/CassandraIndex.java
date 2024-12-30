@@ -25,7 +25,7 @@ public class CassandraIndex extends AIndex{
     @Override
     public boolean connect() {
         try {
-            if (session == null) session = CassandraConnection.getInstance().getSession();
+            if (session == null) session = CassandraConnection.getInstance(this.getOptions()).getSession();
             this.connected  = (session != null) ? true : false;
         } catch (Exception e) {
             this.connected  = false;
@@ -38,21 +38,16 @@ public class CassandraIndex extends AIndex{
         return this.session;
     }
 
-
     @Override
     public void disconnect() {
         this.session.close();
         super.disconnect();
     }
-
-
-
     public UUID insertFile(PutFileDTO importData) throws Exception {
         this.setOwner(importData.owner);
         if (importData.owner.isEmpty()) throw new Exception("Owner not available");
 
         String fileContentString = importData.file;
-//        byte[] file=AIndex.hexStringToByteArray(fileContentString);
         byte[] file = Base64.getDecoder().decode(fileContentString);
 
         if (file.length==0) throw new Exception("File content not available");
@@ -122,7 +117,7 @@ public class CassandraIndex extends AIndex{
 
     @Override
     public FileSearchResults getListOfFilesPaging(String documentId, String owner, Integer pageSize, Integer pageNumber) throws Exception {
-        this.session = CassandraConnection.getInstance().getSession();
+        this.session = CassandraConnection.getInstance(this.getOptions()).getSession();
         String selectQuery;
         PreparedStatement selectStmt;
         if (documentId.isEmpty() && owner.isEmpty())

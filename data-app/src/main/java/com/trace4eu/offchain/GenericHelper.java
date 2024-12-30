@@ -28,7 +28,7 @@ public class GenericHelper {
         byte[] byteArray = new byte[size];
         secureRandom.nextBytes(byteArray);
         return byteArray;
-    } 
+    }
     public static boolean isValidUUID(String uuid) {
         try {
             UUID.fromString(uuid);

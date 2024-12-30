@@ -1,17 +1,11 @@
 package com.trace4eu.offchain.restservice;
 
 import com.trace4eu.offchain.GenericHelper;
-import com.trace4eu.offchain.Vars;
 import com.trace4eu.offchain.dto.PutFileDTO;
 import com.trace4eu.offchain.repository.CassandraIndex;
 import com.trace4eu.offchain.repository.DbOptions;
 import com.trace4eu.offchain.repository.IIndex;
-import org.junit.Assert;
 import org.junit.Before;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 
 import java.util.Base64;
 import java.util.Map;
@@ -31,7 +25,7 @@ public class ServiceTest {
     public void setUp() throws Exception {
         //this.configurationPath = System.getProperty("test.config.path");
         settings = new DbOptions(configurationPath);
-        Vars.DB_OPTIONS = settings;
+//        Vars.DB_OPTIONS = settings;
         indexer = new CassandraIndex(settings);
     }
 
