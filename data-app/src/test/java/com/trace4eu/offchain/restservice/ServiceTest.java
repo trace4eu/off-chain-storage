@@ -6,12 +6,14 @@ import com.trace4eu.offchain.dto.PutFileDTO;
 import com.trace4eu.offchain.repository.CassandraIndex;
 import com.trace4eu.offchain.repository.DbOptions;
 import com.trace4eu.offchain.repository.IIndex;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import java.util.Base64;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -22,11 +24,12 @@ import static org.junit.Assert.*;
 public class ServiceTest {
     private DbOptions settings;
     private IIndex indexer;
-    private String configurationPath="c:\\Users\\IRB\\Documents\\projekti\\trace4eu\\configCassandra\\config.properties";
+    private String configurationPath=System.getProperty("test.config.path");
 //    @Value("${configuration.path}")
 //    private String configurationPath;
     @Before
     public void setUp() throws Exception {
+        //this.configurationPath = System.getProperty("test.config.path");
         settings = new DbOptions(configurationPath);
         Vars.DB_OPTIONS = settings;
         indexer = new CassandraIndex(settings);
@@ -82,6 +85,34 @@ public class ServiceTest {
     }
 
 //    @Test
+    public void testUploadBinaryFile() throws Exception {
+        this.setUp();
+        indexer.connect();
+
+        int size = 102;
+        byte[] bytes = GenericHelper.getSecureRandomByteArray(size);
+        String largeString = GenericHelper.toHexString(bytes);
+        //String encodedString = GenericHelper.toHexString(largeString)+"==";
+        //String encodedString = GenericHelper.toHexString(largeString);
+        String encodedString = Base64.getEncoder().encodeToString(bytes);
+
+        PutFileDTO importData = new PutFileDTO();
+
+        importData.isPrivate = true;
+        importData.expirationTime = 600;
+        importData.file = encodedString;
+        importData.documentId = "someDocumentId";
+        importData.owner="some owner";
+        importData.extension="txt";
+        UUID uid = indexer.insertFile(importData);
+
+        assertNotNull(uid);
+
+        byte[] contentOnServer = indexer.getFile(uid);
+        assertArrayEquals(bytes,contentOnServer);
+    }
+
+    //@Test
     public void testUpload200kb() throws Exception {
         this.setUp();
         indexer.connect();
@@ -106,6 +137,7 @@ public class ServiceTest {
         importData.extension="txt";
         UUID uid = indexer.insertFile(importData);
 
+        assertNotNull(uid);
     }
 
 //    @Test

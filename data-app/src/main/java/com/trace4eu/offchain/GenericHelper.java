@@ -9,6 +9,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.SecureRandom;
 import java.util.*;
 
 public class GenericHelper {
@@ -22,6 +23,20 @@ public class GenericHelper {
         return jsonObject;
     }
 
+    public static byte[] getSecureRandomByteArray(int size) {
+        SecureRandom secureRandom = new SecureRandom();
+        byte[] byteArray = new byte[size];
+        secureRandom.nextBytes(byteArray);
+        return byteArray;
+    }
+
+    public static String toHexString(byte[] byteArray) {
+        StringBuilder sb = new StringBuilder();
+        for (byte b : byteArray) {
+            sb.append(String.format("%02X", b)); // Converts each byte to a 2-char uppercase hex string
+        }
+        return sb.toString();
+    }
     public static boolean isValidUUID(String uuid) {
         try {
             UUID.fromString(uuid);
