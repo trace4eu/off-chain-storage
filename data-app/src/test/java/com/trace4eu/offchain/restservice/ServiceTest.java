@@ -91,9 +91,6 @@ public class ServiceTest {
 
         int size = 102;
         byte[] bytes = GenericHelper.getSecureRandomByteArray(size);
-        String largeString = GenericHelper.toHexString(bytes);
-        //String encodedString = GenericHelper.toHexString(largeString)+"==";
-        //String encodedString = GenericHelper.toHexString(largeString);
         String encodedString = Base64.getEncoder().encodeToString(bytes);
 
         PutFileDTO importData = new PutFileDTO();
@@ -112,7 +109,7 @@ public class ServiceTest {
         assertArrayEquals(bytes,contentOnServer);
     }
 
-    //@Test
+//    @Test
     public void testUpload200kb() throws Exception {
         this.setUp();
         indexer.connect();
@@ -120,12 +117,11 @@ public class ServiceTest {
         int size = 102400;
         StringBuilder sb = new StringBuilder(size);
 
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++)
             sb.append('a');
-        }
 
         String largeString = sb.toString();
-        String encodedString = GenericHelper.toHexString(largeString)+"==";
+        String encodedString = Base64.getEncoder().encodeToString(largeString.getBytes());
 
         PutFileDTO importData = new PutFileDTO();
 
@@ -138,6 +134,9 @@ public class ServiceTest {
         UUID uid = indexer.insertFile(importData);
 
         assertNotNull(uid);
+
+        byte[] storedArr = indexer.getFile(uid);
+        assertArrayEquals(storedArr,largeString.getBytes());
     }
 
 //    @Test
@@ -148,12 +147,11 @@ public class ServiceTest {
         int size = 5*10^6;
         StringBuilder sb = new StringBuilder(size);
 
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++)
             sb.append('a');
-        }
 
         String largeString = sb.toString();
-        String encodedString = GenericHelper.toHexString(largeString)+"==";
+        String encodedString = Base64.getEncoder().encodeToString(largeString.getBytes());
 
         PutFileDTO importData = new PutFileDTO();
 
@@ -165,5 +163,7 @@ public class ServiceTest {
         importData.extension="txt";
         UUID uid = indexer.insertFile(importData);
 
+        byte[] storedArr = indexer.getFile(uid);
+        assertArrayEquals(storedArr,largeString.getBytes());
     }
 }

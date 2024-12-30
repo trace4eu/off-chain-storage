@@ -28,15 +28,7 @@ public class GenericHelper {
         byte[] byteArray = new byte[size];
         secureRandom.nextBytes(byteArray);
         return byteArray;
-    }
-
-    public static String toHexString(byte[] byteArray) {
-        StringBuilder sb = new StringBuilder();
-        for (byte b : byteArray) {
-            sb.append(String.format("%02X", b)); // Converts each byte to a 2-char uppercase hex string
-        }
-        return sb.toString();
-    }
+    } 
     public static boolean isValidUUID(String uuid) {
         try {
             UUID.fromString(uuid);
@@ -112,11 +104,11 @@ public class GenericHelper {
 
         return lines;
     }
-    public static String toHexString(String s){
-        if (s.isEmpty()) return "";
-        byte[] bytes = s.getBytes();
-        return Numeric.toHexString(bytes);
-    }
+//    public static String toHexString(String s){
+//        if (s.isEmpty()) return "";
+//        byte[] bytes = s.getBytes();
+//        return Numeric.toHexString(bytes);
+//    }
 
     public static void addLineToFile(String filePath,String line) throws IOException {
         FileWriter fileWriter = new FileWriter(filePath, true);
