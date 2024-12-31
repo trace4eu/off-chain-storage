@@ -6,6 +6,7 @@ import com.trace4eu.offchain.repository.CassandraIndex;
 import com.trace4eu.offchain.repository.DbOptions;
 import com.trace4eu.offchain.repository.IIndex;
 import org.junit.Before;
+import org.junit.Test;
 
 import java.util.Base64;
 import java.util.Map;
@@ -19,13 +20,9 @@ public class ServiceTest {
     private DbOptions settings;
     private IIndex indexer;
     private String configurationPath=System.getProperty("test.config.path");
-//    @Value("${configuration.path}")
-//    private String configurationPath;
     @Before
     public void setUp() throws Exception {
-        //this.configurationPath = System.getProperty("test.config.path");
         settings = new DbOptions(configurationPath);
-//        Vars.DB_OPTIONS = settings;
         indexer = new CassandraIndex(settings);
     }
 

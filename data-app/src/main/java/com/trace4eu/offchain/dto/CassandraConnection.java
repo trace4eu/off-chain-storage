@@ -55,19 +55,19 @@ public class CassandraConnection {
                 .withInt(DefaultDriverOption.CONNECTION_POOL_REMOTE_SIZE, options.getCONNECTION_POOL_REMOTE_SIZE())
                 .withInt(DefaultDriverOption.CONNECTION_MAX_REQUESTS, options.getCONNECTION_MAX_REQUESTS())
                 .build();
-        InetSocketAddress node = new InetSocketAddress(hostName, options.getPort());
+//        InetSocketAddress node = new InetSocketAddress(hostName, options.getPort());
 
         if (options.getDatacenter().isEmpty()){
 
             session = CqlSession.builder()
                     .withKeyspace(options.getDbName())
                     .withConfigLoader(loader)
-                    .addContactPoint(node)
+//                    .addContactPoint(node)
                     .build();
         }else {
             session = CqlSession.builder()
                     .withKeyspace(options.getDbName())
-                    .addContactPoint(node)
+//                    .addContactPoint(node)
                     .withConfigLoader(loader) //dodano naknadno
                     .withLocalDatacenter(options.getDatacenter())
                     .build();

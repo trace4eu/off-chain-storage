@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.trace4eu</groupId>
 	<artifactId>ocs-data-app</artifactId>
-	<version>0.5.4</version>
+	<version>0.5.5</version>
 	<name>ocs-data-app</name>
 	<description>OCS Data App</description>
 	<properties>
