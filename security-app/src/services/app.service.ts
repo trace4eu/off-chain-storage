@@ -15,7 +15,7 @@ import { FilesPaginated, File } from '../dtos/files.dto';
 import FileNotFoundException from '../exceptions/fileNotFound.exception';
 import { FileData } from '../interfaces/fileData.interface';
 import NotFoundException from '../exceptions/notFound.exception';
-import BadRequestException from "../exceptions/badRequest.exception";
+import BadRequestException from '../exceptions/badRequest.exception';
 
 @Injectable()
 export default class AppService {
@@ -46,7 +46,9 @@ export default class AppService {
     if (!isAccessAllowed) throw new ForbiddenException();
 
     try {
-      const response = await this.axios.get(`${this.cassandraAppUrl}/${id}`);
+      const response = await this.axios.get(`${this.cassandraAppUrl}/${id}`, {
+        responseType: 'arraybuffer',
+      });
       return {
         data: response.data,
         header: {
@@ -85,7 +87,9 @@ export default class AppService {
   async getMetadata(fileId: string) {
     let response;
     try {
-      response = await this.axios.get(`${this.cassandraAppUrl}/${fileId}/metadata`);
+      response = await this.axios.get(
+        `${this.cassandraAppUrl}/${fileId}/metadata`,
+      );
     } catch (error) {
       if ((error as AxiosError).status === HttpStatus.NOT_FOUND)
         throw new NotFoundException('File not found');
