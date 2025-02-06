@@ -37,7 +37,7 @@ docker build --no-cache -t ocs-data-app:x.y.z .
 ## RUN CONTAINER
 The application needs a `config.properties` file. It is located within the container (internal path: `/app/config/config.properties`) so at the time of running the container you can map a local properties file into the container.
 ```sh
-docke run -d -v {absolute path to the config.properties file}:/app/config/config.properties -p {hostPort}:8081 --name ocs-data-app ocs-data-app:x.y.z
+docker run -d -v {absolute path to the config.properties file}:/app/config/config.properties -p {hostPort}:8081 --name ocs-data-app ocs-data-app:x.y.z
 ```
 For example:
 ```sh
