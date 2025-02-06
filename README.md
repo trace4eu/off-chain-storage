@@ -16,6 +16,20 @@ The following diagram shows how it works:
 
 ![ocs overview](./doc/ocs-overview.svg)
 
+## Building and running
+
+You can build and run both apps as containers with [docker compose][1].
+
+```bash
+docker compose up --build
+```
+
+To build and run docker containers for each component individually
+without `docker compose` see the corresponding README.md in each app's
+directory.
+
+[1]: https://docs.docker.com/compose/
+
 ## How to get an access token
 
 The following library has been developed: https://www.npmjs.com/package/@trace4eu/authorisation-wrapper  

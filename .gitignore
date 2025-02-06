@@ -2,3 +2,5 @@
 .idea/
 /cassandra-app/target
 .DS_Store
+data-app/config.properties
+security-app/.env
