@@ -1,11 +1,14 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
-  Param, ParseUUIDPipe,
+  Param,
+  ParseUUIDPipe,
   Post,
   Res,
   UseGuards,
+  HttpCode
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -77,5 +80,24 @@ export class FilesPrivateController {
     if (data.header['content-type'])
       response.setHeader('content-type', data.header['content-type']);
     return response.send(data.data);
+  }
+
+  @ScopesProtected([ValidScopes.ocsWrite])
+  @UseGuards(JwtAuthGuardTrace4eu)
+  @Delete('/:fileId')
+  @ApiOperation({
+    summary: 'Delete a file',
+    description: 'Delete a file',
+  })
+  @ApiResponse({
+    status: 204,
+  })
+  @HttpCode(204)
+  async deleteFile(
+    @Param('fileId', ParseUUIDPipe) fileId: string,
+    @GetEntityData() entityData: EntityData,
+  ) {
+    await this.appService.deleteFile(fileId, entityData.sub);
+    return;
   }
 }

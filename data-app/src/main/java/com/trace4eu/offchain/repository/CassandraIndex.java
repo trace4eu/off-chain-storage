@@ -195,10 +195,10 @@ public class CassandraIndex extends AIndex{
     public Boolean deleteFile(UUID fileId, String owner){
         if (!fileExists(fileId)) return false;
         String ownerInDb = this.getFileInfo(fileId).get("owner");
-        if (ownerInDb != owner) return false;
+        if (!Objects.equals(ownerInDb, owner)) return false;
         String selectQuery = "DELETE FROM ocs.fileStore WHERE Id=? ";
         PreparedStatement selectStmt = session.prepare(selectQuery);
-        BoundStatement boundStmt = selectStmt.bind(fileId,owner);
+        BoundStatement boundStmt = selectStmt.bind(fileId);
         session.execute(boundStmt);
         return true;
     }

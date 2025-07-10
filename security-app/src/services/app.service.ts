@@ -65,6 +65,27 @@ export default class AppService {
     }
   }
 
+  async deleteFile(id: string, clientId?: string): Promise<void> {
+    const metadata = await this.getMetadata(id);
+    if (metadata.owner !== clientId) throw new ForbiddenException();
+
+    try {
+      const data = new URLSearchParams({
+        fileId: id,
+        owner: metadata.owner,
+      }).toString();
+      await this.axios.post(`${this.cassandraAppUrl}/delete`, data, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      });
+    } catch (error) {
+      if ((error as AxiosError).status === 404)
+        throw new FileNotFoundException();
+      throw new CassandraAppException();
+    }
+  }
+
   private async checkAccess(
     id: string,
     clientId: string | undefined,
